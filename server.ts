@@ -6,6 +6,7 @@ import * as cors from "cors";
 import * as mariasql from "mariasql";
 import { dbconfig } from "./database-config";
 import { TestModel } from "./datamodels/testModel";
+import { Card } from "./datamodels/card";
 
 class Server {
   public app: express.Application;
@@ -43,6 +44,25 @@ class Server {
     this.app.post("/testPost", (req, res) => {
       
       console.log(req.body);
+      res.send({message: "success"});
+
+    });
+
+    this.app.post("/addNewCard", (req, res) => {
+    
+      var newCard = new Card();
+      newCard = req.body;
+      const queryStr = "INSERT INTO Card (CardType, CardNumber, UserID, User, Location, Comment, ExpirationDate) VALUES (" +
+      req.body.cardType + ", '" + req.body.cardNumber + "' , " + req.body.userID + ", '" + req.body.user + "', '" +
+      req.body.location + "', '" + req.body.comment + "', '" + req.body.expirationDate + "');";
+      
+      console.log(queryStr);
+      
+      c.query(queryStr, (err, rows) => {
+        if (err)
+          console.log(err);
+      });
+
       res.send({message: "success"});
 
     });
