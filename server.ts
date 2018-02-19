@@ -5,6 +5,7 @@ import * as methodOverride from "method-override";
 import * as cors from "cors";
 import * as mariasql from "mariasql";
 import { dbconfig } from "./database-config";
+import { TestModel } from "./datamodels/testModel";
 
 class Server {
   public app: express.Application;
@@ -34,11 +35,16 @@ class Server {
 
     this.app.get("/", (req, res) => {
       c.query("SELECT * FROM TestTable", (err, rows) => {
-        if (err)
-          res.send(err);
-        else
-          res.send(rows);
+        if (!err)
+          res.send(new TestModel(rows[0].ID, rows[0].StringColumn));
       });
+    });
+
+    this.app.post("/testPost", (req, res) => {
+      
+      console.log(req.body);
+      res.send({message: "success"});
+
     });
   }
 }
