@@ -1,3 +1,4 @@
+import * as SqlUtilities from './../utilities/sql-utilities';
 
 /**
  * Card data model
@@ -44,9 +45,26 @@ export class Card {
      */
     expirationDate: Date;
 
-    /*constructor(req: any) {
-       id = any.body.id; 
-    }*/
+    constructor();
+    constructor(card: any);
+
+    constructor(card?: any) {
+
+      try {
+        if(card.id)
+          this.id = card.id;
+        this.cardType = card.cardType;
+        this.cardNumber = card.cardNumber;
+        this.userID = card.userID;
+        this.user = card.user;
+        this.location = card.location;
+        this.comment = card.comment;
+        this.expirationDate = card.date;
+      }
+      catch (e) {
+
+      }
+    }
   
   }
   
