@@ -1,4 +1,5 @@
 import * as mariasql from 'mariasql';
+import { TestModel } from '../datamodels/testModel';
 
 /**
  * SQL function utilities
@@ -19,6 +20,7 @@ export class SqlUtilities {
    * @param data JSON data object to be inserted
    */
   sqlInsert(tableName: string, data: any) {
+
     let queryString = 'INSERT INTO ' + tableName + ' VALUES (?';
 
     //Empty element for ID
@@ -30,10 +32,22 @@ export class SqlUtilities {
     }
 
     queryString += ')';
-
-    this.c.query(queryString, dataArray).on('result', result => {
-      data.id = result.info.insertId;
+    
+    //Wait for the async query to be done before 'returning' the data
+    return new Promise((resolve, reject) => {
+      this.c.query(queryString, dataArray, (err, rows) => {
+        if(!err) resolve(rows.info.insertId);
+          reject(err);
+      });
     });
-    return data;
+  }
+
+  sqlSelectAll(tableName: string) {
+    return new Promise((resolve, reject) => {
+      this.c.query('SELECT * FROM ' + tableName, false, (err, rows) => {
+        if (!err) resolve(rows);
+        reject(err);
+      });
+    });
   }
 }

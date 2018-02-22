@@ -6,12 +6,12 @@ export class TestModel {
 
     id: number;
   
-    testString: string;
+    stringColumn: string;
 
-    constructor(id: number, testString: string) {
+    constructor(test?: any) {
 
-        this.id = id;
-        this.testString = testString;
+        this.id = test.ID;
+        this.stringColumn = test.StringColumn;
 
     }
   

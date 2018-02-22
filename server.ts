@@ -8,10 +8,13 @@ import { dbconfig } from './database-config';
 import { TestModel } from './datamodels/testModel';
 import { Card } from './datamodels/card';
 import { SqlUtilities } from './utilities/sql-utilities';
+import { CardType } from './datamodels/cardType';
+import { Document } from './datamodels/document';
+import { DocumentType } from './datamodels/documentType';
 
 class Server {
   public app: express.Application;
-
+  
   c = new mariasql();
 
   sqlUtil: SqlUtilities;
@@ -43,10 +46,36 @@ class Server {
     });
   }
 
-  httpRequests() {
-    this.app.get('/', (req, res) => {
-      this.c.query('SELECT * FROM TestTable', (err, rows) => {
-        if (!err) res.send(new TestModel(rows[0].ID, rows[0].StringColumn));
+  httpRequests() {    
+    this.app.get('/getCards', (req, res) => {
+      this.sqlUtil.sqlSelectAll('Card').then((cardList: any[]) => {
+        res.send(cardList.map(card => {
+          return new Card(card);
+        }));
+      });
+    });
+    
+    this.app.get('/getCardTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('CardType').then((cardTypeList: any[]) => {
+        res.send(cardTypeList.map(cardType => {
+          return new CardType(cardType);
+        }));
+      });
+    });
+
+    this.app.get('/getDocuments', (req, res) => {
+      this.sqlUtil.sqlSelectAll('Document').then((documentList: any[]) => {
+        res.send(documentList.map(document => {
+          return new Document(document);
+        }));
+      });
+    });
+
+    this.app.get('/getDocumentTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('DocumentType').then((documentTypeList: any[]) => {
+        res.send(documentTypeList.map(documentType => {
+          return new DocumentType(documentType);
+        }));
       });
     });
 
@@ -57,11 +86,10 @@ class Server {
 
     this.app.post('/addNewCard', (req, res) => {
 
-      var newCard = new Card(req.body);
-      newCard.id = this.sqlUtil.sqlInsert('Card', newCard);
-      
-      res.send({ message: 'success', data: newCard });
-
+      this.sqlUtil.sqlInsert('Card', req.body).then((id) => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });        
+      });
     });
   }
 }
