@@ -4,6 +4,7 @@ import * as logger from 'morgan';
 import * as methodOverride from 'method-override';
 import * as cors from 'cors';
 import * as mariasql from 'mariasql';
+
 import { dbconfig } from './database-config';
 import { TestModel } from './datamodels/testModel';
 import { Card } from './datamodels/card';
@@ -11,6 +12,11 @@ import { SqlUtilities } from './utilities/sql-utilities';
 import { CardType } from './datamodels/cardType';
 import { Document } from './datamodels/document';
 import { DocumentType } from './datamodels/documentType';
+import { Receipt } from './datamodels/receipt';
+import { ItemType } from './datamodels/itemType';
+import { Verification } from './datamodels/verification';
+import { VerificationType } from './datamodels/verificationType';
+import { User } from './datamodels/user';
 
 class Server {
   public app: express.Application;
@@ -79,8 +85,47 @@ class Server {
       });
     });
 
+    this.app.get('/getReceipts', (req, res) => {
+      this.sqlUtil.sqlSelectAll('Receipt').then((receiptList: any[]) => {
+        res.send(receiptList.map(receipt => {
+          return new Receipt(receipt);
+        }));
+      });
+    });
+
+    this.app.get('/getItemTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('ItemType').then((itemTypeList: any[]) => {
+        res.send(itemTypeList.map(itemType => {
+          return new ItemType(itemType);
+        }));
+      });
+    });
+
+    this.app.get('/getVerifications', (req, res) => {
+      this.sqlUtil.sqlSelectAll('Verification').then((verificationList: any[]) => {
+        res.send(verificationList.map(verification => {
+          return new Verification(verification);
+        }));
+      });
+    });
+
+    this.app.get('/getVerificationTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('VerificationType').then((verificationTypeList: any[]) => {
+        res.send(verificationTypeList.map(verificationType => {
+          return new VerificationType(verificationType);
+        }));
+      });
+    });
+
+    this.app.get('/getUsers', (req, res) => {
+      this.sqlUtil.sqlSelectAll('User').then((userList: any[]) => {
+        res.send(userList.map(user => {
+          return new User(user);
+        }));
+      });
+    });
+
     this.app.post('/testPost', (req, res) => {
-      console.log(req.body);
       res.send({ message: 'success' });
     });
 

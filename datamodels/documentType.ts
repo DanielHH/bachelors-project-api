@@ -21,7 +21,7 @@ export class DocumentType {
       try {
         if(documentType.ID)
           this.id = documentType.ID;
-        this.name = documentType.name;
+        this.name = documentType.Name;
       }
       catch (e) {
 
