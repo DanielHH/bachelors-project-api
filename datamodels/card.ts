@@ -1,4 +1,3 @@
-
 /**
  * Card data model
 */
@@ -25,11 +24,6 @@ export class Card {
     userID: number;
   
     /**
-     * Full name of current card holder
-     */
-    user: string;
-  
-    /**
      * Current location of card
      */
     location: string;
@@ -44,9 +38,31 @@ export class Card {
      */
     expirationDate: Date;
 
-    /*constructor(req: any) {
-       id = any.body.id; 
-    }*/
+    /**
+     * Card checked in/out status
+     */
+    status: boolean;
+
+    constructor();
+    constructor(card: any);
+
+    constructor(card?: any) {
+
+      try {
+        if(card.ID)
+          this.id = card.ID;
+        this.cardType = card.CardType;
+        this.cardNumber = card.CardNumber;
+        this.userID = card.UserID;
+        this.location = card.Location;
+        this.comment = card.Comment;
+        this.expirationDate = card.Date;
+        this.status = card.Status;
+      }
+      catch (e) {
+
+      }
+    }
   
   }
   
