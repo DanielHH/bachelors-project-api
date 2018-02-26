@@ -41,7 +41,7 @@ export class Card {
     /**
      * Card checked in/out status
      */
-    status: boolean;
+    status: Number;
 
     constructor();
     constructor(card: any);
