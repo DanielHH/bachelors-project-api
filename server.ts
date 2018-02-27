@@ -17,10 +17,11 @@ import { ItemType } from './datamodels/itemType';
 import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
 import { User } from './datamodels/user';
+import { StatusType } from './datamodels/statusType';
 
 class Server {
   public app: express.Application;
-  
+
   c = new mariasql();
 
   sqlUtil: SqlUtilities;
@@ -52,77 +53,113 @@ class Server {
     });
   }
 
-  httpRequests() {    
+  httpRequests() {
     this.app.get('/getCards', (req, res) => {
       this.sqlUtil.sqlSelectAll('Card').then((cardList: any[]) => {
-        res.send(cardList.map(card => {
-          return new Card(card);
-        }));
+        res.send(
+          cardList.map(card => {
+            return new Card(card);
+          })
+        );
       });
     });
-    
+
     this.app.get('/getCardTypes', (req, res) => {
       this.sqlUtil.sqlSelectAll('CardType').then((cardTypeList: any[]) => {
-        res.send(cardTypeList.map(cardType => {
-          return new CardType(cardType);
-        }));
+        res.send(
+          cardTypeList.map(cardType => {
+            return new CardType(cardType);
+          })
+        );
       });
     });
 
     this.app.get('/getDocuments', (req, res) => {
       this.sqlUtil.sqlSelectAll('Document').then((documentList: any[]) => {
-        res.send(documentList.map(document => {
-          return new Document(document);
-        }));
+        res.send(
+          documentList.map(document => {
+            return new Document(document);
+          })
+        );
       });
     });
 
     this.app.get('/getDocumentTypes', (req, res) => {
-      this.sqlUtil.sqlSelectAll('DocumentType').then((documentTypeList: any[]) => {
-        res.send(documentTypeList.map(documentType => {
-          return new DocumentType(documentType);
-        }));
-      });
+      this.sqlUtil
+        .sqlSelectAll('DocumentType')
+        .then((documentTypeList: any[]) => {
+          res.send(
+            documentTypeList.map(documentType => {
+              return new DocumentType(documentType);
+            })
+          );
+        });
     });
 
     this.app.get('/getReceipts', (req, res) => {
       this.sqlUtil.sqlSelectAll('Receipt').then((receiptList: any[]) => {
-        res.send(receiptList.map(receipt => {
-          return new Receipt(receipt);
-        }));
+        res.send(
+          receiptList.map(receipt => {
+            return new Receipt(receipt);
+          })
+        );
       });
     });
 
     this.app.get('/getItemTypes', (req, res) => {
       this.sqlUtil.sqlSelectAll('ItemType').then((itemTypeList: any[]) => {
-        res.send(itemTypeList.map(itemType => {
-          return new ItemType(itemType);
-        }));
+        res.send(
+          itemTypeList.map(itemType => {
+            return new ItemType(itemType);
+          })
+        );
       });
     });
 
     this.app.get('/getVerifications', (req, res) => {
-      this.sqlUtil.sqlSelectAll('Verification').then((verificationList: any[]) => {
-        res.send(verificationList.map(verification => {
-          return new Verification(verification);
-        }));
-      });
+      this.sqlUtil
+        .sqlSelectAll('Verification')
+        .then((verificationList: any[]) => {
+          res.send(
+            verificationList.map(verification => {
+              return new Verification(verification);
+            })
+          );
+        });
     });
 
     this.app.get('/getVerificationTypes', (req, res) => {
-      this.sqlUtil.sqlSelectAll('VerificationType').then((verificationTypeList: any[]) => {
-        res.send(verificationTypeList.map(verificationType => {
-          return new VerificationType(verificationType);
-        }));
-      });
+      this.sqlUtil
+        .sqlSelectAll('VerificationType')
+        .then((verificationTypeList: any[]) => {
+          res.send(
+            verificationTypeList.map(verificationType => {
+              return new VerificationType(verificationType);
+            })
+          );
+        });
     });
 
     this.app.get('/getUsers', (req, res) => {
       this.sqlUtil.sqlSelectAll('User').then((userList: any[]) => {
-        res.send(userList.map(user => {
-          return new User(user);
-        }));
+        res.send(
+          userList.map(user => {
+            return new User(user);
+          })
+        );
       });
+    });
+
+    this.app.get('/getStatusTypes', (req, res) => {
+      this.sqlUtil
+        .sqlSelectAll('StatusType')
+        .then((statusTypeList: any[]) => {
+          res.send(
+            statusTypeList.map(statusType => {
+              return new StatusType(statusType);
+            })
+          );
+        });
     });
 
     this.app.post('/testPost', (req, res) => {
@@ -130,10 +167,9 @@ class Server {
     });
 
     this.app.post('/addNewCard', (req, res) => {
-
-      this.sqlUtil.sqlInsert('Card', req.body).then((id) => {
+      this.sqlUtil.sqlInsert('Card', req.body).then(id => {
         req.body.id = id;
-        res.send({ message: 'success', data: req.body });        
+        res.send({ message: 'success', data: req.body });
       });
     });
   }
