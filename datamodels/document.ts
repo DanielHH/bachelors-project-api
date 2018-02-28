@@ -38,6 +38,15 @@ export class Document {
      */
     registrationDate: Date;
 
+    /**
+     * Creation date of document in database
+     */
+    creationDate: Date;
+
+    /**
+     * Last modified date of the document
+     */
+    modifiedDate: Date;
 
     /**
      * ID of current document holder
@@ -73,6 +82,8 @@ export class Document {
         this.sender = document.Sender;
         this.documentDate = document.DocumentDate;
         this.registrationDate = document.RegistrationDate;
+        this.creationDate = document.CreationDate;
+        this.modifiedDate = document.ModifiedDate;
         this.userID = document.UserID;
         this.location = document.Location;
         this.comment = document.Comment;
