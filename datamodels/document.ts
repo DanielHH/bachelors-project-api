@@ -66,7 +66,7 @@ export class Document {
     /**
      * document checked in/out status
      */
-    status: boolean;
+    status: number;
 
     constructor();
     constructor(document: any);
