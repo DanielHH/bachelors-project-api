@@ -39,6 +39,16 @@ export class Card {
     expirationDate: Date;
 
     /**
+     * Creation date of card in database
+     */
+    creationDate: Date;
+
+    /**
+     * Last modified date of the card
+     */
+    modifiedDate: Date;
+
+    /**
      * Card checked in/out status
      */
     status: Number;
@@ -56,7 +66,9 @@ export class Card {
         this.userID = card.UserID;
         this.location = card.Location;
         this.comment = card.Comment;
-        this.expirationDate = card.Date;
+        this.expirationDate = card.ExpirationDate;
+        this.creationDate = card.CreationDate;
+        this.modifiedDate = card.ModifiedDate;
         this.status = card.Status;
       }
       catch (e) {
