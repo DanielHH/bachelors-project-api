@@ -151,15 +151,13 @@ class Server {
     });
 
     this.app.get('/getStatusTypes', (req, res) => {
-      this.sqlUtil
-        .sqlSelectAll('StatusType')
-        .then((statusTypeList: any[]) => {
-          res.send(
-            statusTypeList.map(statusType => {
-              return new StatusType(statusType);
-            })
-          );
-        });
+      this.sqlUtil.sqlSelectAll('StatusType').then((statusTypeList: any[]) => {
+        res.send(
+          statusTypeList.map(statusType => {
+            return new StatusType(statusType);
+          })
+        );
+      });
     });
 
     this.app.post('/testPost', (req, res) => {
@@ -170,6 +168,15 @@ class Server {
       this.sqlUtil.sqlInsert('Card', req.body).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.put('/updateCard', (req, res) => {
+      this.sqlUtil.sqlUpdate('Card', req.body).then(success => {
+        if(success)
+          res.send({ message: 'success'});
+        else
+          res.send({ message: 'failure'});        
       });
     });
   }
