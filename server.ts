@@ -171,19 +171,19 @@ class Server {
       });
     });
 
+    this.app.post('/addNewDocument', (req, res) => {
+      this.sqlUtil.sqlInsert('Document', req.body).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
     this.app.put('/updateCard', (req, res) => {
       this.sqlUtil.sqlUpdate('Card', req.body).then(success => {
         if(success)
           res.send({ message: 'success'});
         else
           res.send({ message: 'failure'});        
-      });
-    });
-
-    this.app.post('/addNewDocument', (req, res) => {
-      this.sqlUtil.sqlInsert('Document', req.body).then(id => {
-        req.body.id = id;
-        res.send({ message: 'success', data: req.body });
       });
     });
 
