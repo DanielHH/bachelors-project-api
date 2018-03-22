@@ -18,6 +18,7 @@ import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
 import { User } from './datamodels/user';
 import { StatusType } from './datamodels/statusType';
+import { PdfUtilities } from './utilities/pdf-utilities';
 
 class Server {
   public app: express.Application;
@@ -25,6 +26,7 @@ class Server {
   c = new mariasql();
 
   sqlUtil: SqlUtilities;
+  pdfUtil: PdfUtilities;
 
   constructor() {
     //create expressjs application
@@ -34,6 +36,7 @@ class Server {
     this.config();
 
     this.sqlUtil = new SqlUtilities(this.c);
+    this.pdfUtil = new PdfUtilities();
 
     this.httpRequests();
   }
@@ -160,6 +163,36 @@ class Server {
       });
     });
 
+    this.app.post('/genPDF', function (req, res) {
+      const templatePath = './pdfTemplates/';
+
+      // Get packages
+      var fs = require('fs');
+      var ejs = require('ejs');
+      var pdf = require('html-pdf')
+      // Read and compile variable html template
+      var compiled = ejs.compile(fs.readFileSync(templatePath + '/basic_variable_pdf.html', 'utf8'));
+      // Add variables to template
+      var html = compiled({ title : 'EJS', text : 'Hello, World!', text2 : 'Follow me' });
+
+      // Create and save pdf
+      var pdfFilePath = './pdfs/test.pdf';
+      var options = { format: 'A4' };
+      pdf.create(html, options).toFile(pdfFilePath);
+      
+      // Send pdf as respons
+      fs.readFile(pdfFilePath , (err,data) => {
+        
+        if (err) {
+          console.log(err);
+        } else{
+          res.contentType("application/pdf");
+          console.log(data);
+          res.send(data);
+        }
+      });
+    });
+
     this.app.post('/testPost', (req, res) => {
       res.send({ message: 'success' });
     });
@@ -196,6 +229,7 @@ class Server {
       });
     });
   }
+
 }
 
 export default new Server().app;
