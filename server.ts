@@ -178,6 +178,13 @@ class Server {
       });
     });
 
+    this.app.post('/addNewReceipt', (req, res) => {
+      this.sqlUtil.sqlInsert('Receipt', req.body).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
     this.app.put('/updateCard', (req, res) => {
       this.sqlUtil.sqlUpdate('Card', req.body).then(success => {
         if(success)
@@ -195,6 +202,16 @@ class Server {
           res.send({ message: 'failure'});        
       });
     });
+
+    this.app.put('/updateReceipt', (req, res) => {
+      this.sqlUtil.sqlUpdate('Receipt', req.body).then(success => {
+        if(success)
+          res.send({ message: 'success'});
+        else
+          res.send({ message: 'failure'});        
+      });
+    });
+
   }
 }
 
