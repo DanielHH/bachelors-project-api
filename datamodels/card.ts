@@ -31,7 +31,7 @@ export class Card {
     /**
      * Comment
      */
-    comment: string;
+    comment?: string;
   
     /**
      * Expiration date of the card
@@ -53,6 +53,11 @@ export class Card {
      */
     status: Number;
 
+    /**
+     * Active receipt (if any)
+     */
+    activeReceipt?: number;
+
     constructor();
     constructor(card: any);
 
@@ -70,6 +75,7 @@ export class Card {
         this.creationDate = card.CreationDate;
         this.modifiedDate = card.ModifiedDate;
         this.status = card.Status;
+        this.activeReceipt = card.ActiveReceipt;
       }
       catch (e) {
 
