@@ -18,22 +18,25 @@ import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
 import { User } from './datamodels/user';
 import { StatusType } from './datamodels/statusType';
+import { CardDTO } from './DTO/cardDTO';
 
 class Server {
   public app: express.Application;
 
-  c = new mariasql();
-
+  
   sqlUtil: SqlUtilities;
 
   constructor() {
+
+    global.db = new mariasql();
+
     //create expressjs application
     this.app = express();
 
     //configure application
     this.config();
 
-    this.sqlUtil = new SqlUtilities(this.c);
+    this.sqlUtil = new SqlUtilities();
 
     this.httpRequests();
   }
@@ -44,7 +47,7 @@ class Server {
     this.app.use(methodOverride());
     this.app.use(cors());
 
-    this.c.connect({
+    global.db.connect({
       host: dbconfig.host,
       user: dbconfig.username,
       password: dbconfig.password,
@@ -55,10 +58,16 @@ class Server {
 
   httpRequests() {
     this.app.get('/getCards', (req, res) => {
-      this.sqlUtil.sqlSelectAll('Card').then((cardList: any[]) => {
+       
+      const query = 'SELECT Card.*,' +
+       'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+       'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
+       'User.UserType, User.Username, User.Name, User.Email ' + 
+       'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) LEFT JOIN (User) ON (User.ID=Card.UserID)';
+      this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
-            return new Card(card);
+            return new CardDTO(card);
           })
         );
       });
