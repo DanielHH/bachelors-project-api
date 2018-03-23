@@ -62,7 +62,7 @@ export class Document {
     /**
      * Comment
      */
-    comment: string;
+    comment?: string;
 
     /**
      * document checked in/out status
@@ -94,7 +94,7 @@ export class Document {
         this.location = document.Location;
         this.comment = document.Comment;
         this.status = document.Status;
-        this.activeReceipt = null;
+        this.activeReceipt = document.ActiveReceipt;
       }
       catch (e) {
 
