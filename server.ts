@@ -165,29 +165,46 @@ class Server {
 
     this.app.post('/genPDF', function (req, res) {
       const templatePath = './pdfTemplates/';
-
+      const params = req.body;
+      console.log(req.body);
       // Get packages
       var fs = require('fs');
       var ejs = require('ejs');
       var pdf = require('html-pdf')
+      let template = " ";
       // Read and compile variable html template
-      var compiled = ejs.compile(fs.readFileSync(templatePath + '/basic_variable_pdf.html', 'utf8'));
+      switch (params[0]) {
+        case "receipt": 
+        default: template = "/receipt_template.html"; break;
+      }
+
+
+      var html = fs.readFileSync(templatePath + template, 'utf8');
+      //var compiled = ejs.compile(fs.readFileSync(templatePath + '/receipt_template.html', 'utf8'));
       // Add variables to template
-      var html = compiled({ title : 'EJS', text : 'Hello, World!', text2 : 'Follow me' });
+      //var html = compiled({ heading : params[0], paragraph : params[1]});
+      //var html = compiled({ title : 'EJS', text : 'Hello, World!', text2 : 'Test me' });
+      //var html = compiled({ title : 'EJS', text : 'Hello, World!', text2 : 'Follow me' });
 
       // Create and save pdf
-      var pdfFilePath = './pdfs/test.pdf';
+      var pdfFilePath = './pdfs/receipt.pdf';
       var options = { format: 'A4' };
-      pdf.create(html, options).toFile(pdfFilePath);
+      var test = pdf.create(html, options).toFile(pdfFilePath, function(err, res2) {
+        if (err) return console.log(err);
+        console.log(res2);
+      });
+      //console.log(test);
       
+      //res.send(req.body);
       // Send pdf as respons
+      //console.log(fs.readFileSync(pdfFilePath));
       fs.readFile(pdfFilePath , (err,data) => {
-        
         if (err) {
           console.log(err);
         } else{
           res.contentType("application/pdf");
-          console.log(data);
+          //console.log("Read file");
+          //console.log(data);
           res.send(data);
         }
       });
