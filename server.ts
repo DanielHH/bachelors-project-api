@@ -163,15 +163,13 @@ class Server {
     });
 
     this.app.get('/getStatusTypes', (req, res) => {
-      this.sqlUtil
-        .sqlSelectAll('StatusType')
-        .then((statusTypeList: any[]) => {
-          res.send(
-            statusTypeList.map(statusType => {
-              return new StatusType(statusType);
-            })
-          );
-        });
+      this.sqlUtil.sqlSelectAll('StatusType').then((statusTypeList: any[]) => {
+        res.send(
+          statusTypeList.map(statusType => {
+            return new StatusType(statusType);
+          })
+        );
+      });
     });
 
     this.app.post('/testPost', (req, res) => {
@@ -184,6 +182,48 @@ class Server {
         res.send({ message: 'success', data: req.body });
       });
     });
+
+    this.app.post('/addNewDocument', (req, res) => {
+      this.sqlUtil.sqlInsert('Document', req.body).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.post('/addNewReceipt', (req, res) => {
+      this.sqlUtil.sqlInsert('Receipt', req.body).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.put('/updateCard', (req, res) => {
+      this.sqlUtil.sqlUpdate('Card', req.body).then(success => {
+        if(success)
+          res.send({ message: 'success'});
+        else
+          res.send({ message: 'failure'});        
+      });
+    });
+
+    this.app.put('/updateDocument', (req, res) => {
+      this.sqlUtil.sqlUpdate('Document', req.body).then(success => {
+        if(success)
+          res.send({ message: 'success'});
+        else
+          res.send({ message: 'failure'});        
+      });
+    });
+
+    this.app.put('/updateReceipt', (req, res) => {
+      this.sqlUtil.sqlUpdate('Receipt', req.body).then(success => {
+        if(success)
+          res.send({ message: 'success'});
+        else
+          res.send({ message: 'failure'});        
+      });
+    });
+
   }
 }
 

@@ -1,4 +1,3 @@
-
 /**
  * Receipt data model
 */
