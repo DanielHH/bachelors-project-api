@@ -52,7 +52,7 @@ export class Receipt {
       try {
         if(receipt.ID)
           this.id = receipt.ID;
-        this.itemTypeID = receipt.Name;
+        this.itemTypeID = receipt.itemTypeID;
         this.cardID = receipt.CardID;
         this.documentID = receipt.DocumentID;
         this.userID = receipt.UserID;
