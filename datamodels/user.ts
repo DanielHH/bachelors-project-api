@@ -28,37 +28,18 @@ export class User {
   email: string;
 
   constructor();
-  constructor(
-    id?: number,
-    userType?: number,
-    username?: string,
-    name?: string,
-    email?: string,
-    user?: any
-  );
+  constructor(user?: any);
 
-  constructor(
-    id?: number,
-    userType?: number,    
-    username?: string,
-    name?: string,
-    email?: string,
-    user?: any
-  ) {
+  constructor(user?: any) {
     try {
-      if (!user) {
-        this.id = id;
-        this.userType = userType;
-        this.username = username;
-        this.name = name;
-        this.email = email;
-      } else {
-        this.id = user.ID;
-        this.userType = user.UserType;
-        this.username = user.Username;
-        this.name = user.Name;
-        this.email = user.Email;
+      if (user) {
+        if(user.id)
+          this.id = user.id;
+        this.userType = user.userType;
+        this.username = user.username;
+        this.name = user.name;
+        this.email = user.email;
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 }

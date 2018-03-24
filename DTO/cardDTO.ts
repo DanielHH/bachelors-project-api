@@ -1,6 +1,6 @@
-import { CardType } from '../datamodels/cardType';
-import { User } from '../datamodels/user';
-import { StatusType } from '../datamodels/statusType';
+import { UserDTO } from './userDTO';
+import { StatusTypeDTO } from './statusTypeDTO';
+import { CardTypeDTO } from './cardTypeDTO';
 
 /**
  * Card data transfer object
@@ -14,7 +14,7 @@ export class CardDTO {
   /**
    * Card type
    */
-  cardType: CardType;
+  cardType: CardTypeDTO;
 
   /**
    * Card serial number (can contain alphabetical characters)
@@ -24,7 +24,7 @@ export class CardDTO {
   /**
    * ID of current card holder
    */
-  user: User;
+  user: UserDTO;
 
   /**
    * Current location of card
@@ -54,7 +54,13 @@ export class CardDTO {
   /**
    * Card checked in/out status
    */
-  status: StatusType;
+  status: StatusTypeDTO;
+
+  /**
+   * Active receipt (if any)
+   */
+  activeReceipt?: number;
+
 
   constructor();
   constructor(card: any);
@@ -63,10 +69,11 @@ export class CardDTO {
     try {
       this.id = card.ID;
 
-      this.cardType = new CardType(card.CardTypeID, card.CardTypeName);
+      this.cardType = new CardTypeDTO(card.CardTypeID, card.CardTypeName);
       this.cardNumber = card.CardNumber;
 
-      this.user = new User(
+      this.user = new UserDTO(
+        null,
         card.UserID,
         card.UserType,
         card.Username,
@@ -79,7 +86,9 @@ export class CardDTO {
       this.expirationDate = card.ExpirationDate;
       this.creationDate = card.CreationDate;
       this.modifiedDate = card.ModifiedDate;
-      this.status = card.Status;
-    } catch (e) {}
+      this.status = new StatusTypeDTO(card.StatusTypeID, card.StatusTypeName);
+      this.activeReceipt = card.activeReceipt;
+
+    } catch (e) { }
   }
 }

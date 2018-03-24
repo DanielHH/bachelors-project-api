@@ -3,30 +3,31 @@
  */
 export class StatusType {
 
-    /**
-     * Database ID of the status type
-     */
-    id: number;
+  /**
+   * Database ID of the status type
+   */
+  id: number;
 
-    /**
-     * Name of the status type
-     */
-    name: string;
+  /**
+   * Name of the status type
+   */
+  name: string;
 
-    constructor();
-    constructor(statusType: any);
+  constructor();
+  constructor(statusType?: any);
 
-    constructor(statusType?: any) {
+  constructor(statusType?: any) {
 
-      try {
-        if(statusType.ID)
-          this.id = statusType.ID;
+    try {
+      if (statusType) {
+        this.id = statusType.ID;
         this.name = statusType.Name;
       }
-      catch (e) {
 
-      }
     }
-  
+    catch (e) {
+
+    }
   }
-  
+
+}

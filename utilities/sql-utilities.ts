@@ -27,7 +27,7 @@ export class SqlUtilities {
 
     queryString = queryString.slice(0, -1);
     queryString += ')';
-    
+
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
       global.db.query(queryString, dataArray, (err, rows) => {

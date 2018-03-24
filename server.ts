@@ -19,6 +19,7 @@ import { VerificationType } from './datamodels/verificationType';
 import { User } from './datamodels/user';
 import { StatusType } from './datamodels/statusType';
 import { CardDTO } from './DTO/cardDTO';
+import { UserDTO } from './DTO/userDTO';
 
 class Server {
   public app: express.Application;
@@ -153,7 +154,7 @@ class Server {
       this.sqlUtil.sqlSelectAll('User').then((userList: any[]) => {
         res.send(
           userList.map(user => {
-            return new User(user);
+            return new UserDTO(user);
           })
         );
       });
@@ -174,7 +175,7 @@ class Server {
     });
 
     this.app.post('/addNewCard', (req, res) => {
-      this.sqlUtil.sqlInsert('Card', req.body).then(id => {
+      this.sqlUtil.sqlInsert('Card', new Card(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });
@@ -195,7 +196,7 @@ class Server {
     });
 
     this.app.put('/updateCard', (req, res) => {
-      this.sqlUtil.sqlUpdate('Card', req.body).then(success => {
+      this.sqlUtil.sqlUpdate('Card', new Card(req.body)).then(success => {
         if(success)
           res.send({ message: 'success'});
         else

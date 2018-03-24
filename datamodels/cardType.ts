@@ -15,20 +15,12 @@ export class CardType {
   name: string;
 
   constructor();
-  constructor(id?: number, name?: string, cardType?: any);
+  constructor(cardType?: any);
 
-  constructor(id?: number, name?: string, cardType?: any) {
+  constructor(cardType?: any) {
 
-    if(!cardType) {
-      this.id = id;
-      this.name = name;
-    }
+    this.id = cardType.ID;
+    this.name = cardType.Name;
 
-    else {
-      if (cardType.ID) {
-        this.id = cardType.ID;
-        this.name = cardType.Name;
-      }
-    }
   }
 }
