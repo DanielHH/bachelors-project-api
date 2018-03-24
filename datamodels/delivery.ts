@@ -70,10 +70,10 @@ export class Delivery {
         this.documentNumber = document.DocumentNumber;
         this.name = document.Name;
         this.documentDate = document.DocumentDate;
-        this.sentDate = document.RegistrationDate;
+        this.sentDate = document.SentDate;
         this.creationDate = document.CreationDate;
         this.modifiedDate = document.ModifiedDate;
-        this.receiver = document.Location;
+        this.receiver = document.Receiver;
         this.comment = document.Comment;
         this.status = document.Status;
       }
