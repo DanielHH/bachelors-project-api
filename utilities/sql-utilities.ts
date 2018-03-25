@@ -6,14 +6,8 @@ import * as _ from 'lodash';
  * SQL function utilities
  */
 export class SqlUtilities {
-  /**
-   * MariaDB database connection
-   */
-  c: any;
 
-  constructor(c: any) {
-    this.c = c;
-  }
+  constructor() { }
 
   /**
    * Insert data into database
@@ -36,7 +30,7 @@ export class SqlUtilities {
     
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
-      this.c.query(queryString, dataArray, (err, rows) => {
+      global.db.query(queryString, dataArray, (err, rows) => {
         if (!err) resolve(rows.info.insertId);
         reject(err);
       });
@@ -45,7 +39,25 @@ export class SqlUtilities {
 
   sqlSelectAll(tableName: string) {
     return new Promise((resolve, reject) => {
-      this.c.query('SELECT * FROM ' + tableName, false, (err, rows) => {
+      global.db.query('SELECT * FROM ' + tableName, false, (err, rows) => {
+        if (!err) resolve(rows);
+        reject(err);
+      });
+    });
+  }
+
+  sqlSelect(tableName: string, id: number) {
+    return new Promise((resolve, reject) => {
+      global.db.query('SELECT * FROM ' + tableName + ' WHERE ID = ?', [id], false, (err, rows) => {
+        if (!err) resolve(rows[0]);
+        reject(err);
+      });
+    });
+  }
+
+  sqlSelectQuery(query: string) {
+    return new Promise((resolve, reject) => {
+      global.db.query(query, false, (err, rows) => {
         if (!err) resolve(rows);
         reject(err);
       });
@@ -76,9 +88,7 @@ export class SqlUtilities {
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
-      this.c.query(queryString, dataArray, (err, rows) => {
-        console.log(err);
-        console.log(rows);
+      global.db.query(queryString, dataArray, (err, rows) => {
         if (!err) resolve(rows.info.affectedRows);
         reject(err);
       });

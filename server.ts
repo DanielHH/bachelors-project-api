@@ -19,24 +19,26 @@ import { VerificationType } from './datamodels/verificationType';
 import { User } from './datamodels/user';
 import { StatusType } from './datamodels/statusType';
 import { PdfUtilities } from './utilities/pdf-utilities';
+import { CardDTO } from './DTO/cardDTO';
 
 class Server {
   public app: express.Application;
 
-  c = new mariasql();
-
+  
   sqlUtil: SqlUtilities;
   pdfUtil: PdfUtilities;
 
   constructor() {
+
+    global.db = new mariasql();
+
     //create expressjs application
     this.app = express();
 
     //configure application
     this.config();
 
-    this.sqlUtil = new SqlUtilities(this.c);
-    this.pdfUtil = new PdfUtilities();
+    this.sqlUtil = new SqlUtilities();
 
     this.httpRequests();
   }
@@ -47,7 +49,7 @@ class Server {
     this.app.use(methodOverride());
     this.app.use(cors());
 
-    this.c.connect({
+    global.db.connect({
       host: dbconfig.host,
       user: dbconfig.username,
       password: dbconfig.password,
@@ -58,10 +60,16 @@ class Server {
 
   httpRequests() {
     this.app.get('/getCards', (req, res) => {
-      this.sqlUtil.sqlSelectAll('Card').then((cardList: any[]) => {
+       
+      const query = 'SELECT Card.*,' +
+       'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+       'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
+       'User.UserType, User.Username, User.Name, User.Email ' + 
+       'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) LEFT JOIN (User) ON (User.ID=Card.UserID)';
+      this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
-            return new Card(card);
+            return new CardDTO(card);
           })
         );
       });
@@ -163,51 +171,15 @@ class Server {
       });
     });
 
+    this.app.get('/genPDF', (req, res) => {
+      res.download("./pdfs/receipt.pdf");
+    })
+
     this.app.post('/genPDF', function (req, res) {
-      const templatePath = './pdfTemplates/';
-      const params = req.body;
-      console.log(req.body);
-      // Get packages
-      var fs = require('fs');
-      var ejs = require('ejs');
-      var pdf = require('html-pdf')
-      let template = " ";
-      // Read and compile variable html template
-      switch (params[0]) {
-        case "receipt": 
-        default: template = "/receipt_template.html"; break;
-      }
-
-
-      var html = fs.readFileSync(templatePath + template, 'utf8');
-      //var compiled = ejs.compile(fs.readFileSync(templatePath + '/receipt_template.html', 'utf8'));
-      // Add variables to template
-      //var html = compiled({ heading : params[0], paragraph : params[1]});
-      //var html = compiled({ title : 'EJS', text : 'Hello, World!', text2 : 'Test me' });
-      //var html = compiled({ title : 'EJS', text : 'Hello, World!', text2 : 'Follow me' });
-
-      // Create and save pdf
-      var pdfFilePath = './pdfs/receipt.pdf';
-      var options = { format: 'A4' };
-      var test = pdf.create(html, options).toFile(pdfFilePath, function(err, res2) {
-        if (err) return console.log(err);
-        console.log(res2);
-      });
-      //console.log(test);
-      
-      //res.send(req.body);
-      // Send pdf as respons
-      //console.log(fs.readFileSync(pdfFilePath));
-      fs.readFile(pdfFilePath , (err,data) => {
-        if (err) {
-          console.log(err);
-        } else{
-          res.contentType("application/pdf");
-          //console.log("Read file");
-          //console.log(data);
-          res.send(data);
-        }
-      });
+      const pdfUtil = new PdfUtilities(/*this.sqlUtil*/);
+      const data = pdfUtil.generatePDF(req.body);
+      res.contentType("application/pdf");
+      res.send(data);
     });
 
     this.app.post('/testPost', (req, res) => {

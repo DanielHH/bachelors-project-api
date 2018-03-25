@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
+
+<html>
 
 <head>
     <meta charset="utf-8" />
@@ -74,6 +76,7 @@
             width: 14%;
             height: 50px;
             text-align: center;
+            word-wrap: break-word;
             padding-top: 10px;
         }
         
@@ -82,6 +85,7 @@
             width: 10%;
             height: 50px;
             text-align: center;
+            word-wrap: break-word;
             padding-top: 10px;
         }
         
@@ -90,6 +94,7 @@
             width: 7%;
             height: 50px;
             text-align: center;
+            word-wrap: break-word;
             padding-top: 10px;
         }
         
@@ -98,6 +103,7 @@
             width: 5%;
             height: 50px;
             text-align: center;
+            word-wrap: break-word;
             padding-top: 10px;
         }
         
@@ -153,18 +159,18 @@
     <h2 class="">Användarkopia</h2>
 
     <div class="row">
-        <div class="column12 border-top border-left">Reg.Nr</div>
+        <div class="column9 border-top border-left">Reg.Nr</div>
         <div class="column9 border-top border-left">Benämning</div>
         <div class="column18 border-top border-left">Typ</div>
         <div class="column9 border-top border-left">Avsändare</div>
         <div class="column9 border-top border-left">Daterat Datum</div>
         <div class="column9 border-top border-left">Inkommet Datum</div>
-        <div class="column7 border-top border-left">Ansvarig på Sectra</div>
+        <div class="column9 border-top border-left">Ansvarig på Sectra</div>
         <div class="column7 border-top border-left">Kommentar</div>
         <div class="column9 border-top border-left border-right">Förvaras</div>
     </div>
     <div class="row">
-        <div class="column12 border-top border-bottom border-left">
+        <div class="column9 border-top border-bottom border-left">
             <%= serNumber %>
         </div>
         <div class="column9 border-top border-bottom border-left">
@@ -182,8 +188,8 @@
         <div class="column9 border-top border-bottom border-left">
             <%= arrDate %>
         </div>
-        <div class="column7 border-top border-bottom border-left">
-            <%= responsible %>
+        <div class="column9 border-top border-bottom border-left">
+            <%= receiver %>
         </div>
         <div class="column7 border-top border-bottom border-left">
             <%= comment %>

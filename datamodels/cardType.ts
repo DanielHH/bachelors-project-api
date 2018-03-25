@@ -1,32 +1,34 @@
+import { SqlUtilities } from '../utilities/sql-utilities';
+
 /**
  * CardType data model
  */
 export class CardType {
+  /**
+   * Database ID of the card type
+   */
+  id: number;
 
-    /**
-     * Database ID of the card type
-     */
-    id: number;
+  /**
+   * Name of the card type
+   */
+  name: string;
 
-    /**
-     * Name of the card type
-     */
-    name: string;
+  constructor();
+  constructor(id?: number, name?: string, cardType?: any);
 
-    constructor();
-    constructor(cardType: any);
+  constructor(id?: number, name?: string, cardType?: any) {
 
-    constructor(cardType?: any) {
+    if(!cardType) {
+      this.id = id;
+      this.name = name;
+    }
 
-      try {
-        if(cardType.ID)
-          this.id = cardType.ID;
+    else {
+      if (cardType.ID) {
+        this.id = cardType.ID;
         this.name = cardType.Name;
       }
-      catch (e) {
-
-      }
     }
-  
   }
-  
+}
