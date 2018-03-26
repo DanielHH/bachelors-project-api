@@ -15,7 +15,7 @@ export class ReceiptDTO {
   /**
    * ID of receipt item type
    */
-  itemType: number;
+  itemTypeID: number;
 
   /**
    * Card ID of receipt
