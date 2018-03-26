@@ -3,96 +3,101 @@
 */
 export class Document {
 
-    /**
-     * Database ID of the document
-     */
-    id: number;
-  
-    /**
-     * Document type
-     */
-    documentType: number;
-  
-    /**
-     * Document serial number (can contain alphabetical characters)
-     */
-    documentNumber: string;
+  /**
+   * Database ID of the document
+   */
+  ID: number;
 
-    /**
-     * Document name
-     */
-    name: string;
+  /**
+   * Document type
+   */
+  DocumentType: number;
 
-    /**
-     * Document sender
-     */
-    sender: string;
+  /**
+   * Document serial number (can contain alphabetical characters)
+   */
+  DocumentNumber: string;
 
-    /**
-     * Document date
-     */
-    documentDate: Date;
+  /**
+   * Document name
+   */
+  Name: string;
 
-    /**
-     * Registration date
-     */
-    registrationDate: Date;
+  /**
+   * Document sender
+   */
+  Sender: string;
 
-    /**
-     * Creation date of document in database
-     */
-    creationDate: Date;
+  /**
+   * Document date
+   */
+  DocumentDate: Date;
 
-    /**
-     * Last modified date of the document
-     */
-    modifiedDate: Date;
+  /**
+   * Registration date
+   */
+  RegistrationDate: Date;
 
-    /**
-     * ID of current document holder
-     */
-    userID: number;
-  
-    /**
-     * Current location of document
-     */
-    location: string;
-  
-    /**
-     * Comment
-     */
-    comment: string;
+  /**
+   * Creation date of document in database
+   */
+  CreationDate: Date;
 
-    /**
-     * document checked in/out status
-     */
-    status: number;
+  /**
+   * Last modified date of the document
+   */
+  ModifiedDate: Date;
 
-    constructor();
-    constructor(document: any);
+  /**
+   * ID of current document holder
+   */
+  UserID: number;
 
-    constructor(document?: any) {
+  /**
+   * Current location of document
+   */
+  Location: string;
 
-      try {
-        if(document.ID)
-          this.id = document.ID;
-        this.documentType = document.DocumentType;
-        this.documentNumber = document.DocumentNumber;
-        this.name = document.Name;
-        this.sender = document.Sender;
-        this.documentDate = document.DocumentDate;
-        this.registrationDate = document.RegistrationDate;
-        this.creationDate = document.CreationDate;
-        this.modifiedDate = document.ModifiedDate;
-        this.userID = document.UserID;
-        this.location = document.Location;
-        this.comment = document.Comment;
-        this.status = document.Status;
-      }
-      catch (e) {
+  /**
+   * Comment
+   */
+  Comment: string;
 
-      }
+  /**
+   * document checked in/out status
+   */
+  Status: number;
+
+  /**
+  * Active receipt (if any)
+  */
+  ActiveReceipt?: number;
+
+  constructor();
+  constructor(document: any);
+
+  constructor(document?: any) {
+
+    if (document.id) {
+      this.ID = document.id;
     }
-  
+    else {
+      this.ID = null;
+    }
+    this.DocumentType = document.documentType.id;
+    this.DocumentNumber = document.documentNumber;
+    this.Name = document.name;
+    this.Sender = document.sender;
+    this.DocumentDate = document.documentDate;
+    this.RegistrationDate = document.registrationDate;
+    this.CreationDate = document.creationDate;
+    this.ModifiedDate = document.modifiedDate;
+    this.UserID = document.user.id;
+    this.Location = document.location;
+    this.Comment = document.comment;
+    this.Status = document.status.id;
+    this.ActiveReceipt = document.activeReceipt;
+
   }
-  
+
+}

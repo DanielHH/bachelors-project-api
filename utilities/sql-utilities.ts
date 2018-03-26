@@ -75,7 +75,7 @@ export class SqlUtilities {
     let dataArray = [];
 
     for (let key of Object.keys(data)) {
-      if (key !== 'id') {
+      if (key !== 'ID') {
 
         queryString += _.upperFirst(key) + ' = ?, ';
 
@@ -84,7 +84,7 @@ export class SqlUtilities {
     }
 
     queryString = queryString.slice(0, -2);
-    queryString += ' WHERE ID = ' + data.id;
+    queryString += ' WHERE ID = ' + data.ID;
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
