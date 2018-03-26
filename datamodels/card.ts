@@ -3,84 +3,87 @@
 */
 export class Card {
 
-    /**
-     * Database ID of the card
-     */
-    id: number;
-  
-    /**
-     * Card type
-     */
-    cardType: number;
-  
-    /**
-     * Card serial number (can contain alphabetical characters)
-     */
-    cardNumber: string;
-  
-    /**
-     * ID of current card holder
-     */
-    userID: number;
-  
-    /**
-     * Current location of card
-     */
-    location: string;
-  
-    /**
-     * Comment
-     */
-    comment?: string;
-  
-    /**
-     * Expiration date of the card
-     */
-    expirationDate: Date;
+  /**
+   * Database ID of the card
+   */
+  ID: number;
 
-    /**
-     * Creation date of card in database
-     */
-    creationDate: Date;
+  /**
+   * Card type
+   */
+  CardType: number;
 
-    /**
-     * Last modified date of the card
-     */
-    modifiedDate: Date;
+  /**
+   * Card serial number (can contain alphabetical characters)
+   */
+  CardNumber: string;
 
-    /**
-     * Card checked in/out status
-     */
-    status: Number;
+  /**
+   * ID of current card holder
+   */
+  UserID: number;
 
-    /**
-     * Active receipt (if any)
-     */
-    activeReceipt?: number;
+  /**
+   * Current location of card
+   */
+  Location: string;
 
-    constructor();
-    constructor(card: any);
+  /**
+   * Comment
+   */
+  Comment: string;
 
-    constructor(card?: any) {
+  /**
+   * Expiration date of the card
+   */
+  ExpirationDate: Date;
 
-      try {
-        if(card.ID)
-          this.id = card.ID;
-        this.cardType = card.CardType;
-        this.cardNumber = card.CardNumber;
-        this.userID = card.UserID;
-        this.location = card.Location;
-        this.comment = card.Comment;
-        this.expirationDate = card.ExpirationDate;
-        this.creationDate = card.CreationDate;
-        this.modifiedDate = card.ModifiedDate;
-        this.status = card.Status;
-        this.activeReceipt = card.ActiveReceipt;
+  /**
+   * Creation date of card in database
+   */
+  CreationDate: Date;
+
+  /**
+   * Last modified date of the card
+   */
+  ModifiedDate: Date;
+
+  /**
+   * Card checked in/out status
+   */
+  Status: Number;
+
+  /**
+   * Active receipt (if any)
+   */
+  ActiveReceipt?: number;
+
+  constructor();
+  constructor(card: any);
+
+  constructor(card?: any) {
+
+    try {
+      if (card.id) {
+        this.ID = card.id;
       }
-      catch (e) {
-
+      else {
+        this.ID = null;
       }
+      this.CardType = card.cardType.id;
+      this.CardNumber = card.cardNumber;
+      this.UserID = card.user.id;
+      this.Location = card.location;
+      this.Comment = card.comment;
+      this.ExpirationDate = card.expirationDate;
+      this.CreationDate = card.creationDate;
+      this.ModifiedDate = card.modifiedDate;
+      this.Status = card.status.id;
+      this.ActiveReceipt = card.activeReceipt;
     }
-  
+    catch (e) {
+
+    }
   }
-  
+
+}

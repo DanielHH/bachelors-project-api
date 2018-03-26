@@ -6,42 +6,42 @@ export class Receipt {
     /**
      * Database ID of the receipt
      */
-    id: number;
+    ID: number;
   
     /**
      * ID of receipt item type
      */
-    itemTypeID: number;
+    ItemTypeID: number;
   
     /**
      * Card ID of receipt
      */
-    cardID?: number;
+    CardID?: number;
   
     /**
      * Document ID of receipt item type
      */
-    documentID?: number;
+    DocumentID?: number;
   
     /**
      * ID of current receipt holder
      */
-    userID: number;
+    UserID: number;
   
     /**
      * Start date of the receipt
      */
-    startDate: Date;
+    StartDate: Date;
   
     /**
      * End date of the receipt
      */
-    endDate: Date;
+    EndDate: Date;
   
     /**
      * Comment
      */
-    comment: string;
+    Comment: string;
 
     constructor();
     constructor(receipt: any);
@@ -49,15 +49,33 @@ export class Receipt {
     constructor(receipt?: any) {
 
       try {
-        if(receipt.ID)
-          this.id = receipt.ID;
-        this.itemTypeID = receipt.ItemTypeID;
-        this.cardID = receipt.CardID;
-        this.documentID = receipt.DocumentID;
-        this.userID = receipt.UserID;
-        this.startDate = receipt.StartDate;
-        this.endDate = receipt.EndDate;
-        this.comment = receipt.Comment;
+        if(receipt.ID) {
+          this.ID = Number(receipt.id);
+        }
+        else {
+          this.ID = null;
+        }
+
+        this.ItemTypeID = receipt.itemTypeID;
+        
+        if(receipt.cardID) {
+          this.CardID = receipt.cardID;
+        }
+        else {
+          this.CardID = null;
+        }
+
+        if(receipt.documentID) {
+          this.DocumentID = receipt.documentID;
+        }
+        else {
+          this.DocumentID = null;
+        }
+
+        this.UserID = receipt.userID;
+        this.StartDate = receipt.startDate;
+        this.EndDate = receipt.endDate;
+        this.Comment = receipt.comment;
       }
       catch (e) {
 
