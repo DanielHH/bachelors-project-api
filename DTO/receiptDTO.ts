@@ -52,7 +52,7 @@ export class ReceiptDTO {
 
   constructor(receipt?: any) {
     try {
-      this.id = receipt.ID;
+      this.id = Number(receipt.ID);
 
       /*
       this.itemType = new ItemTypeDTO(receipt.ItemTypeID, receipt.ItemTypeName);

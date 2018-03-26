@@ -84,7 +84,7 @@ export class DocumentDTO {
   constructor(document?: any) {
 
     try {
-      this.id = document.ID;
+      this.id = Number(document.ID);
 
       this.documentType = new DocumentTypeDTO(document.DocumentTypeID, document.DocumentTypeName);
       this.documentNumber = document.DocumentNumber;
@@ -109,7 +109,7 @@ export class DocumentDTO {
       this.location = document.Location;
       this.comment = document.Comment;
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
-      this.activeReceipt = document.ActiveReceipt;
+      this.activeReceipt = Number(document.ActiveReceipt);
 
     } catch (e) { }
   }
