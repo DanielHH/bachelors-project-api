@@ -47,16 +47,16 @@ export class UserDTO {
   ) {
     try {
       if (user) {
-        this.id = user.ID;
-        this.userType = user.UserType;
+        this.id = Number(user.ID);
+        this.userType = Number(user.UserType);
         this.username = user.Username;
         this.name = user.Name;
         this.email = user.Email;
 
       }
       else {
-        this.id = id;
-        this.userType = userType;
+        this.id = Number(id);
+        this.userType = Number(userType);
         this.username = username;
         this.name = name;
         this.email = email;

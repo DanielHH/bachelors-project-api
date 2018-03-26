@@ -91,7 +91,7 @@ export class CardDTO {
 
   fromJoin(data: any) {
     try {
-      this.id = data.CardID;
+      this.id = Number(data.CardID);
 
       this.cardType = new CardTypeDTO(data.CardTypeID, data.CardTypeName);
       this.cardNumber = data.CardNumber;
@@ -111,7 +111,7 @@ export class CardDTO {
       this.creationDate = data.CardCreationDate;
       this.modifiedDate = data.CardModifiedDate;
       this.status = new StatusTypeDTO(data.CardStatusTypeID, data.CardStatusTypeName);
-      this.activeReceipt = data.CardActiveReceipt;
+      this.activeReceipt = Number(data.CardActiveReceipt);
     } catch (e) {}
   }
 

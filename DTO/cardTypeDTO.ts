@@ -17,7 +17,7 @@ export class CardTypeDTO {
 
   constructor(id?: number, name?: string) {
 
-    this.id = id;
+    this.id = Number(id);
     this.name = name;
 
   }
