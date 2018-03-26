@@ -11,6 +11,7 @@ import { Card } from './datamodels/card';
 import { SqlUtilities } from './utilities/sql-utilities';
 import { CardType } from './datamodels/cardType';
 import { Document } from './datamodels/document';
+import { Delivery } from './datamodels/delivery';
 import { DocumentType } from './datamodels/documentType';
 import { Receipt } from './datamodels/receipt';
 import { ItemType } from './datamodels/itemType';
@@ -98,6 +99,17 @@ class Server {
         res.send(
           documentList.map(document => {
             return new DocumentDTO(document);
+          })
+        );
+      });
+    });
+
+
+    this.app.get('/getDeliveries', (req, res) => {
+      this.sqlUtil.sqlSelectAll('Delivery').then((deliveryList: any[]) => {
+        res.send(
+          deliveryList.map(delivery => {
+            return new Delivery(delivery);
           })
         );
       });
