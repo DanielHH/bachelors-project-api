@@ -80,7 +80,7 @@ export class ReceiptDTO {
         receipt.Email
       );*/
 
-      this.itemType = Number(receipt.ItemTypeID);
+      this.itemTypeID = Number(receipt.ItemTypeID);
       this.cardID = Number(receipt.CardID);
       this.documentID = Number(receipt.DocumentID);
       this.userID = Number(receipt.UserID);
