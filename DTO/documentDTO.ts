@@ -102,7 +102,7 @@ export class DocumentDTO {
         document.UserID,
         document.UserType,
         document.Username,
-        document.Name,
+        document.UsersName,
         document.Email
       );
 

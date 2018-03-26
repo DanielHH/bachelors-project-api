@@ -21,6 +21,7 @@ import { StatusType } from './datamodels/statusType';
 import { CardDTO } from './DTO/cardDTO';
 import { UserDTO } from './DTO/userDTO';
 import { DocumentDTO } from './DTO/documentDTO';
+import { ReceiptDTO } from './DTO/receiptDTO';
 
 class Server {
   public app: express.Application;
@@ -90,7 +91,7 @@ class Server {
       const query = 'SELECT Document.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email ' +
+        'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) LEFT JOIN (User) ON (User.ID=Document.UserID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
@@ -118,7 +119,7 @@ class Server {
       this.sqlUtil.sqlSelectAll('Receipt').then((receiptList: any[]) => {
         res.send(
           receiptList.map(receipt => {
-            return new Receipt(receipt);
+            return new ReceiptDTO(receipt);
           })
         );
       });
@@ -222,7 +223,7 @@ class Server {
     });
 
     this.app.put('/updateReceipt', (req, res) => {
-      this.sqlUtil.sqlUpdate('Receipt', req.body).then(success => {
+      this.sqlUtil.sqlUpdate('Receipt', new Receipt(req.body)).then(success => {
         if (success)
           res.send({ message: 'success' });
         else

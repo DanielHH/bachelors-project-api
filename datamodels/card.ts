@@ -62,6 +62,7 @@ export class Card {
   constructor(card: any);
 
   constructor(card?: any) {
+
     try {
       if (card.id) {
         this.ID = card.id;
