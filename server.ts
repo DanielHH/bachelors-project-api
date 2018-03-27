@@ -23,6 +23,7 @@ import { CardDTO } from './DTO/cardDTO';
 import { UserDTO } from './DTO/userDTO';
 import { DocumentDTO } from './DTO/documentDTO';
 import { ReceiptDTO } from './DTO/receiptDTO';
+import { DeliveryDTO } from './DTO/deliveryDTO';
 
 class Server {
   public app: express.Application;
@@ -106,10 +107,17 @@ class Server {
 
 
     this.app.get('/getDeliveries', (req, res) => {
-      this.sqlUtil.sqlSelectAll('Delivery').then((deliveryList: any[]) => {
+
+      const query = 'SELECT Delivery.*,' +
+      'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+      'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
+      'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentType AND StatusType.ID=Delivery.Status)';
+
+
+      this.sqlUtil.sqlSelectQuery(query).then((deliveryList: any[]) => {
         res.send(
           deliveryList.map(delivery => {
-            return new Delivery(delivery);
+            return new DeliveryDTO(delivery);
           })
         );
       });
