@@ -1,8 +1,8 @@
+import * as methodOverride from 'method-override';
+import * as cors from 'cors';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
-import * as methodOverride from 'method-override';
-import * as cors from 'cors';
 import * as mariasql from 'mariasql';
 
 import { dbconfig } from './database-config';
@@ -14,6 +14,7 @@ import { Document } from './datamodels/document';
 import { Delivery } from './datamodels/delivery';
 import { DocumentType } from './datamodels/documentType';
 import { Receipt } from './datamodels/receipt';
+import { LogEvent } from './datamodels/logEvent';
 import { ItemType } from './datamodels/itemType';
 import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
@@ -219,6 +220,13 @@ class Server {
 
     this.app.post('/addNewReceipt', (req, res) => {
       this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body)).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.post('/addNewLogEvent', (req, res) => {
+      this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });
