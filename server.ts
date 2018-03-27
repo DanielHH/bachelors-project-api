@@ -218,7 +218,14 @@ class Server {
     });
 
     this.app.post('/addNewReceipt', (req, res) => {
-      this.sqlUtil.sqlInsert('Receipt', req.body).then(id => {
+      this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body)).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.post('/addNewDelivery', (req, res) => {
+      this.sqlUtil.sqlInsert('Delivery', new Delivery(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });
@@ -244,6 +251,15 @@ class Server {
 
     this.app.put('/updateReceipt', (req, res) => {
       this.sqlUtil.sqlUpdate('Receipt', new Receipt(req.body)).then(success => {
+        if (success)
+          res.send({ message: 'success' });
+        else
+          res.send({ message: 'failure' });
+      });
+    });
+
+    this.app.put('/updateDelivery', (req, res) => {
+      this.sqlUtil.sqlUpdate('Delivery', new Delivery(req.body)).then(success => {
         if (success)
           res.send({ message: 'success' });
         else
