@@ -6,57 +6,57 @@ export class Delivery {
     /**
      * Database ID of the document
      */
-    id: number;
+    ID: number;
 
     /**
      * Document type
      */
-    documentType: number;
+    DocumentType: number;
 
     /**
      * Document serial number (can contain alphabetical characters)
      */
-    documentNumber: string;
+    DocumentNumber: string;
 
     /**
      * Document name
      */
-    name: string;
+    Name: string;
 
     /**
      * Document date
      */
-    documentDate: Date;
+    DocumentDate: Date;
 
     /**
      * Registration date
      */
-    sentDate: Date;
+    SentDate: Date;
 
    /**
      * Creation date of document in database
      */
-    creationDate: Date;
+    CreationDate: Date;
 
     /**
      * Last modified date of the document
      */
-    modifiedDate: Date;
+    ModifiedDate: Date;
 
     /**
      * Current location of document
      */
-    receiver: string;
+    Receiver: string;
 
     /**
      * Comment
      */
-    comment: string;
+    Comment: string;
 
     /**
      * document checked in/out status
      */
-    status: number;
+    Status: number;
 
     constructor();
     constructor(document: any);
@@ -64,18 +64,22 @@ export class Delivery {
     constructor(document?: any) {
 
       try {
-        if(document.ID)
-          this.id = document.ID;
-        this.documentType = document.DocumentType;
-        this.documentNumber = document.DocumentNumber;
-        this.name = document.Name;
-        this.documentDate = document.DocumentDate;
-        this.sentDate = document.SentDate;
-        this.creationDate = document.CreationDate;
-        this.modifiedDate = document.ModifiedDate;
-        this.receiver = document.Receiver;
-        this.comment = document.Comment;
-        this.status = document.Status;
+        if (document.id) {
+          this.ID = document.id;
+        }
+        else {
+          this.ID = null;
+        }
+        this.DocumentType = document.documentType.id;
+        this.DocumentNumber = document.documentNumber;
+        this.Name = document.name;
+        this.DocumentDate = document.documentDate;
+        this.SentDate = document.sentDate;
+        this.CreationDate = document.creationDate;
+        this.ModifiedDate = document.modifiedDate;
+        this.Receiver = document.receiver;
+        this.Comment = document.comment;
+        this.Status = document.status.id;
       }
       catch (e) {
 
