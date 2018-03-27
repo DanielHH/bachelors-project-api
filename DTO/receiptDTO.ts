@@ -81,8 +81,8 @@ export class ReceiptDTO {
       );*/
 
       this.itemTypeID = Number(receipt.ItemTypeID);
-      this.cardID = Number(receipt.CardID);
-      this.documentID = Number(receipt.DocumentID);
+      this.cardID = receipt.CardID ? Number(receipt.CardID) : null;
+      this.documentID = receipt.DocumentID ? Number(receipt.DocumentID) : null;
       this.userID = Number(receipt.UserID);
 
       this.comment = receipt.Comment;
