@@ -177,9 +177,10 @@ class Server {
 
     this.app.post('/genPDF', function (req, res) {
       const pdfUtil = new PdfUtilities(/*this.sqlUtil*/);
-      const data = pdfUtil.generatePDF(req.body);
-      res.contentType("application/pdf");
-      res.send(data);
+      const data: string = pdfUtil.generatePDF(req.body);
+      console.log(data);
+      //res.contentType("application/pdf");
+      res.download(data);
     });
 
     this.app.post('/testPost', (req, res) => {
