@@ -19,6 +19,10 @@ export class LogEvent {
    */
   DocumentID?: number;
   /**
+   * Current owner ID of log event
+   */
+  CurrentOwnerID?: number;
+  /**
    * User ID of user who made the event
    */
   UserID: number;
@@ -54,6 +58,12 @@ export class LogEvent {
         this.DocumentID = logEvent.documentID;
       } else {
         this.DocumentID = null;
+      }
+
+      if (logEvent.CurrentOwnerID) {
+        this.CurrentOwnerID = logEvent.currentOwnerID;
+      } else {
+        this.CurrentOwnerID = null;
       }
 
       if (logEvent.userID) {

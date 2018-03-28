@@ -37,11 +37,6 @@ export class Receipt {
      * End date of the receipt
      */
     EndDate: Date;
-  
-    /**
-     * Comment
-     */
-    Comment: string;
 
     constructor();
     constructor(receipt: any);
@@ -75,7 +70,6 @@ export class Receipt {
         this.UserID = receipt.userID;
         this.StartDate = receipt.startDate;
         this.EndDate = receipt.endDate;
-        this.Comment = receipt.comment;
       }
       catch (e) {
 

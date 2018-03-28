@@ -19,6 +19,10 @@ export class LogEventDTO {
      */
     documentID?: number;
     /**
+     * Current owner ID of log event
+     */
+    currentOwnerID?: number;
+    /**
      * User ID of user who made the event
      */
     userID: number;
@@ -43,6 +47,8 @@ export class LogEventDTO {
         this.cardID = logEvent.CardID ? Number(logEvent.CardID) : null;
   
         this.documentID = logEvent.DocumentID ? Number(logEvent.DocumentID) : null;
+
+        this.currentOwnerID = logEvent.currentownerID ? Number(logEvent.currentOwnerID) : null;
   
         this.userID = Number(logEvent.UserID);
   
