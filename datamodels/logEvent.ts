@@ -64,7 +64,7 @@ export class LogEvent {
 
       this.LogTypeID = logEvent.logTypeID;
 
-      this.LogDate = logEvent.LogDate;
+      this.LogDate = logEvent.logDate;
     } catch (e) {}
   }
 }
