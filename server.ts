@@ -25,6 +25,7 @@ import { UserDTO } from './DTO/userDTO';
 import { DocumentDTO } from './DTO/documentDTO';
 import { ReceiptDTO } from './DTO/receiptDTO';
 import { DeliveryDTO } from './DTO/deliveryDTO';
+import { LogEventDTO } from './DTO/logEventDTO';
 
 class Server {
   public app: express.Application;
@@ -141,6 +142,16 @@ class Server {
         res.send(
           receiptList.map(receipt => {
             return new ReceiptDTO(receipt);
+          })
+        );
+      });
+    });
+
+    this.app.get('/getLogEvents', (req, res) => {
+      this.sqlUtil.sqlSelectAll('LogEvent').then((logEventList: any[]) => {
+        res.send(
+          logEventList.map(logEvent => {
+            return new LogEventDTO(logEvent);
           })
         );
       });
