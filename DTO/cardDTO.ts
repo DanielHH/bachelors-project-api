@@ -62,30 +62,14 @@ export class CardDTO {
   activeReceipt?: number;
 
   constructor();
-  constructor(card?: any, data?: any);
-  /*
-  id?: number,
-  cardTypeID?: number,
-  cardTypeName?: string,
-  cardNumber?: string,
-  userID?: number,
-  userType?: number,
-  username?: string,
-  name?: string,
-  email?: string,
-  location?: string,
-  comment?: string,
-  expirationDate?: Date,
-  creationDate?: Date,
-  modifiedDate?: Date,
-  statusTypeID?: number,
-  statusTypeName?: string,
-  activeReceipt?: number*/
-  constructor(card?: any, data?: any) {
-    if (card) {
-      this.fromCard(card);
-    } else {
+  constructor(data?: any);
+
+  constructor(data?: any) {
+    if (data.CardID) {
       this.fromJoin(data);
+    }
+    else {
+      this.fromCard(data);
     }
   }
 
@@ -112,7 +96,7 @@ export class CardDTO {
       this.modifiedDate = data.CardModifiedDate;
       this.status = new StatusTypeDTO(data.CardStatusTypeID, data.CardStatusTypeName);
       this.activeReceipt = Number(data.CardActiveReceipt);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   fromCard(card: any) {
@@ -138,6 +122,6 @@ export class CardDTO {
       this.modifiedDate = card.ModifiedDate;
       this.status = new StatusTypeDTO(card.StatusTypeID, card.StatusTypeName);
       this.activeReceipt = Number(card.ActiveReceipt);
-    } catch (e) {}
+    } catch (e) { }
   }
 }
