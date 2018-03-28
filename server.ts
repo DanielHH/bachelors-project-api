@@ -19,6 +19,7 @@ import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
 import { User } from './datamodels/user';
 import { StatusType } from './datamodels/statusType';
+import { PdfUtilities } from './utilities/pdf-utilities';
 import { CardDTO } from './DTO/cardDTO';
 import { UserDTO } from './DTO/userDTO';
 import { DocumentDTO } from './DTO/documentDTO';
@@ -30,6 +31,7 @@ class Server {
 
 
   sqlUtil: SqlUtilities;
+  pdfUtil: PdfUtilities;
 
   constructor() {
 
@@ -223,6 +225,18 @@ class Server {
       });
     });
 
+    this.app.get('/genPDF', (req, res) => {
+      res.download("./pdfs/receipt.pdf");
+    })
+
+    this.app.post('/genPDF', function (req, res) {
+      const pdfUtil = new PdfUtilities(/*this.sqlUtil*/);
+      const data: string = pdfUtil.generatePDF(req.body);
+      console.log(data);
+      //res.contentType("application/pdf");
+      res.download(data);
+    });
+
     this.app.post('/testPost', (req, res) => {
       res.send({ message: 'success' });
     });
@@ -292,6 +306,7 @@ class Server {
     });
 
   }
+
 }
 
 export default new Server().app;
