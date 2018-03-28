@@ -30,7 +30,7 @@ export class PdfUtilities {
     switch (pdfType) {
       case "card": html = this.createCardReceipt(data[1]); break;
       case "document": html = this.createDokReceipt(data[1]); break;
-      case "inventory": html = this.createInventory(); break;
+      case "inventory": return this.createInventory();
       case "filteredInventory":
       case "filtered": 
       default: html = this.fs.readFileSync(this.templatePath + "/inventory_template.html", 'utf8'); break;
@@ -100,14 +100,40 @@ export class PdfUtilities {
       const compStart = this.inventory(13, inventory, 'start', 1, 1);
       items -= 13;
       let leftInventory = inventory.slice(13);
+      const compExtra: any[] = [pages-1];
       for(let page = 2; page < pages; page++){
-        this.inventory(items, leftInventory, 'extra', page, pages);
+        compExtra[page-2] = this.inventory(items, leftInventory, 'extra', page, pages);
         if (items > 14){
           items -= 14;
           leftInventory = leftInventory.slice(14);
         }
       }
-      
+
+      var pdfFilePath = './pdfs/inventory';
+      var options = { format: 'A4' };
+      this.pdf.create(compStart, options).toFile(pdfFilePath + '_start.pdf', function(err, res2) {
+        if (err) return console.log(err);
+        console.log(res2);
+      });
+
+      const files: any[] = [pages];
+      files.push(pdfFilePath + '_start.pdf');
+      let currentPath: string;
+      for( let i = 0; i < pages-1; i++){
+        currentPath = pdfFilePath + '_' + i + '.pdf';
+        this.pdf.create(compExtra[i], options).toFile(currentPath)
+        files.push(currentPath);
+      }
+
+      let dest_path = './pdfs/receipt.pdf';
+      var merge = require('easy-pdf-merge');
+      merge(files, dest_path, function(err){
+        if (err) {
+          return console.log(err);
+        }
+        console.log('success');
+      } )
+      return dest_path;      
     }
 
   }
