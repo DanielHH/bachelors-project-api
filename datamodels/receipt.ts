@@ -56,23 +56,23 @@ export class Receipt {
           this.ID = null;
         }
 
-        this.ItemTypeID = receipt.itemTypeID;
+        this.ItemTypeID = receipt.itemType.ID;
         
         if(receipt.cardID) {
-          this.CardID = receipt.cardID;
+          this.CardID = receipt.card.ID;
         }
         else {
           this.CardID = null;
         }
 
         if(receipt.documentID) {
-          this.DocumentID = receipt.documentID;
+          this.DocumentID = receipt.document.ID;
         }
         else {
           this.DocumentID = null;
         }
 
-        this.UserID = receipt.userID;
+        this.UserID = receipt.user.ID;
         this.StartDate = receipt.startDate;
         this.EndDate = receipt.endDate;
         this.Comment = receipt.comment;

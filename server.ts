@@ -109,9 +109,9 @@ class Server {
     this.app.get('/getDeliveries', (req, res) => {
 
       const query = 'SELECT Delivery.*,' +
-      'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
-      'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
-      'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentType AND StatusType.ID=Delivery.Status)';
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
+        'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentType AND StatusType.ID=Delivery.Status)';
 
 
       this.sqlUtil.sqlSelectQuery(query).then((deliveryList: any[]) => {
@@ -138,27 +138,27 @@ class Server {
     this.app.get('/getReceipts', (req, res) => {
 
       const query = 'SELECT Receipt.*,' +
-      'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
-      'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
-      'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
-      'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
-      'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
-      'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
-      'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
-      'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
-      'Document.Comment AS DocumentComment, Document.DocumentDate,' +
-      'Document.RegistrationDate AS DocumentRegistrationDate,' +
-      'Document.CreationDate AS DocumentCreationDate,' +
-      'Document.ModifiedDate AS DocumentModifiedDate,' +
-      'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
-      'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
-      'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
-      'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-      'User.UserType, User.Username, User.Name, User.Email ' +
-      'FROM Receipt LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Receipt.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
-      'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Receipt.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
-      'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
-      'LEFT JOIN (User) ON (User.ID=Receipt.UserID)';
+        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
+        'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
+        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
+        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
+        'Document.Comment AS DocumentComment, Document.DocumentDate,' +
+        'Document.RegistrationDate AS DocumentRegistrationDate,' +
+        'Document.CreationDate AS DocumentCreationDate,' +
+        'Document.ModifiedDate AS DocumentModifiedDate,' +
+        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
+        'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
+        'User.UserType, User.Username, User.Name, User.Email ' +
+        'FROM Receipt LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Receipt.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Receipt.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
+        'LEFT JOIN (User) ON (User.ID=Receipt.UserID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((receiptList: any[]) => {
         res.send(
