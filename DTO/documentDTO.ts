@@ -79,10 +79,52 @@ export class DocumentDTO {
 
 
   constructor();
-  constructor(document: any);
+  constructor(data: any);
 
-  constructor(document?: any) {
+  constructor(data?: any) {
 
+    if (data.DocumentID) {
+      this.fromJoin(data);
+    }
+    else {
+      this.fromDocument(data);
+    }
+
+  }
+
+  fromJoin(data: any) {
+    try {
+      this.id = Number(data.DocumentID);
+
+      this.documentType = new DocumentTypeDTO(data.DocumentTypeID, data.DocumentTypeName);
+      this.documentNumber = data.DocumentNumber;
+
+      this.name = data.DocuemntName;
+      this.sender = data.DocumentSender;
+
+      this.documentDate = data.DocumentDate;
+      this.registrationDate = data.DocumentRegistrationDate;
+      this.creationDate = data.DocumentCreationDate;
+      this.modifiedDate = data.DocumentModifiedDate;
+
+      this.user = new UserDTO(
+        null,
+        data.UserID,
+        data.UserType,
+        data.Username,
+        data.UsersName,
+        data.Email
+      );
+
+      this.location = data.DocumentLocation;
+      this.comment = data.DocumentComment;
+      this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
+      this.activeReceipt = Number(data.ActiveReceipt);
+
+    } catch (e) { }
+  }
+
+  fromDocument(document: any) {
     try {
       this.id = Number(document.ID);
 
