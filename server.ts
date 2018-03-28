@@ -11,6 +11,7 @@ import { Card } from './datamodels/card';
 import { SqlUtilities } from './utilities/sql-utilities';
 import { CardType } from './datamodels/cardType';
 import { Document } from './datamodels/document';
+import { Delivery } from './datamodels/delivery';
 import { DocumentType } from './datamodels/documentType';
 import { Receipt } from './datamodels/receipt';
 import { ItemType } from './datamodels/itemType';
@@ -20,11 +21,15 @@ import { User } from './datamodels/user';
 import { StatusType } from './datamodels/statusType';
 import { PdfUtilities } from './utilities/pdf-utilities';
 import { CardDTO } from './DTO/cardDTO';
+import { UserDTO } from './DTO/userDTO';
+import { DocumentDTO } from './DTO/documentDTO';
+import { ReceiptDTO } from './DTO/receiptDTO';
+import { DeliveryDTO } from './DTO/deliveryDTO';
 
 class Server {
   public app: express.Application;
 
-  
+
   sqlUtil: SqlUtilities;
   pdfUtil: PdfUtilities;
 
@@ -60,12 +65,12 @@ class Server {
 
   httpRequests() {
     this.app.get('/getCards', (req, res) => {
-       
+
       const query = 'SELECT Card.*,' +
-       'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
-       'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
-       'User.UserType, User.Username, User.Name, User.Email ' + 
-       'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) LEFT JOIN (User) ON (User.ID=Card.UserID)';
+        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
+        'User.UserType, User.Username, User.Name, User.Email ' +
+        'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) LEFT JOIN (User) ON (User.ID=Card.UserID)';
       this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
@@ -86,10 +91,35 @@ class Server {
     });
 
     this.app.get('/getDocuments', (req, res) => {
-      this.sqlUtil.sqlSelectAll('Document').then((documentList: any[]) => {
+
+      const query = 'SELECT Document.*,' +
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
+        'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
+        'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) LEFT JOIN (User) ON (User.ID=Document.UserID)';
+
+      this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
         res.send(
           documentList.map(document => {
-            return new Document(document);
+            return new DocumentDTO(document);
+          })
+        );
+      });
+    });
+
+
+    this.app.get('/getDeliveries', (req, res) => {
+
+      const query = 'SELECT Delivery.*,' +
+      'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+      'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
+      'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentType AND StatusType.ID=Delivery.Status)';
+
+
+      this.sqlUtil.sqlSelectQuery(query).then((deliveryList: any[]) => {
+        res.send(
+          deliveryList.map(delivery => {
+            return new DeliveryDTO(delivery);
           })
         );
       });
@@ -111,7 +141,7 @@ class Server {
       this.sqlUtil.sqlSelectAll('Receipt').then((receiptList: any[]) => {
         res.send(
           receiptList.map(receipt => {
-            return new Receipt(receipt);
+            return new ReceiptDTO(receipt);
           })
         );
       });
@@ -155,7 +185,7 @@ class Server {
       this.sqlUtil.sqlSelectAll('User').then((userList: any[]) => {
         res.send(
           userList.map(user => {
-            return new User(user);
+            return new UserDTO(user);
           })
         );
       });
@@ -188,50 +218,66 @@ class Server {
     });
 
     this.app.post('/addNewCard', (req, res) => {
-      this.sqlUtil.sqlInsert('Card', req.body).then(id => {
+      this.sqlUtil.sqlInsert('Card', new Card(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewDocument', (req, res) => {
-      this.sqlUtil.sqlInsert('Document', req.body).then(id => {
+      this.sqlUtil.sqlInsert('Document', new Document(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewReceipt', (req, res) => {
-      this.sqlUtil.sqlInsert('Receipt', req.body).then(id => {
+      this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body)).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.post('/addNewDelivery', (req, res) => {
+      this.sqlUtil.sqlInsert('Delivery', new Delivery(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.put('/updateCard', (req, res) => {
-      this.sqlUtil.sqlUpdate('Card', req.body).then(success => {
-        if(success)
-          res.send({ message: 'success'});
+      this.sqlUtil.sqlUpdate('Card', new Card(req.body)).then(success => {
+        if (success)
+          res.send({ message: 'success' });
         else
-          res.send({ message: 'failure'});        
+          res.send({ message: 'failure' });
       });
     });
 
     this.app.put('/updateDocument', (req, res) => {
-      this.sqlUtil.sqlUpdate('Document', req.body).then(success => {
-        if(success)
-          res.send({ message: 'success'});
+      this.sqlUtil.sqlUpdate('Document', new Document(req.body)).then(success => {
+        if (success)
+          res.send({ message: 'success' });
         else
-          res.send({ message: 'failure'});        
+          res.send({ message: 'failure' });
       });
     });
 
     this.app.put('/updateReceipt', (req, res) => {
-      this.sqlUtil.sqlUpdate('Receipt', req.body).then(success => {
-        if(success)
-          res.send({ message: 'success'});
+      this.sqlUtil.sqlUpdate('Receipt', new Receipt(req.body)).then(success => {
+        if (success)
+          res.send({ message: 'success' });
         else
-          res.send({ message: 'failure'});        
+          res.send({ message: 'failure' });
+      });
+    });
+
+    this.app.put('/updateDelivery', (req, res) => {
+      this.sqlUtil.sqlUpdate('Delivery', new Delivery(req.body)).then(success => {
+        if (success)
+          res.send({ message: 'success' });
+        else
+          res.send({ message: 'failure' });
       });
     });
 
