@@ -44,6 +44,8 @@ class Server {
     this.config();
 
     this.sqlUtil = new SqlUtilities();
+    this.pdfUtil = new PdfUtilities();
+    this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));
 
     this.httpRequests();
   }
@@ -229,12 +231,10 @@ class Server {
       res.download("./pdfs/receipt.pdf");
     })
 
-    this.app.post('/genPDF', function (req, res) {
-      const pdfUtil = new PdfUtilities(/*this.sqlUtil*/);
-      const data: string = pdfUtil.generatePDF(req.body);
-      console.log(data);
-      //res.contentType("application/pdf");
-      res.download(data);
+    this.app.post('/genPDF', (req, res) => {
+      this.pdfUtil.generatePDF(req.body).then(path => {
+        res.send({ message: 'success', url: 'http://' + req.headers.host + path})
+      });
     });
 
     this.app.post('/testPost', (req, res) => {

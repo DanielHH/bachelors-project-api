@@ -4,6 +4,7 @@ import { CardDTO } from "../DTO/cardDTO";
 import { Document } from "../datamodels/document";
 import * as _ from 'lodash';
 import { userInfo } from "os";
+import * as moment from 'moment';
 
 
 
@@ -47,14 +48,18 @@ export class PdfUtilities {
                           comment: "comment", location: "location", curDate: new Date() });*/
 
     // Create and save pdf
-    var pdfFilePath = './pdfs/receipt.pdf';
-    var options = { format: 'A4' };
-    this.pdf.create(html, options).toFile(pdfFilePath, function(err, res2) {
-      if (err) return console.log(err);
-      console.log(res2);
+    const pdfFilePath = './pdfs/' + _.replace(data[1].user.name, /[/\s\\?%*:|"<>]/g, '',)  + '_' +
+    moment(data[1].modifiedDate).format('YYYY-MM-DD') + '.pdf';
+    const options = { format: 'A4' };
+
+    return new Promise((resolve, reject) => {
+      this.pdf.create(html, options).toFile(pdfFilePath, (err, res) => {
+        if (!err) resolve(pdfFilePath.substring(1));
+        reject(err);
+      });
     });
 
-    return pdfFilePath;
+    
   }
 
 
@@ -74,12 +79,12 @@ export class PdfUtilities {
     return new CardDTO();
   }*/
 
-  createCardReceipt(body: any[]) {
+  createCardReceipt(body: CardDTO) {
     var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + "/card_receipt_template.html", 'utf8'));
     // Add variables to template
-    return compiled({ serNumber : body[0] , type: body[1], user: body[2],
-                          expDate: body[3], comment: body[4],
-                          location: body[5], curDate: body[6] });
+    return compiled({ serNumber : body.cardNumber , type: body.cardType.name, user: body.user.name,
+                          expDate: body.expirationDate, comment: body.comment,
+                          location: body.location, curDate: moment(body.modifiedDate).format('YYYY-MM-DD') });
   }
 
   createDokReceipt(body: any[]) {
