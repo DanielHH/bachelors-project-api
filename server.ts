@@ -182,6 +182,41 @@ class Server {
     });
 
     this.app.get('/getVerifications', (req, res) => {
+
+      const query = 'SELECT Verification.*,' +
+        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
+        'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
+        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
+        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
+        'Document.Comment AS DocumentComment, Document.DocumentDate,' +
+        'Document.RegistrationDate AS DocumentRegistrationDate,' +
+        'Document.CreationDate AS DocumentCreationDate,' +
+        'Document.ModifiedDate AS DocumentModifiedDate,' +
+        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
+        'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
+        'User.UserType, User.Username, User.Name, User.Email ' +
+        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
+        'LEFT JOIN (User) ON (User.ID=Verification.UserID)';
+
+      this.sqlUtil
+        .sqlSelectQuery(query).then((verificationList: any[]) => {
+          res.send(
+            verificationList.map(verification => {
+              return new Verification(verification);
+            })
+          );
+        });
+    });
+
+    /*this.app.get('/getVerifications', (req, res) => {
       this.sqlUtil
         .sqlSelectAll('Verification')
         .then((verificationList: any[]) => {
@@ -191,7 +226,7 @@ class Server {
             })
           );
         });
-    });
+    });*/
 
     this.app.get('/getVerificationTypes', (req, res) => {
       this.sqlUtil
@@ -264,6 +299,13 @@ class Server {
 
     this.app.post('/addNewDelivery', (req, res) => {
       this.sqlUtil.sqlInsert('Delivery', new Delivery(req.body)).then(id => {
+        req.body.id = id;
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.post('/addNewVerification', (req, res) => {
+      this.sqlUtil.sqlInsert('Verification', new Verification(req.body)).then(id => {
         req.body.id = id;
         res.send({ message: 'success', data: req.body });
       });

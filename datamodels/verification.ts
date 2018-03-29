@@ -32,11 +32,11 @@ export class Verification {
     /**
      * ID of current verification holder
      */
-    userID: number;
+    userID?: number;
   
   
     /**
-     * Expiration date of the verification
+     * Date of the verification
      */
     verificationDate: Date;
 
@@ -46,14 +46,30 @@ export class Verification {
     constructor(verification?: any) {
 
       try {
-        if(verification.ID)
-          this.id = verification.ID;
-        this.verificationType = verification.VerificationType;
-        this.itemTypeID = verification.ItemTypeID;
-        this.cardID = verification.CardID;
-        this.documentID = verification.DucmentID;
-        this.userID = verification.UserID;
-        this.verificationDate = verification.VerificationDate;
+        if (verification.ID)
+          this.id = Number(verification.ID);
+          this.verificationType = verification.VerificationType;
+          this.itemTypeID = verification.ItemTypeID;
+
+          if (verification.DocumentID) {
+            this.documentID = verification.DocumentID;
+          } else {
+            this.documentID = null;
+          }
+
+          if (verification.CardID) {
+            this.cardID = verification.CardID;
+          } else {
+            this.cardID = null;
+          }
+
+          if (verification.userID) {
+            this.userID = verification.UserID;
+          } else {
+            this.userID = null;
+          }
+
+          this.verificationDate = verification.VerificationDate;
       }
       catch (e) {
 

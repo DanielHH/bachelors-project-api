@@ -74,6 +74,11 @@ export class Document {
   */
   ActiveReceipt?: number;
 
+  /**
+   * Last verification
+   */
+  LastVerification?: number;
+
   constructor();
   constructor(document: any);
 
@@ -98,6 +103,7 @@ export class Document {
     this.Comment = document.comment;
     this.Status = document.status.id;
     this.ActiveReceipt = document.activeReceipt;
+    this.LastVerification = document.LastVerification;
 
   }
 

@@ -58,6 +58,11 @@ export class Card {
    */
   ActiveReceipt?: number;
 
+  /**
+   * Last verification
+   */
+  LastVerification?: number;
+
   constructor();
   constructor(card: any);
 
@@ -80,6 +85,7 @@ export class Card {
       this.ModifiedDate = card.modifiedDate;
       this.Status = card.status.id;
       this.ActiveReceipt = card.activeReceipt;
+      this.LastVerification = card.LastVerification;
     }
     catch (e) {
 
