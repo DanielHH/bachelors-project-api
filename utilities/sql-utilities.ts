@@ -15,7 +15,7 @@ export class SqlUtilities {
    * @param data JSON data object to be inserted
    */
   sqlInsert(tableName: string, data: any) {
-    let queryString = 'INSERT INTO ' + tableName + ' SET';
+    let queryString = 'INSERT INTO ' + tableName + ' SET ';
 
     let dataArray = [];
 
