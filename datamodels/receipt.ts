@@ -44,7 +44,7 @@ export class Receipt {
     constructor(receipt?: any) {
 
       try {
-        if (receipt.ID) {
+        if (receipt.id) {
           this.ID = Number(receipt.id);
         } else {
           this.ID = null;
