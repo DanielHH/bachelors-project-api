@@ -77,6 +77,11 @@ export class DocumentDTO {
    */
   activeReceipt?: number;
 
+  /**
+   * Latest verification
+   */
+  lastVerifcation: Date;
+
 
   constructor();
   constructor(data: any);
@@ -152,6 +157,7 @@ export class DocumentDTO {
       this.comment = document.Comment;
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
       this.activeReceipt = Number(document.ActiveReceipt);
+      this.lastVerifcation = document.LastVerificationDate;
 
     } catch (e) { }
   }
