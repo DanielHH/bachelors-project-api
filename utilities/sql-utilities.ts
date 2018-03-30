@@ -88,6 +88,9 @@ export class SqlUtilities {
 
     queryString = queryString.slice(0, -2);
     queryString += ' WHERE ID = ' + data.ID;
+    console.log(Object.keys(data));
+    console.log(queryString);
+    console.log(dataArray);
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {

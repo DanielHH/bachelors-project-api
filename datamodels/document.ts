@@ -47,12 +47,12 @@ export class Document {
   /**
    * Last modified date of the document
    */
-  ModifiedDate: Date;
+  ModifiedDate?: Date;
 
   /**
    * ID of current document holder
    */
-  UserID: number;
+  UserID?: number;
 
   /**
    * Current location of document
@@ -62,7 +62,7 @@ export class Document {
   /**
    * Comment
    */
-  Comment: string;
+  Comment?: string;
 
   /**
    * document checked in/out status
@@ -98,7 +98,7 @@ export class Document {
     this.RegistrationDate = document.registrationDate;
     this.CreationDate = document.creationDate;
     this.ModifiedDate = document.modifiedDate;
-    this.UserID = document.user.id;
+    this.UserID = document.user ? document.user.id : null;
     this.Location = document.location;
     this.Comment = document.comment;
     this.Status = document.status.id;
