@@ -67,7 +67,7 @@ export class Verification {
           this.DocumentID = null;
         }
         
-        if (verification.user) {
+        if (verification.user.id) {
           this.UserID = Number(verification.user.id);
         } else {
           this.UserID = null;
