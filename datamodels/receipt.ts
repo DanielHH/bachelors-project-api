@@ -52,13 +52,13 @@ export class Receipt {
 
         this.ItemTypeID = receipt.itemType.id;
         
-        if (receipt.cardID) {
+        if (receipt.card) {
           this.CardID = receipt.card.id;
         } else {
           this.CardID = null;
         }
 
-        if (receipt.documentID) {
+        if (receipt.document) {
           this.DocumentID = receipt.document.id;
         } else {
           this.DocumentID = null;
