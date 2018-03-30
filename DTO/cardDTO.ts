@@ -121,7 +121,7 @@ export class CardDTO {
 
       this.user = new UserDTO(
         null,
-        Number(card.UserID),
+        card.UserID,
         card.UserType,
         card.Username,
         card.Name,
