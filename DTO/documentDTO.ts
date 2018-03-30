@@ -163,7 +163,14 @@ export class DocumentDTO {
       this.location = document.Location;
       this.comment = document.Comment;
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
-      this.activeReceipt = Number(document.ActiveReceipt);
+
+      if (document.ActiveReceipt) {
+        this.activeReceipt = Number(document.ActiveReceipt);
+      }
+      else {
+        this.activeReceipt = null;
+      }
+      
       this.lastVerificationID = Number(document.LastVerificationID);
       this.lastVerificationDate = document.LastVerificationDate;
 

@@ -15,21 +15,16 @@ export class SqlUtilities {
    * @param data JSON data object to be inserted
    */
   sqlInsert(tableName: string, data: any) {
-    let queryString = 'INSERT INTO ' + tableName + ' VALUES (';
+    let queryString = 'INSERT INTO ' + tableName + ' SET';
 
-    //Empty element for ID
     let dataArray = [];
 
     for (let key of Object.keys(data)) {
-      queryString += '?,';
+      queryString += key + ' = ?,';
       dataArray.push(data[key]);
     }
-
+ 
     queryString = queryString.slice(0, -1);
-    queryString += ')';
-
-    console.log(queryString);
-    console.log(data);
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
@@ -78,19 +73,13 @@ export class SqlUtilities {
     let dataArray = [];
 
     for (let key of Object.keys(data)) {
-      if (key !== 'ID') {
-
-        queryString += _.upperFirst(key) + ' = ?, ';
-
-        dataArray.push(data[key]);
-      }
+      queryString += key + ' = ?,';
+      dataArray.push(data[key]);
     }
 
-    queryString = queryString.slice(0, -2);
+    queryString = queryString.slice(0, -1);
+
     queryString += ' WHERE ID = ' + data.ID;
-    console.log(Object.keys(data));
-    console.log(queryString);
-    console.log(dataArray);
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {

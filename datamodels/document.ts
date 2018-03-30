@@ -98,11 +98,26 @@ export class Document {
     this.RegistrationDate = document.registrationDate;
     this.CreationDate = document.creationDate;
     this.ModifiedDate = document.modifiedDate;
-    this.UserID = document.user ? document.user.id : null;
+    
+    if (document.user.id) {
+      this.UserID = document.user.id;
+    }
+    else {
+      this.UserID = null;
+    }
+
+
     this.Location = document.location;
     this.Comment = document.comment;
     this.Status = document.status.id;
-    this.ActiveReceipt = document.activeReceipt;
+
+    if (document.activeReceipt) {
+      this.ActiveReceipt = document.activeReceipt;
+    }
+    else {
+      this.ActiveReceipt = null;
+    }
+
 
     if (document.lastVerificationID) {
       this.LastVerification = document.lastVerificationID;

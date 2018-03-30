@@ -134,7 +134,12 @@ export class CardDTO {
       this.creationDate = card.CreationDate;
       this.modifiedDate = card.ModifiedDate;
       this.status = new StatusTypeDTO(card.StatusTypeID, card.StatusTypeName);
-      this.activeReceipt = Number(card.ActiveReceipt);
+      if (card.ActiveReceipt) {
+        this.activeReceipt = Number(card.ActiveReceipt);
+      }
+      else {
+        this.activeReceipt = null;
+      }
       this.lastVerificationID = Number(card.LastVerificationID);
       this.lastVerificationDate = card.LastVerificationDate;
     } catch (e) { }
