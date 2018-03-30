@@ -102,7 +102,7 @@ class Server {
         'Verification.VerificationDate AS LastVerificationDate,' +
         'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' + 
-        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification) ' +
+        'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification) ' +
         'LEFT JOIN (User) ON (User.ID=Document.UserID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
