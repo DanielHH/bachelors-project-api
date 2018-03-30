@@ -86,8 +86,8 @@ export class Card {
       this.Status = card.status.id;
       this.ActiveReceipt = card.activeReceipt;
 
-      if (card.lastVerification) {
-        this.LastVerification = card.lastVerification.id;
+      if (card.lastVerificationID) {
+        this.LastVerification = card.lastVerificationID;
       } else {
         this.LastVerification = null;
       }

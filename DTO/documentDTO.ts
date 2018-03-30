@@ -78,9 +78,14 @@ export class DocumentDTO {
   activeReceipt?: number;
 
   /**
-   * Latest verification
+   * ID of last verification
    */
-  lastVerifcation: Date;
+  lastVerificationID?: number;
+
+  /**
+   * Date of last verification
+   */
+  lastVerificationDate?: Date;
 
 
   constructor();
@@ -104,7 +109,7 @@ export class DocumentDTO {
       this.documentType = new DocumentTypeDTO(data.DocumentTypeID, data.DocumentTypeName);
       this.documentNumber = data.DocumentNumber;
 
-      this.name = data.DocuemntName;
+      this.name = data.DocumentName;
       this.sender = data.DocumentSender;
 
       this.documentDate = data.DocumentDate;
@@ -125,6 +130,8 @@ export class DocumentDTO {
       this.comment = data.DocumentComment;
       this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
       this.activeReceipt = Number(data.ActiveReceipt);
+      this.lastVerificationID = Number(data.LastVerificationID);
+      this.lastVerificationDate = data.LastVerificationDate;
 
     } catch (e) { }
   }
@@ -157,7 +164,8 @@ export class DocumentDTO {
       this.comment = document.Comment;
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
       this.activeReceipt = Number(document.ActiveReceipt);
-      this.lastVerifcation = document.LastVerificationDate;
+      this.lastVerificationID = Number(document.LastVerificationID);
+      this.lastVerificationDate = document.LastVerificationDate;
 
     } catch (e) { }
   }

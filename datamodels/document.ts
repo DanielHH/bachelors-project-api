@@ -104,8 +104,8 @@ export class Document {
     this.Status = document.status.id;
     this.ActiveReceipt = document.activeReceipt;
 
-    if (document.lastVerification) {
-      this.LastVerification = document.lastVerification.id;
+    if (document.lastVerificationID) {
+      this.LastVerification = document.lastVerificationID;
     } else {
       this.LastVerification = null;
     }

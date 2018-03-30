@@ -69,7 +69,7 @@ class Server {
       const query = 'SELECT Card.*,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
-        'Verification.VerificationDate AS LastVerificationDate,' +
+        'Verification.ID AS LastVerificationID, Verification.VerificationDate AS LastVerificationDate,' +
         'User.UserType, User.Username, User.Name, User.Email ' +
         'FROM Card LEFT JOIN (CardType, StatusType, Verification) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status AND Verification.ID=Card.LastVerification) ' +
         'LEFT JOIN (User) ON (User.ID=Card.UserID)';
@@ -97,7 +97,7 @@ class Server {
       const query = 'SELECT Document.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
-        'Verification.VerificationDate AS LastVerificationDate,' +
+        'Verification.ID AS LastVerificationID, Verification.VerificationDate AS LastVerificationDate,' +
         'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType, Verification) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status AND Verification.ID=Document.LastVerification) ' + 
         'LEFT JOIN (User) ON (User.ID=Document.UserID)';
