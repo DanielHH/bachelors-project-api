@@ -7,32 +7,32 @@ export class Verification {
     /**
      * Database ID of the verification
      */
-    id: number;
+    ID: number;
   
     /**
      * Verification type
      */
-    verificationType: number;
+    VerificationTypeID: number;
   
     /**
      * ID of verification item type
      */
-    itemTypeID: number;
+    ItemTypeID: number;
   
     /**
      * Card ID of verification
      */
-    cardID?: number;
+    CardID?: number;
   
     /**
      * Document ID of verification item type
      */
-    documentID?: number;
+    DocumentID?: number;
   
     /**
      * ID of current verification holder
      */
-    userID?: number;
+    UserID?: number;
   
   
     /**
@@ -46,30 +46,34 @@ export class Verification {
     constructor(verification?: any) {
 
       try {
-        if (verification.ID)
-          this.id = Number(verification.ID);
-          this.verificationType = verification.VerificationType;
-          this.itemTypeID = verification.ItemTypeID;
+        if (verification.id) {
+          this.ID = Number(verification.id);
+        } else {
+          this.ID = null;
+        }
 
-          if (verification.DocumentID) {
-            this.documentID = verification.DocumentID;
-          } else {
-            this.documentID = null;
-          }
+        this.VerificationTypeID = verification.verificationType.id;
+        this.ItemTypeID = verification.itemType.id;
 
-          if (verification.CardID) {
-            this.cardID = verification.CardID;
-          } else {
-            this.cardID = null;
-          }
+        if (verification.document) {
+          this.DocumentID = verification.document.id;
+        } else {
+          this.DocumentID = null;
+        }
 
-          if (verification.userID) {
-            this.userID = verification.UserID;
-          } else {
-            this.userID = null;
-          }
+        if (verification.card) {
+          this.CardID = verification.card.id;
+        } else {
+          this.CardID = null;
+        }
 
-          this.verificationDate = verification.VerificationDate;
+        if (verification.user) {
+          this.UserID = verification.user.id;
+        } else {
+          this.UserID = null;
+        }
+
+        this.verificationDate = verification.verificationDate;
       }
       catch (e) {
 

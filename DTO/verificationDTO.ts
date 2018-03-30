@@ -36,7 +36,7 @@ export class VerificationDTO {
   /**
    * ID of current item holder
    */
-  user: UserDTO;
+  user?: UserDTO;
 
   /**
    * Date of the verification

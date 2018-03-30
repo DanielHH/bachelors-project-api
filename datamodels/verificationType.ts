@@ -21,7 +21,7 @@ export class VerificationType {
       try {
         if(verificationType.ID)
           this.id = verificationType.ID;
-        this.name = verificationType.Name;
+          this.name = verificationType.Name;
       }
       catch (e) {
 

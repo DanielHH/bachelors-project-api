@@ -347,6 +347,15 @@ class Server {
       });
     });
 
+    this.app.put('/updateVerification', (req, res) => {
+      this.sqlUtil.sqlUpdate('Verification', new Verification(req.body)).then(success => {
+        if (success)
+          res.send({ message: 'success' });
+        else
+          res.send({ message: 'failure' });
+      });
+    });
+
   }
 
 }
