@@ -69,10 +69,12 @@ class Server {
       const query = 'SELECT Card.*,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
-        'Verification.ID AS LastVerificationID, Verification.VerificationDate AS LastVerificationDate,' +
+        'Verification.VerificationDate AS LastVerificationDate,' +
         'User.UserType, User.Username, User.Name, User.Email ' +
-        'FROM Card LEFT JOIN (CardType, StatusType, Verification) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status AND Verification.ID=Card.LastVerification) ' +
+        'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) ' +
+        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification) ' +
         'LEFT JOIN (User) ON (User.ID=Card.UserID)';
+        
       this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
@@ -97,9 +99,10 @@ class Server {
       const query = 'SELECT Document.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
-        'Verification.ID AS LastVerificationID, Verification.VerificationDate AS LastVerificationDate,' +
+        'Verification.VerificationDate AS LastVerificationDate,' +
         'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
-        'FROM Document LEFT JOIN (DocumentType, StatusType, Verification) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status AND Verification.ID=Document.LastVerification) ' + 
+        'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' + 
+        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification) ' +
         'LEFT JOIN (User) ON (User.ID=Document.UserID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
