@@ -12,7 +12,7 @@ export class Verification {
     /**
      * Verification type
      */
-    VerificationTypeID: number;
+    VerificationType: number;
   
     /**
      * ID of verification item type
@@ -38,7 +38,7 @@ export class Verification {
     /**
      * Date of the verification
      */
-    verificationDate: Date;
+    VerificationDate: Date;
 
     constructor();
     constructor(verification: any);
@@ -52,28 +52,28 @@ export class Verification {
           this.ID = null;
         }
 
-        this.VerificationTypeID = verification.verificationType.id;
+        this.VerificationType = verification.verificationType.id;
         this.ItemTypeID = verification.itemType.id;
 
-        if (verification.document) {
-          this.DocumentID = verification.document.id;
-        } else {
-          this.DocumentID = null;
-        }
-
         if (verification.card) {
-          this.CardID = verification.card.id;
+          this.CardID = Number(verification.card.id);
         } else {
           this.CardID = null;
         }
 
+        if (verification.document) {
+          this.DocumentID = Number(verification.document.id);
+        } else {
+          this.DocumentID = null;
+        }
+
         if (verification.user) {
-          this.UserID = verification.user.id;
+          this.UserID = Number(verification.user.id);
         } else {
           this.UserID = null;
         }
 
-        this.verificationDate = verification.verificationDate;
+        this.VerificationDate = verification.verificationDate;
       }
       catch (e) {
 

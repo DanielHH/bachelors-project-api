@@ -103,8 +103,11 @@ export class Document {
     this.Comment = document.comment;
     this.Status = document.status.id;
     this.ActiveReceipt = document.activeReceipt;
-    this.LastVerification = document.lastVerification.id;
 
+    if (document.lastVerification) {
+      this.LastVerification = document.lastVerification.id;
+    } else {
+      this.LastVerification = null;
+    }
   }
-
 }

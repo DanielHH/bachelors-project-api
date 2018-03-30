@@ -85,7 +85,12 @@ export class Card {
       this.ModifiedDate = card.modifiedDate;
       this.Status = card.status.id;
       this.ActiveReceipt = card.activeReceipt;
-      this.LastVerification = card.lastVerification.id;
+
+      if (card.lastVerification) {
+        this.LastVerification = card.lastVerification.id;
+      } else {
+        this.LastVerification = null;
+      }
     }
     catch (e) {
 
