@@ -47,7 +47,12 @@ export class UserDTO {
   ) {
     try {
       if (user) {
-        this.id = Number(user.ID);
+        if (user.ID) {
+          this.id = Number(user.ID);
+        }
+        else {
+          this.id = null;
+        }
         this.userType = Number(user.UserType);
         this.username = user.Username;
         this.name = user.Name;
@@ -55,7 +60,12 @@ export class UserDTO {
 
       }
       else {
-        this.id = Number(id);
+        if (id) {
+          this.id = Number(id);
+        }
+        else {
+          this.id = null;
+        }
         this.userType = Number(userType);
         this.username = username;
         this.name = name;

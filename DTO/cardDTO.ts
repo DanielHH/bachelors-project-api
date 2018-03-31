@@ -61,6 +61,16 @@ export class CardDTO {
    */
   activeReceipt?: number;
 
+  /**
+   * ID of last verification
+   */
+  lastVerificationID?: number;
+
+  /**
+   * Date of last verification
+   */
+  lastVerificationDate?: Date;
+
   constructor();
   constructor(data?: any);
 
@@ -96,6 +106,9 @@ export class CardDTO {
       this.modifiedDate = data.CardModifiedDate;
       this.status = new StatusTypeDTO(data.CardStatusTypeID, data.CardStatusTypeName);
       this.activeReceipt = Number(data.CardActiveReceipt);
+      this.lastVerificationID = Number(data.LastVerificationID);
+      this.lastVerificationDate = data.LastVerificationDate;
+
     } catch (e) { }
   }
 
@@ -108,7 +121,7 @@ export class CardDTO {
 
       this.user = new UserDTO(
         null,
-        Number(card.UserID),
+        card.UserID,
         card.UserType,
         card.Username,
         card.Name,
@@ -121,7 +134,14 @@ export class CardDTO {
       this.creationDate = card.CreationDate;
       this.modifiedDate = card.ModifiedDate;
       this.status = new StatusTypeDTO(card.StatusTypeID, card.StatusTypeName);
-      this.activeReceipt = Number(card.ActiveReceipt);
+      if (card.ActiveReceipt) {
+        this.activeReceipt = Number(card.ActiveReceipt);
+      }
+      else {
+        this.activeReceipt = null;
+      }
+      this.lastVerificationID = Number(card.LastVerificationID);
+      this.lastVerificationDate = card.LastVerificationDate;
     } catch (e) { }
   }
 }

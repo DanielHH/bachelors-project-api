@@ -6,12 +6,12 @@ export class VerificationType {
     /**
      * Database ID of the verification type
      */
-    id: number;
+    ID: number;
   
     /**
      * Name of the verification type
      */
-    name: string;
+    Name: string;
 
     constructor();
     constructor(verificationType: any);
@@ -19,9 +19,9 @@ export class VerificationType {
     constructor(verificationType?: any) {
 
       try {
-        if(verificationType.ID)
-          this.id = verificationType.ID;
-        this.name = verificationType.Name;
+        if(verificationType.id)
+          this.ID = verificationType.id;
+          this.Name = verificationType.name;
       }
       catch (e) {
 

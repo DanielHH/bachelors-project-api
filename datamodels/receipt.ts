@@ -44,26 +44,23 @@ export class Receipt {
     constructor(receipt?: any) {
 
       try {
-        if(receipt.ID) {
+        if (receipt.id) {
           this.ID = Number(receipt.id);
-        }
-        else {
+        } else {
           this.ID = null;
         }
 
         this.ItemTypeID = receipt.itemType.id;
         
-        if(receipt.cardID) {
+        if (receipt.card) {
           this.CardID = receipt.card.id;
-        }
-        else {
+        } else {
           this.CardID = null;
         }
 
-        if(receipt.documentID) {
+        if (receipt.document) {
           this.DocumentID = receipt.document.id;
-        }
-        else {
+        } else {
           this.DocumentID = null;
         }
 
