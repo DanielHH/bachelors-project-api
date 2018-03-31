@@ -42,13 +42,13 @@ export class LogEventDTO {
       try {
         this.id = Number(logEvent.ID);
   
-        this.itemTypeID = Number(logEvent.itemTypeID);
+        this.itemTypeID = Number(logEvent.ItemTypeID);
 
         this.cardID = logEvent.CardID ? Number(logEvent.CardID) : null;
   
         this.documentID = logEvent.DocumentID ? Number(logEvent.DocumentID) : null;
 
-        this.ownerID = logEvent.ownerID ? Number(logEvent.ownerID) : null;
+        this.ownerID = logEvent.OwnerID ? Number(logEvent.OwnerID) : null;
   
         this.userID = Number(logEvent.UserID);
   
