@@ -1,5 +1,5 @@
 import server from './server';
 
-const port = process.env.PORT || 9090;
+const port = process.env.PORT || 8080;
 
 server.listen(port);
