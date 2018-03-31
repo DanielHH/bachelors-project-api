@@ -77,12 +77,66 @@ export class DocumentDTO {
    */
   activeReceipt?: number;
 
+  /**
+   * ID of last verification
+   */
+  lastVerificationID?: number;
+
+  /**
+   * Date of last verification
+   */
+  lastVerificationDate?: Date;
+
 
   constructor();
-  constructor(document: any);
+  constructor(data: any);
 
-  constructor(document?: any) {
+  constructor(data?: any) {
 
+    if (data.DocumentID) {
+      this.fromJoin(data);
+    }
+    else {
+      this.fromDocument(data);
+    }
+
+  }
+
+  fromJoin(data: any) {
+    try {
+      this.id = Number(data.DocumentID);
+
+      this.documentType = new DocumentTypeDTO(data.DocumentTypeID, data.DocumentTypeName);
+      this.documentNumber = data.DocumentNumber;
+
+      this.name = data.DocumentName;
+      this.sender = data.DocumentSender;
+
+      this.documentDate = data.DocumentDate;
+      this.registrationDate = data.DocumentRegistrationDate;
+      this.creationDate = data.DocumentCreationDate;
+      this.modifiedDate = data.DocumentModifiedDate;
+
+      this.user = new UserDTO(
+        null,
+        data.UserID,
+        data.UserType,
+        data.Username,
+        data.UsersName,
+        data.Email
+      );
+
+      this.location = data.DocumentLocation;
+      this.comment = data.DocumentComment;
+      this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
+      this.activeReceipt = Number(data.ActiveReceipt);
+      this.lastVerificationID = Number(data.LastVerificationID);
+      this.lastVerificationDate = data.LastVerificationDate;
+
+    } catch (e) { }
+  }
+
+  fromDocument(document: any) {
     try {
       this.id = Number(document.ID);
 
@@ -109,7 +163,16 @@ export class DocumentDTO {
       this.location = document.Location;
       this.comment = document.Comment;
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
-      this.activeReceipt = Number(document.ActiveReceipt);
+
+      if (document.ActiveReceipt) {
+        this.activeReceipt = Number(document.ActiveReceipt);
+      }
+      else {
+        this.activeReceipt = null;
+      }
+      
+      this.lastVerificationID = Number(document.LastVerificationID);
+      this.lastVerificationDate = document.LastVerificationDate;
 
     } catch (e) { }
   }

@@ -61,31 +61,25 @@ export class CardDTO {
    */
   activeReceipt?: number;
 
+  /**
+   * ID of last verification
+   */
+  lastVerificationID?: number;
+
+  /**
+   * Date of last verification
+   */
+  lastVerificationDate?: Date;
+
   constructor();
-  constructor(card?: any, data?: any);
-  /*
-  id?: number,
-  cardTypeID?: number,
-  cardTypeName?: string,
-  cardNumber?: string,
-  userID?: number,
-  userType?: number,
-  username?: string,
-  name?: string,
-  email?: string,
-  location?: string,
-  comment?: string,
-  expirationDate?: Date,
-  creationDate?: Date,
-  modifiedDate?: Date,
-  statusTypeID?: number,
-  statusTypeName?: string,
-  activeReceipt?: number*/
-  constructor(card?: any, data?: any) {
-    if (card) {
-      this.fromCard(card);
-    } else {
+  constructor(data?: any);
+
+  constructor(data?: any) {
+    if (data.CardID) {
       this.fromJoin(data);
+    }
+    else {
+      this.fromCard(data);
     }
   }
 
@@ -112,7 +106,10 @@ export class CardDTO {
       this.modifiedDate = data.CardModifiedDate;
       this.status = new StatusTypeDTO(data.CardStatusTypeID, data.CardStatusTypeName);
       this.activeReceipt = Number(data.CardActiveReceipt);
-    } catch (e) {}
+      this.lastVerificationID = Number(data.LastVerificationID);
+      this.lastVerificationDate = data.LastVerificationDate;
+
+    } catch (e) { }
   }
 
   fromCard(card: any) {
@@ -124,7 +121,7 @@ export class CardDTO {
 
       this.user = new UserDTO(
         null,
-        Number(card.UserID),
+        card.UserID,
         card.UserType,
         card.Username,
         card.Name,
@@ -137,7 +134,14 @@ export class CardDTO {
       this.creationDate = card.CreationDate;
       this.modifiedDate = card.ModifiedDate;
       this.status = new StatusTypeDTO(card.StatusTypeID, card.StatusTypeName);
-      this.activeReceipt = Number(card.ActiveReceipt);
-    } catch (e) {}
+      if (card.ActiveReceipt) {
+        this.activeReceipt = Number(card.ActiveReceipt);
+      }
+      else {
+        this.activeReceipt = null;
+      }
+      this.lastVerificationID = Number(card.LastVerificationID);
+      this.lastVerificationDate = card.LastVerificationDate;
+    } catch (e) { }
   }
 }

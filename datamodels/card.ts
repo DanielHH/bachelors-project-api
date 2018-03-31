@@ -58,6 +58,11 @@ export class Card {
    */
   ActiveReceipt?: number;
 
+  /**
+   * Last verification
+   */
+  LastVerification?: number;
+
   constructor();
   constructor(card: any);
 
@@ -72,14 +77,33 @@ export class Card {
       }
       this.CardType = card.cardType.id;
       this.CardNumber = card.cardNumber;
-      this.UserID = card.user.id;
+
+      if (card.user.id) {
+        this.UserID = card.user.id;
+      }
+      else {
+        this.UserID = null;
+      }
+
       this.Location = card.location;
       this.Comment = card.comment;
       this.ExpirationDate = card.expirationDate;
       this.CreationDate = card.creationDate;
       this.ModifiedDate = card.modifiedDate;
       this.Status = card.status.id;
-      this.ActiveReceipt = card.activeReceipt;
+      
+      if (card.activeReceipt) {
+        this.ActiveReceipt = card.activeReceipt;
+      }
+      else {
+        this.ActiveReceipt = null;
+      }
+
+      if (card.lastVerificationID) {
+        this.LastVerification = card.lastVerificationID;
+      } else {
+        this.LastVerification = null;
+      }
     }
     catch (e) {
 

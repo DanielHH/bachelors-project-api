@@ -15,22 +15,22 @@ export class ReceiptDTO {
   /**
    * ID of receipt item type
    */
-  itemTypeID: number;
+  itemType: ItemTypeDTO;
 
   /**
    * Card ID of receipt
    */
-  cardID?: number;
+  card?: CardDTO;
 
   /**
    * Document ID of receipt item type
    */
-  documentID?: number;
+  document?: DocumentDTO;
 
   /**
    * ID of current receipt holder
    */
-  userID: number;
+  user: UserDTO;
 
   /**
    * Start date of the receipt
@@ -49,7 +49,7 @@ export class ReceiptDTO {
     try {
       this.id = Number(receipt.ID);
 
-      /*
+      
       this.itemType = new ItemTypeDTO(receipt.ItemTypeID, receipt.ItemTypeName);
 
       if(receipt.CardID) {
@@ -60,10 +60,10 @@ export class ReceiptDTO {
       }
 
       if(receipt.DocumentID) {
-        this.document = new DocumentDTO();
+        this.document = new DocumentDTO(receipt);
       }
       else {
-        this.card = null;
+        this.document = null;
       }
 
       this.user = new UserDTO(
@@ -73,15 +73,10 @@ export class ReceiptDTO {
         receipt.Username,
         receipt.Name,
         receipt.Email
-      );*/
+      );
 
-      this.itemTypeID = Number(receipt.ItemTypeID);
-      this.cardID = receipt.CardID ? Number(receipt.CardID) : null;
-      this.documentID = receipt.DocumentID ? Number(receipt.DocumentID) : null;
-      this.userID = Number(receipt.UserID);
-
-      this.endDate = receipt.EndDate;
       this.startDate = receipt.StartDate;
+      this.endDate = receipt.EndDate;
 
     } catch (e) {}
   }

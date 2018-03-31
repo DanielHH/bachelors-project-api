@@ -36,7 +36,7 @@ export class Receipt {
     /**
      * End date of the receipt
      */
-    EndDate: Date;
+    EndDate?: Date;
 
     constructor();
     constructor(receipt: any);
@@ -44,30 +44,27 @@ export class Receipt {
     constructor(receipt?: any) {
 
       try {
-        if(receipt.ID) {
+        if (receipt.id) {
           this.ID = Number(receipt.id);
-        }
-        else {
+        } else {
           this.ID = null;
         }
 
-        this.ItemTypeID = receipt.itemTypeID;
+        this.ItemTypeID = receipt.itemType.id;
         
-        if(receipt.cardID) {
-          this.CardID = receipt.cardID;
-        }
-        else {
+        if (receipt.card) {
+          this.CardID = receipt.card.id;
+        } else {
           this.CardID = null;
         }
 
-        if(receipt.documentID) {
-          this.DocumentID = receipt.documentID;
-        }
-        else {
+        if (receipt.document) {
+          this.DocumentID = receipt.document.id;
+        } else {
           this.DocumentID = null;
         }
 
-        this.UserID = receipt.userID;
+        this.UserID = receipt.user.id;
         this.StartDate = receipt.startDate;
         this.EndDate = receipt.endDate;
       }

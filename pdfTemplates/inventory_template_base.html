@@ -1,0 +1,426 @@
+<!-- <!DOCTYPE html> -->
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <style>
+        body {
+            background-color: white;
+            margin-left: 70px;
+            margin-right: 50px;
+        }
+        
+        h1 {
+            color: Black;
+            text-align: center;
+        }
+        
+        h2 {
+            text-align: center;
+        }
+        
+        p {
+            font-family: verdana;
+            font-size: 20px;
+        }
+        
+        hr {
+            height: 1px;
+            background-color: black;
+            margin-right: 50px;
+        }
+        
+        .signing {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .signing2 {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        h3 {
+            margin-bottom: 0px;
+        }
+        
+        .enlarge {
+            font-size: 20px;
+        }
+        
+        .enlarge2 {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+        
+        .column-top-left {
+            float: left;
+            width: 45%;
+        }
+        
+        .column-top-right {
+            float: right;
+            width: 45%;
+            text-align: right;
+            margin-right: 50px;
+        }
+        
+        .column2 {
+            float: left;
+            width: 45%;
+        }
+        
+        .column6 {
+            float: left;
+            width: 16%;
+            height: 50px;
+            text-align: center;
+            word-wrap: break-word;
+            padding-top: 10px;
+        }
+        
+        .column7 {
+            float: left;
+            width: 14%;
+            height: 50px;
+            text-align: center;
+            word-wrap: break-word;
+            padding-top: 10px;
+        }
+        
+        .column9 {
+            float: left;
+            width: 10%;
+            height: 50px;
+            text-align: center;
+            word-wrap: break-word;
+            padding-top: 10px;
+        }
+        
+        .column12 {
+            float: left;
+            width: 7%;
+            height: 50px;
+            text-align: center;
+            word-wrap: break-word;
+            padding-top: 10px;
+        }
+        
+        .column18 {
+            float: left;
+            width: 5%;
+            height: 50px;
+            text-align: center;
+            word-wrap: break-word;
+            padding-top: 10px;
+        }
+        
+        .border-top {
+            border-top: 1px solid;
+        }
+        
+        .border-bottom {
+            border-bottom: 1px solid;
+        }
+        
+        .border-left {
+            border-left: 1px solid;
+        }
+        
+        .border-right {
+            border-right: 1px solid;
+        }
+        /* Clear floats after the columns */
+        
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        .bottom-spacer {
+            margin-bottom: 50px;
+        }
+    </style>
+    <!--<link rel="stylesheet" href="reciepts.scss" />-->
+    <title></title>
+</head>
+
+
+
+<body>
+
+    <div class="row bottom-spacer">
+        <div class="column-top-left">
+            <%= curDate %>
+        </div>
+        <div class="column-top-right">Sida
+            <%= curPage %> av
+                <%= totalPage %>
+        </div>
+    </div>
+
+
+    <h1 class="">Inventering</h1>
+    <!-- <h2 class="">Användarkopia</h2> -->
+
+    <div class="row">
+        <div class="column6 border-top border-left">Verifierad</div>
+        <div class="column6 border-top border-left">Typ</div>
+        <div class="column6 border-top border-left">Ref.Nummer</div>
+        <div class="column6 border-top border-left">Användare</div>
+        <div class="column6 border-top border-left">Förvaras</div>
+        <div class="column6 border-top border-left border-right">Kommentar</div>
+
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type1 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number1 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user1 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location1 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment1 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type2 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number2 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user2 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location2 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment2 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type3 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number3 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user3 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location3 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment3 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type4 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number4 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user4 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location4 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment4 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type5 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number5 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user5 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location5 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment5 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type6 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number6 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user6 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location6 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment6 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type7 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number7 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user7 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location7 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment7 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type8 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number8 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user8 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location8 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment8 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type9 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number9 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user9 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location9 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment9 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type10 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number10 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user10 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location10 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment10 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type11 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number11 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user11 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location11 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment11 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type12 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number12 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user12 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location12 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment12 %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column6 border-top border-bottom border-left">
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= type13 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= number13 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= user13 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left">
+            <%= location13 %>
+        </div>
+        <div class="column6 border-top border-bottom border-left border-right">
+            <%= comment13 %>
+        </div>
+    </div>
+</body>
+
+</html>
