@@ -42,7 +42,6 @@ export class ReceiptDTO {
    */
   endDate: Date;
 
-
   constructor();
   constructor(receipt: any);
 
