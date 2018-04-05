@@ -53,7 +53,7 @@ export class PdfUtilities {
       moment(data[1].modifiedDate).format('YYYY-MM-DD') + '.pdf';
     const pdfFilePath = './pdfs/' + pdfFileName;
 
-    const options = { format: 'A4', type: 'pdf' };
+    const options = { width: '595', height: '842' };
 
     return new Promise((resolve, reject) => {
       this.pdf.create(html, options).toFile(pdfFilePath, (err, res) => {
