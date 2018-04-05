@@ -32,7 +32,7 @@ export class DeliveryDTO {
   documentDate: Date;
 
   /**
-   * Registration date
+   * Sent date
    */
   sentDate: Date;
 

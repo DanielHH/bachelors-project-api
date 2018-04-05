@@ -42,7 +42,6 @@ export class ReceiptDTO {
    */
   endDate: Date;
 
-
   constructor();
   constructor(receipt: any);
 
@@ -76,9 +75,8 @@ export class ReceiptDTO {
         receipt.Email
       );
 
-
-      this.endDate = receipt.EndDate;
       this.startDate = receipt.StartDate;
+      this.endDate = receipt.EndDate;
 
     } catch (e) {}
   }
