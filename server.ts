@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
 import * as mariasql from 'mariasql';
+import * as _ from 'lodash';
 
 import { dbconfig } from './database-config';
 import { TestModel } from './datamodels/testModel';
@@ -48,7 +49,12 @@ class Server {
 
     this.sqlUtil = new SqlUtilities();
     this.pdfUtil = new PdfUtilities();
-    this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));
+    if(_.first(__dirname) == '/') {
+      this.app.use('/pdfs', express.static(__dirname + '/pdfs'));      
+    }
+    else {
+      this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));      
+    }
 
     this.httpRequests();
   }
