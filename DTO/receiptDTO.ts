@@ -42,6 +42,11 @@ export class ReceiptDTO {
    */
   endDate: Date;
 
+  /**
+   * URL to pdf
+   */
+  url?: string;
+
   constructor();
   constructor(receipt: any);
 
@@ -77,6 +82,7 @@ export class ReceiptDTO {
 
       this.startDate = receipt.StartDate;
       this.endDate = receipt.EndDate;
+      this.url = receipt.host + '/pdfs/' + receipt.PDFName;
 
     } catch (e) {}
   }
