@@ -47,6 +47,8 @@ class Server {
     this.config();
 
     this.sqlUtil = new SqlUtilities();
+    this.pdfUtil = new PdfUtilities();
+    this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));
 
     this.httpRequests();
   }
@@ -179,6 +181,7 @@ class Server {
       this.sqlUtil.sqlSelectQuery(query).then((receiptList: any[]) => {
         res.send(
           receiptList.map(receipt => {
+            receipt.host = 'http://' + req.headers.host;
             return new ReceiptDTO(receipt);
           })
         );
@@ -276,12 +279,10 @@ class Server {
       res.download("./pdfs/receipt.pdf");
     })
 
-    this.app.post('/genPDF', function (req, res) {
-      const pdfUtil = new PdfUtilities(/*this.sqlUtil*/);
-      const data: string = pdfUtil.generatePDF(req.body);
-      console.log(data);
-      //res.contentType("application/pdf");
-      res.download(data);
+    this.app.post('/genPDF', (req, res) => {
+      this.pdfUtil.generatePDF(req.body).then(path => {
+        res.send({ message: 'success', url: 'http://' + req.headers.host + path})
+      });
     });
 
     this.app.post('/testPost', (req, res) => {
@@ -290,42 +291,42 @@ class Server {
 
     this.app.post('/addNewCard', (req, res) => {
       this.sqlUtil.sqlInsert('Card', new Card(req.body)).then(id => {
-        req.body.id = id;
+        req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewDocument', (req, res) => {
       this.sqlUtil.sqlInsert('Document', new Document(req.body)).then(id => {
-        req.body.id = id;
+        req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewReceipt', (req, res) => {
       this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body)).then(id => {
-        req.body.id = id;
+        req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewLogEvent', (req, res) => {
       this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body)).then(id => {
-        req.body.id = id;
+        req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewDelivery', (req, res) => {
       this.sqlUtil.sqlInsert('Delivery', new Delivery(req.body)).then(id => {
-        req.body.id = id;
+        req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
     });
 
     this.app.post('/addNewVerification', (req, res) => {
       this.sqlUtil.sqlInsert('Verification', new Verification(req.body)).then(id => {
-        req.body.id = id;
+        req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
     });

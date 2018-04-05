@@ -3,3 +3,4 @@ package-lock.json
 *.js
 database-config.ts
 *.yml
+pdfs/

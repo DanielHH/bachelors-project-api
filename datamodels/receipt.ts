@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 /**
  * Receipt data model
 */
@@ -38,6 +40,11 @@ export class Receipt {
      */
     EndDate?: Date;
 
+    /**
+     * PDF file name
+     */
+    PDFName?: string;
+
     constructor();
     constructor(receipt: any);
 
@@ -67,6 +74,8 @@ export class Receipt {
         this.UserID = receipt.user.id;
         this.StartDate = receipt.startDate;
         this.EndDate = receipt.endDate;
+        this.PDFName = _.last(_.split(receipt.url, '/'));
+        
       }
       catch (e) {
 
