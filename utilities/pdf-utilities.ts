@@ -53,7 +53,7 @@ export class PdfUtilities {
       moment(data[1].modifiedDate).format('YYYY-MM-DD') + '.pdf';
     const pdfFilePath = './pdfs/' + pdfFileName;
 
-    const options = { format: 'A4', type: 'pdf' };
+    const options = { format: 'A4', type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
 
     return new Promise((resolve, reject) => {
       this.pdf.create(html, options).toFile(pdfFilePath, (err, res) => {
@@ -78,7 +78,7 @@ export class PdfUtilities {
   }
 
   createCardReceipt(body: CardDTO) {
-    var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + "/card_receipt_template.html", 'utf8'));
+    var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + "/card/card_receipt_template.html", 'utf8'));
     // Add variables to template
     return compiled({
       serNumber: body.cardNumber, type: body.cardType.name, user: body.user.name,
@@ -88,7 +88,7 @@ export class PdfUtilities {
   }
 
   createDokReceipt(body: DocumentDTO) {
-    var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + "/dok_receipt_template.html", 'utf8'));
+    var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + "/document/document_receipt_template.html", 'utf8'));
     // Add variables to template
     return compiled({
       serNumber: body.documentNumber, info: body.name, type: body.documentType.name, sender: body.sender,
