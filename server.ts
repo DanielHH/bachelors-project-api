@@ -49,6 +49,7 @@ class Server {
 
     this.sqlUtil = new SqlUtilities();
     this.pdfUtil = new PdfUtilities();
+
     if(_.first(__dirname) == '/') {
       this.app.use('/pdfs', express.static(__dirname + '/pdfs'));      
     }
