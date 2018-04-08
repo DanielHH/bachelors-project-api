@@ -5,6 +5,9 @@ import * as bodyParser from 'body-parser';
 import * as logger from 'morgan';
 import * as mariasql from 'mariasql';
 import * as _ from 'lodash';
+import * as bcrypt from 'bcrypt';
+import * as atob from 'atob';
+import * as btoa from 'btoa';
 
 import { dbconfig } from './database-config';
 import { TestModel } from './datamodels/testModel';
@@ -33,12 +36,10 @@ import { VerificationDTO } from './DTO/verificationDTO';
 class Server {
   public app: express.Application;
 
-
   sqlUtil: SqlUtilities;
   pdfUtil: PdfUtilities;
 
   constructor() {
-
     global.db = new mariasql();
 
     //create expressjs application
@@ -50,11 +51,10 @@ class Server {
     this.sqlUtil = new SqlUtilities();
     this.pdfUtil = new PdfUtilities();
 
-    if(_.first(__dirname) == '/') {
-      this.app.use('/pdfs', express.static(__dirname + '/pdfs'));      
-    }
-    else {
-      this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));      
+    if (_.first(__dirname) == '/') {
+      this.app.use('/pdfs', express.static(__dirname + '/pdfs'));
+    } else {
+      this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));
     }
 
     this.httpRequests();
@@ -77,8 +77,8 @@ class Server {
 
   httpRequests() {
     this.app.get('/getCards', (req, res) => {
-
-      const query = 'SELECT Card.*,' +
+      const query =
+        'SELECT Card.*,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
@@ -87,8 +87,7 @@ class Server {
         'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) ' +
         'LEFT JOIN (User) ON (User.ID=Card.UserID) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification)';
-        
-        
+
       this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
@@ -109,17 +108,16 @@ class Server {
     });
 
     this.app.get('/getDocuments', (req, res) => {
-
-      const query = 'SELECT Document.*,' +
+      const query =
+        'SELECT Document.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
         'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
-        'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' + 
+        'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
         'LEFT JOIN (User) ON (User.ID=Document.UserID) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification)';
-        
 
       this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
         res.send(
@@ -130,14 +128,12 @@ class Server {
       });
     });
 
-
     this.app.get('/getDeliveries', (req, res) => {
-
-      const query = 'SELECT Delivery.*,' +
+      const query =
+        'SELECT Delivery.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
         'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentType AND StatusType.ID=Delivery.Status)';
-
 
       this.sqlUtil.sqlSelectQuery(query).then((deliveryList: any[]) => {
         res.send(
@@ -161,8 +157,8 @@ class Server {
     });
 
     this.app.get('/getReceipts', (req, res) => {
-
-      const query = 'SELECT Receipt.*,' +
+      const query =
+        'SELECT Receipt.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
         'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
@@ -216,8 +212,8 @@ class Server {
     });
 
     this.app.get('/getVerifications', (req, res) => {
-
-      const query = 'SELECT Verification.*,' +
+      const query =
+        'SELECT Verification.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
         'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
@@ -240,14 +236,13 @@ class Server {
         'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
         'LEFT JOIN (User) ON (User.ID=Verification.UserID)';
 
-      this.sqlUtil
-        .sqlSelectQuery(query).then((verificationList: any[]) => {
-          res.send(
-            verificationList.map(verification => {
-              return new VerificationDTO(verification);
-            })
-          );
-        });
+      this.sqlUtil.sqlSelectQuery(query).then((verificationList: any[]) => {
+        res.send(
+          verificationList.map(verification => {
+            return new VerificationDTO(verification);
+          })
+        );
+      });
     });
 
     this.app.get('/getVerificationTypes', (req, res) => {
@@ -283,12 +278,15 @@ class Server {
     });
 
     this.app.get('/genPDF', (req, res) => {
-      res.download("./pdfs/receipt.pdf");
-    })
+      res.download('./pdfs/receipt.pdf');
+    });
 
     this.app.post('/genPDF', (req, res) => {
       this.pdfUtil.generatePDF(req.body).then(path => {
-        res.send({ message: 'success', url: 'http://' + req.headers.host + path})
+        res.send({
+          message: 'success',
+          url: 'http://' + req.headers.host + path
+        });
       });
     });
 
@@ -332,59 +330,80 @@ class Server {
     });
 
     this.app.post('/addNewVerification', (req, res) => {
-      this.sqlUtil.sqlInsert('Verification', new Verification(req.body)).then(id => {
-        req.body.id = Number(id);
-        res.send({ message: 'success', data: req.body });
-      });
+      this.sqlUtil
+        .sqlInsert('Verification', new Verification(req.body))
+        .then(id => {
+          req.body.id = Number(id);
+          res.send({ message: 'success', data: req.body });
+        });
     });
 
     this.app.put('/updateCard', (req, res) => {
       this.sqlUtil.sqlUpdate('Card', new Card(req.body)).then(success => {
-        if (success)
-          res.send({ message: 'success' });
-        else
-          res.send({ message: 'failure' });
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
       });
     });
 
     this.app.put('/updateDocument', (req, res) => {
-      this.sqlUtil.sqlUpdate('Document', new Document(req.body)).then(success => {
-        if (success)
-          res.send({ message: 'success' });
-        else
-          res.send({ message: 'failure' });
-      });
+      this.sqlUtil
+        .sqlUpdate('Document', new Document(req.body))
+        .then(success => {
+          if (success) res.send({ message: 'success' });
+          else res.send({ message: 'failure' });
+        });
     });
 
     this.app.put('/updateReceipt', (req, res) => {
       this.sqlUtil.sqlUpdate('Receipt', new Receipt(req.body)).then(success => {
-        if (success)
-          res.send({ message: 'success' });
-        else
-          res.send({ message: 'failure' });
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
       });
     });
 
     this.app.put('/updateDelivery', (req, res) => {
-      this.sqlUtil.sqlUpdate('Delivery', new Delivery(req.body)).then(success => {
-        if (success)
-          res.send({ message: 'success' });
-        else
-          res.send({ message: 'failure' });
-      });
+      this.sqlUtil
+        .sqlUpdate('Delivery', new Delivery(req.body))
+        .then(success => {
+          if (success) res.send({ message: 'success' });
+          else res.send({ message: 'failure' });
+        });
     });
 
     this.app.put('/updateVerification', (req, res) => {
-      this.sqlUtil.sqlUpdate('Verification', new Verification(req.body)).then(success => {
-        if (success)
-          res.send({ message: 'success' });
-        else
-          res.send({ message: 'failure' });
-      });
+      this.sqlUtil
+        .sqlUpdate('Verification', new Verification(req.body))
+        .then(success => {
+          if (success) res.send({ message: 'success' });
+          else res.send({ message: 'failure' });
+        });
     });
 
-  }
+    /*
+    this.app.get('/updatePassword', (req, res) => {
+      this.sqlUtil.sqlSelectID('User', 8).then((user: any) => {
+        bcrypt.hash(user.Password, 12, (err, hash) => {
+          user.Password = hash;
+          this.sqlUtil.sqlUpdate('User', user);
+          res.send('done');
+        });
+      });
+    });*/
 
+    this.app.post('/login', (req, res) => {
+      this.sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
+        console.log(req.body);
+        bcrypt.compare(atob(req.body.password), user.Password, (err, result) => {
+          if (result) {
+            res.send({ message: 'success', data: new UserDTO(user) });
+          }
+          else {
+            res.send({ message: 'failure' });
+          }
+        });
+      });
+    });
+  }
 }
 
 export default new Server().app;

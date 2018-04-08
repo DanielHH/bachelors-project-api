@@ -44,9 +44,18 @@ export class SqlUtilities {
     });
   }
 
-  sqlSelect(tableName: string, id: number) {
+  sqlSelectID(tableName: string, id: number) {
     return new Promise((resolve, reject) => {
       global.db.query('SELECT * FROM ' + tableName + ' WHERE ID = ?', [id], false, (err, rows) => {
+        if (!err) resolve(rows[0]);
+        reject(err);
+      });
+    });
+  }
+
+  sqlSelectUsername(username: string) {
+    return new Promise((resolve, reject) => {
+      global.db.query('SELECT * FROM User WHERE Username = ?', [username], false, (err, rows) => {
         if (!err) resolve(rows[0]);
         reject(err);
       });
