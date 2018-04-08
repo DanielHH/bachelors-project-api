@@ -145,15 +145,13 @@ class Server {
     });
 
     this.app.get('/getDocumentTypes', (req, res) => {
-      this.sqlUtil
-        .sqlSelectAll('DocumentType')
-        .then((documentTypeList: any[]) => {
-          res.send(
-            documentTypeList.map(documentType => {
-              return new DocumentType(documentType);
-            })
-          );
-        });
+      this.sqlUtil.sqlSelectAll('DocumentType').then((documentTypeList: any[]) => {
+        res.send(
+          documentTypeList.map(documentType => {
+            return new DocumentType(documentType);
+          })
+        );
+      });
     });
 
     this.app.get('/getReceipts', (req, res) => {
@@ -246,15 +244,13 @@ class Server {
     });
 
     this.app.get('/getVerificationTypes', (req, res) => {
-      this.sqlUtil
-        .sqlSelectAll('VerificationType')
-        .then((verificationTypeList: any[]) => {
-          res.send(
-            verificationTypeList.map(verificationType => {
-              return new VerificationType(verificationType);
-            })
-          );
-        });
+      this.sqlUtil.sqlSelectAll('VerificationType').then((verificationTypeList: any[]) => {
+        res.send(
+          verificationTypeList.map(verificationType => {
+            return new VerificationType(verificationType);
+          })
+        );
+      });
     });
 
     this.app.get('/getUsers', (req, res) => {
@@ -330,12 +326,10 @@ class Server {
     });
 
     this.app.post('/addNewVerification', (req, res) => {
-      this.sqlUtil
-        .sqlInsert('Verification', new Verification(req.body))
-        .then(id => {
-          req.body.id = Number(id);
-          res.send({ message: 'success', data: req.body });
-        });
+      this.sqlUtil.sqlInsert('Verification', new Verification(req.body)).then(id => {
+        req.body.id = Number(id);
+        res.send({ message: 'success', data: req.body });
+      });
     });
 
     this.app.put('/updateCard', (req, res) => {
@@ -346,12 +340,10 @@ class Server {
     });
 
     this.app.put('/updateDocument', (req, res) => {
-      this.sqlUtil
-        .sqlUpdate('Document', new Document(req.body))
-        .then(success => {
-          if (success) res.send({ message: 'success' });
-          else res.send({ message: 'failure' });
-        });
+      this.sqlUtil.sqlUpdate('Document', new Document(req.body)).then(success => {
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
+      });
     });
 
     this.app.put('/updateReceipt', (req, res) => {
@@ -362,21 +354,17 @@ class Server {
     });
 
     this.app.put('/updateDelivery', (req, res) => {
-      this.sqlUtil
-        .sqlUpdate('Delivery', new Delivery(req.body))
-        .then(success => {
-          if (success) res.send({ message: 'success' });
-          else res.send({ message: 'failure' });
-        });
+      this.sqlUtil.sqlUpdate('Delivery', new Delivery(req.body)).then(success => {
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
+      });
     });
 
     this.app.put('/updateVerification', (req, res) => {
-      this.sqlUtil
-        .sqlUpdate('Verification', new Verification(req.body))
-        .then(success => {
-          if (success) res.send({ message: 'success' });
-          else res.send({ message: 'failure' });
-        });
+      this.sqlUtil.sqlUpdate('Verification', new Verification(req.body)).then(success => {
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
+      });
     });
 
     /*
@@ -392,15 +380,17 @@ class Server {
 
     this.app.post('/login', (req, res) => {
       this.sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
-        console.log(req.body);
-        bcrypt.compare(atob(req.body.password), user.Password, (err, result) => {
-          if (result) {
-            res.send({ message: 'success', data: new UserDTO(user) });
-          }
-          else {
-            res.send({ message: 'failure' });
-          }
-        });
+        if (user) {
+          bcrypt.compare(atob(req.body.password), user.Password, (err, result) => {
+            if (result) {
+              res.send({ message: 'success', data: new UserDTO(user) });
+            } else {
+              res.send({ message: 'failure' });
+            }
+          });
+        } else {
+          res.send({ message: 'failure' });
+        }
       });
     });
   }
