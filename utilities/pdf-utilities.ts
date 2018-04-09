@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { userInfo } from "os";
 import * as moment from 'moment';
 import { DocumentDTO } from "../DTO/documentDTO";
+import { VerificationDTO } from "../DTO/verificationDTO";
 import { Receipt } from "../datamodels/receipt";
 
 
@@ -32,7 +33,7 @@ export class PdfUtilities {
     switch (pdfType) {
       case "card": html = this.createCardReceipt(data[1]); break;
       case "document": html = this.createDokReceipt(data[1]); break;
-      case "inventory": return this.createInventory();
+      case "inventory": return this.createInventory(data[1]);
       case "filteredInventory":
       case "filtered":
       default: html = this.fs.readFileSync(this.templatePath + "/inventory_template.html", 'utf8'); break;
@@ -97,8 +98,40 @@ export class PdfUtilities {
     });
   }
 
-  createInventory() {
-    const inventory = [] //= this.sqlUtil.sqlSelectQuery("");
+  createInventory(inventory: VerificationDTO[]) {
+    const query =
+        'SELECT Verification.*,' +
+        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
+        'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
+        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
+        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
+        'Document.Comment AS DocumentComment, Document.DocumentDate,' +
+        'Document.RegistrationDate AS DocumentRegistrationDate,' +
+        'Document.CreationDate AS DocumentCreationDate,' +
+        'Document.ModifiedDate AS DocumentModifiedDate,' +
+        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
+        'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
+        'User.UserType, User.Username, User.Name, User.Email ' +
+        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
+        'LEFT JOIN (User) ON (User.ID=Verification.UserID)';
+
+      let that;
+      this.sqlUtil.sqlSelectQuery(query).then((verificationList: any[]) => {
+        that = verificationList.map(verification => {
+            console.log(verification);
+            return new VerificationDTO(verification);
+          });
+      });
+
+    console.log(that);
     let items = inventory.length
     if (items <= 13) {
       return this.inventory(items, inventory, 'start', 1, 1);
@@ -146,7 +179,7 @@ export class PdfUtilities {
   }
 
 
-  inventory(length: number, items, template: string, curPage: number, pages: number) {
+  inventory(length: number, items: VerificationDTO[], template: string, curPage: number, pages: number) {
     let type: any[14];
     let number: any[14];
     let user: any[14];
@@ -157,14 +190,27 @@ export class PdfUtilities {
     let i = 0
     while (i < 14) {
       const item = items[i];
+      console.log(item.id);
+      type[i] = number[i] = user[i] = location[i] = comment[i] = "";
       if (i < length) {
-        type[i] = item.type;
-        number[i] = item.number;
-        user[i] = item.user;
-        location[i] = item.location;
-        comment[i] = item.location;
-      } else {
-        type[i] = number[i] = user[i] = location[i] = comment[i] = "";
+        type[i] = item.itemType.name;
+        
+        switch (type[i]) {
+          case 'Card':  number[i] = item.card.cardNumber;
+                        location[i] = item.card.location;
+                        comment[i] = item.card.comment;
+                        break;
+
+          case 'Document': number[i] = item.card.cardNumber;
+                           location[i] = item.card.location;
+                           comment[i] = item.card.comment;
+                           break;
+          default: type[i] = number[i] = user[i] = location[i] = comment[i] = "";
+        }
+
+        if (item.user){ 
+          user[i] = item.user.name;
+        }
       }
       i++;
     }
