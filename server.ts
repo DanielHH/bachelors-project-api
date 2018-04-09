@@ -158,7 +158,7 @@ class Server {
     });
 
     this.app.get('/getReceipts', (req, res) => {
-      const query =
+      let query =
         'SELECT Receipt.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
@@ -183,7 +183,15 @@ class Server {
         'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
         'LEFT JOIN (User, UserType) ON (User.ID=Receipt.UserID AND UserType.ID=User.UserType)';
 
-      this.sqlUtil.sqlSelectQuery(query).then((receiptList: any[]) => {
+        let queryData = [];
+
+        if(req.query.userID) {
+          query += ' WHERE Receipt.UserID=?';
+          queryData.push(req.query.userID);
+          
+        }
+
+      this.sqlUtil.sqlSelectQuery(query, queryData).then((receiptList: any[]) => {
         res.send(
           receiptList.map(receipt => {
             receipt.host = 'http://' + req.headers.host;

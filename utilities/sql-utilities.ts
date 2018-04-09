@@ -62,9 +62,10 @@ export class SqlUtilities {
     });
   }
 
-  sqlSelectQuery(query: string) {
+  sqlSelectQuery(query: string, queryData?: any[]) {
+
     return new Promise((resolve, reject) => {
-      global.db.query(query, false, (err, rows) => {
+      global.db.query(query, queryData, false, (err, rows) => {
         if (!err) resolve(rows);
         reject(err);
       });
