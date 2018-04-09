@@ -55,7 +55,7 @@ export class SqlUtilities {
 
   sqlSelectUsername(username: string) {
     return new Promise((resolve, reject) => {
-      global.db.query('SELECT * FROM User WHERE Username = ?', [username], false, (err, rows) => {
+      global.db.query('SELECT User.*, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserType) WHERE User.Username=?', [username], false, (err, rows) => {
         if (!err) resolve(rows[0]);
         reject(err);
       });
