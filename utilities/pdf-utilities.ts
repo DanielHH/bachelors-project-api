@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { DocumentDTO } from "../DTO/documentDTO";
 import { VerificationDTO } from "../DTO/verificationDTO";
 import { Receipt } from "../datamodels/receipt";
+import { resolve } from "path";
 
 
 
@@ -19,6 +20,7 @@ export class PdfUtilities {
   fs = require('fs');
   ejs = require('ejs');
   pdf = require('html-pdf')
+  merge = require('easy-pdf-merge');
 
   constructor() {
     this.sqlUtil = new SqlUtilities();
@@ -33,7 +35,8 @@ export class PdfUtilities {
     switch (pdfType) {
       case "card": html = this.createCardReceipt(data[1]); break;
       case "document": html = this.createDokReceipt(data[1]); break;
-      case "inventory": return this.createInventory(data[1]);
+      case "inventory": return this.createInventory(data[1]).then(res => {
+        return new Promise((resolve,reject) => { resolve(res);})});        
       case "filteredInventory":
       case "filtered":
       default: html = this.fs.readFileSync(this.templatePath + "/inventory_template.html", 'utf8'); break;
@@ -99,39 +102,6 @@ export class PdfUtilities {
   }
 
   createInventory(inventory: VerificationDTO[]) {
-    const query =
-        'SELECT Verification.*,' +
-        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
-        'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
-        'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
-        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
-        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
-        'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
-        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
-        'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
-        'Document.Comment AS DocumentComment, Document.DocumentDate,' +
-        'Document.RegistrationDate AS DocumentRegistrationDate,' +
-        'Document.CreationDate AS DocumentCreationDate,' +
-        'Document.ModifiedDate AS DocumentModifiedDate,' +
-        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
-        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
-        'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
-        'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email ' +
-        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
-        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
-        'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
-        'LEFT JOIN (User) ON (User.ID=Verification.UserID)';
-
-      let that;
-      this.sqlUtil.sqlSelectQuery(query).then((verificationList: any[]) => {
-        that = verificationList.map(verification => {
-            console.log(verification);
-            return new VerificationDTO(verification);
-          });
-      });
-
-    console.log(that);
     let items = inventory.length
     if (items <= 13) {
       return this.inventory(items, inventory, 'start', 1, 1);
@@ -150,7 +120,7 @@ export class PdfUtilities {
       }
 
       var pdfFilePath = './pdfs/inventory';
-      var options = { format: 'A4' };
+      const options = { format: 'A4', type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
       this.pdf.create(compStart, options).toFile(pdfFilePath + '_start.pdf', function (err, res2) {
         if (err) return console.log(err);
         console.log(res2);
@@ -159,40 +129,59 @@ export class PdfUtilities {
       const files: any[] = [pages];
       files.push(pdfFilePath + '_start.pdf');
       let currentPath: string;
-      for (let i = 0; i < pages - 1; i++) {
-        currentPath = pdfFilePath + '_' + i + '.pdf';
-        this.pdf.create(compExtra[i], options).toFile(currentPath)
-        files.push(currentPath);
-      }
 
-      let dest_path = './pdfs/receipt.pdf';
-      var merge = require('easy-pdf-merge');
-      merge(files, dest_path, function (err) {
-        if (err) {
-          return console.log(err);
+      let promise = new Promise((resolve, reject) => {
+        for (let i = 0; i < pages - 1; i++) {
+          currentPath = pdfFilePath + '_' + i + '.pdf';
+          this.pdf.create(compExtra[i], options).toFile(currentPath, (err,res) => {
+            if (err) {
+              reject(err);
+            }
+          })
+          files.push(currentPath);
         }
-        console.log('success');
-      })
-      return dest_path;
+      }).then(() => {
+        return new Promise((resolve,reject) => {
+        const dest_path = './pdfs/inventory_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';
+        var merge = require('easy-pdf-merge');
+        merge(files, dest_path, function (err) {
+          if (!err) {
+            resolve(dest_path.substring(1));
+          }
+          else {
+            reject(err)
+          }
+        });
+      });
+      }).then(result => {
+        return new Promise((resolve, reject) => {
+        for (let str in files){
+          this.fs.unlink(str, (err2) => {
+            if (!err2) {
+              resolve(result);
+            }
+          });
+        };
+      });
+      });
     }
 
   }
 
 
   inventory(length: number, items: VerificationDTO[], template: string, curPage: number, pages: number) {
-    let type: any[14];
-    let number: any[14];
-    let user: any[14];
-    let location: any[14];
-    let comment: any[14];
+    let type: any[14] = new Array(14);
+    let number: any[14] = new Array(14);
+    let user: any[14] = new Array(14);
+    let location: any[14] = new Array(14);
+    let comment: any[14] = new Array(14);
 
     let done = false;
     let i = 0
     while (i < 14) {
-      const item = items[i];
-      console.log(item.id);
       type[i] = number[i] = user[i] = location[i] = comment[i] = "";
       if (i < length) {
+        const item = items[i];
         type[i] = item.itemType.name;
         
         switch (type[i]) {
@@ -201,9 +190,9 @@ export class PdfUtilities {
                         comment[i] = item.card.comment;
                         break;
 
-          case 'Document': number[i] = item.card.cardNumber;
-                           location[i] = item.card.location;
-                           comment[i] = item.card.comment;
+          case 'Document': number[i] = item.document.documentNumber;
+                           location[i] = item.document.location;
+                           comment[i] = item.document.comment;
                            break;
           default: type[i] = number[i] = user[i] = location[i] = comment[i] = "";
         }
@@ -238,7 +227,7 @@ export class PdfUtilities {
       type11: type[10], number11: number[10], user11: user[10], location11: location[10], comment11: comment[10],
       type12: type[11], number12: number[11], user12: user[11], location12: location[11], comment12: comment[11],
       type13: type[12], number13: number[12], user13: user[12], location13: location[12], comment13: comment[12],
-
+      curDate: moment(new Date()).format('YYYY-MM-DD'), curPage: curPage, totalPage: pages
     });
   }
 
@@ -260,6 +249,7 @@ export class PdfUtilities {
       type12: type[11], number12: number[11], user12: user[11], location12: location[11], comment12: comment[11],
       type13: type[12], number13: number[12], user13: user[12], location13: location[12], comment13: comment[12],
       type14: type[13], number14: number[13], user14: user[13], location14: location[13], comment14: comment[13],
+      curDate: moment(new Date()).format('YYYY-MM-DD'), curPage: curPage, totalPage: pages
     });
   }
 
