@@ -70,7 +70,8 @@ export class VerificationDTO {
       this.user = new UserDTO(
         null,
         verification.UserID,
-        verification.UserType,
+        verification.UserTypeID,
+        verification.UserTypeName,
         verification.Username,
         verification.Name,
         verification.Email

@@ -1,3 +1,5 @@
+import { UserTypeDTO } from "./userTypeDTO";
+
 /**
  * User data transfer object
  */
@@ -10,7 +12,7 @@ export class UserDTO {
   /**
    * User type
    */
-  userType: number;
+  userType: UserTypeDTO;
 
   /**
    * Username
@@ -31,7 +33,8 @@ export class UserDTO {
   constructor(
     user?: any,
     id?: number,
-    userType?: number,
+    userTypeID?: number,
+    userTypeName?: string,    
     username?: string,
     name?: string,
     email?: string
@@ -40,7 +43,8 @@ export class UserDTO {
   constructor(
     user?: any,
     id?: number,
-    userType?: number,
+    userTypeID?: number,
+    userTypeName?: string,
     username?: string,
     name?: string,
     email?: string
@@ -53,7 +57,7 @@ export class UserDTO {
         else {
           this.id = null;
         }
-        this.userType = Number(user.UserType);
+        this.userType = new UserTypeDTO(user.UserTypeID, user.UserTypeName);
         this.username = user.Username;
         this.name = user.Name;
         this.email = user.Email;
@@ -66,7 +70,7 @@ export class UserDTO {
         else {
           this.id = null;
         }
-        this.userType = Number(userType);
+        this.userType = new UserTypeDTO(userTypeID, userTypeName);
         this.username = username;
         this.name = name;
         this.email = email;

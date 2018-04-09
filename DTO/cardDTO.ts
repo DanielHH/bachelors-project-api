@@ -93,7 +93,8 @@ export class CardDTO {
       this.user = new UserDTO(
         null,
         data.UserID,
-        data.UserType,
+        data.UserTypeID,
+        data.userTypeName,
         data.Username,
         data.Name,
         data.Email
@@ -122,7 +123,8 @@ export class CardDTO {
       this.user = new UserDTO(
         null,
         card.UserID,
-        card.UserType,
+        card.UserTypeID,
+        card.UserTypeName,
         card.Username,
         card.Name,
         card.Email
