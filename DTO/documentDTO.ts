@@ -128,8 +128,8 @@ export class DocumentDTO {
 
       this.location = data.DocumentLocation;
       this.comment = data.DocumentComment;
-      this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
-      this.activeReceipt = Number(data.ActiveReceipt);
+      this.status = new StatusTypeDTO(data.DocumentStatusTypeID, data.DocumentStatusTypeName);
+      this.activeReceipt = Number(data.DocumentActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
 
