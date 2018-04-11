@@ -89,7 +89,7 @@ export class LogEventDTO {
   
         this.logDate = logEvent.LogDate;
 
-        this.logText = _.replace(this.logType.logText, '$data', logEvent.LogText);
+        this.logText = _.replace(this.logType.logText, '$data', logEvent.LogData);
         
       } catch (e) {}
     }
