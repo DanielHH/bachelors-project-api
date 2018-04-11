@@ -18,7 +18,7 @@ export class PdfUtilities {
 
 
   static templatePath = './pdfTemplates/';
-  static sqlUtil = new SqlUtilities();
+  sqlUtil: SqlUtilities;
   static fs = require('fs');
   static ejs = require('ejs');
   static pdf = require('html-pdf')
@@ -26,26 +26,20 @@ export class PdfUtilities {
   static options = { format: 'A4', type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
 
   constructor() {
-    //this.sqlUtil = new SqlUtilities();
+    this.sqlUtil = new SqlUtilities();
   }
 
   generatePDF(data?: any[]) {
-    // Get packages
-    console.log('starting');
-    let template = " ";
     // Read and compile variable html template
     const pdfType = data[0];
-    let html;
     switch (pdfType) {
       case "card": return this.createCardReceipt(data[1], data[2], pdfType);
       case "document": return this.createDokReceipt(data[1], data[2], pdfType);
       case "inventory": return this.createInventory(data[1]);      
       case "receipts": return this.createReceiptList(data[1]);
       case "documents": return this.createDokList(data[1]);
-      default: html = PdfUtilities.fs.readFileSync(PdfUtilities.templatePath + "/inventory_template.html", 'utf8'); break;
+      case "cards": return this.createCardList(data[1]);
     }
-
-    // Create and save pdf
   }
 
   createCardReceipt(body: CardDTO, receipt, pdfType) {
@@ -79,8 +73,41 @@ export class PdfUtilities {
   createReceiptList(receiptsList: ReceiptDTO[]){
     return this.generatePages(this.receipts, receiptsList, '/receipts');
   }
+
+  createDokList(documents: DocumentDTO[]){
+    return this.generatePages(this.documents, documents, '/receipts');
+  }
+
+  createCardList(cards: CardDTO[]){
+    return this.generatePages(this.cards, cards, '/cards');
+  }
+
+  cards(length, cards: CardDTO[], template, curPage, pages){
+    let items = [];
+    let status, type, number, user, endDate, sender, comment, location;
+
+    let done = false;
+    let i = 0
+    while (i < length) {
+        const card = cards[i];
+        type = card.cardType
+        status = card.status.name;
+        number = card.cardNumber;
+        comment = card.comment;
+        location = card.location;
+        endDate = card.expirationDate;
+
+        if (card.user){ 
+          user = card.user.name;
+        }
+      i++;
+      items.push([status, type, number, user, location, comment, endDate]);
+    }
+
+    return PdfUtilities.fillTemplate(items, curPage, pages, '/card/card_template_' + template + '.html');
+  }
   
-  documents(this: PdfUtilities, length, documents: DocumentDTO[], template, curPage, pages) {
+  documents(length, documents: DocumentDTO[], template, curPage, pages) {
     let items = [];
     let status, type, number, user, desc, sender, comment, location;
 
@@ -102,10 +129,8 @@ export class PdfUtilities {
       i++;
       items.push([status, number, desc, type, sender, comment, location]);
     }
-    switch (template) {
-      case 'start': return PdfUtilities.fillTemplate(items, curPage, pages, "/document/document_template_base.html");
-      case 'extra': return PdfUtilities.fillTemplate(items, curPage, pages, "/document/document_template_extra.html");
-    }
+
+    return PdfUtilities.fillTemplate(items, curPage, pages, '/document/document_template_' + template + '.html');
   }
 
   receipts(this: PdfUtilities, length, receipts: ReceiptDTO[], template, curPage, pages) {
@@ -175,10 +200,7 @@ export class PdfUtilities {
       items.push(['', type, number, user, location, comment])
     }
 
-    switch (template) {
-      case 'start': return PdfUtilities.fillTemplate(items,curPage, pages, "/inventory/inventory_template_base.html");
-      case 'extra': return PdfUtilities.fillTemplate(items, curPage, pages, "/inventory/inventory_template_extra.html");
-    }
+    return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html');
   }
 
   generatePages(func: Function, itemList: any[], path){
@@ -235,7 +257,7 @@ export class PdfUtilities {
       PdfUtilities.pdf.create(html, PdfUtilities.options).toFile(pdfFilePath, (err, res) => {
         if (!err) {
           receipt.url = pdfFileName;
-          PdfUtilities.sqlUtil.sqlUpdate('Receipt', new Receipt(receipt)).then(success => {
+          this.sqlUtil.sqlUpdate('Receipt', new Receipt(receipt)).then(success => {
             if (success) {
               resolve(pdfFilePath.substring(1));
             }
