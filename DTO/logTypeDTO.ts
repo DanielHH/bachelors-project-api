@@ -12,11 +12,17 @@ export class LogTypeDTO {
    */
   name: string;
 
-  constructor();
-  constructor(id?: number, name?: string);
+  /**
+   * Log text
+   */
+  logText: string;
 
-  constructor(id?: number, name?: string) {
+  constructor();
+  constructor(id?: number, name?: string, logText?: string);
+
+  constructor(id?: number, name?: string, logText?: string) {
     this.id = Number(id);
     this.name = name;
+    this.logText = logText;
   }
 }

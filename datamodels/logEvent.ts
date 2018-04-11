@@ -35,6 +35,11 @@ export class LogEvent {
    */
   LogDate: Date;
 
+  /**
+   * Log data
+   */
+  LogData: string;
+
   constructor();
   constructor(logEvent: any);
 
@@ -75,6 +80,8 @@ export class LogEvent {
       this.LogTypeID = logEvent.logTypeID;
 
       this.LogDate = logEvent.logDate;
+
+      this.LogData = logEvent.logData;
     } catch (e) {}
   }
 }

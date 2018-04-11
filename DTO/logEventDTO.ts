@@ -3,7 +3,7 @@ import { CardDTO } from "./cardDTO";
 import { DocumentDTO } from "./documentDTO";
 import { UserDTO } from "./userDTO";
 import { LogTypeDTO } from "./logTypeDTO";
-
+import * as _ from "lodash";
 
 /**
  * Log event data transfer object
@@ -44,6 +44,11 @@ export class LogEventDTO {
      * Log date of the event
      */
     logDate: Date;
+
+    /**
+     * Log text
+     */
+    logText;
   
     constructor();
     constructor(logEvent: any);
@@ -80,9 +85,11 @@ export class LogEventDTO {
       );
 
 
-        this.logType = new LogTypeDTO(logEvent.LogTypeID, logEvent.LogTypeName);
+        this.logType = new LogTypeDTO(logEvent.LogTypeID, logEvent.LogTypeName, logEvent.LogTypeText);
   
         this.logDate = logEvent.LogDate;
+
+        this.logText = _.replace(this.logType.logText, '$data', logEvent.LogData);
         
       } catch (e) {}
     }
