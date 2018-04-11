@@ -13,6 +13,11 @@ export class LogType {
      */
     name: string;
 
+    /**
+     * Log text
+     */
+    logText: string;
+
     constructor();
     constructor(logType: any);
 
@@ -22,6 +27,7 @@ export class LogType {
         if(logType.ID)
           this.id = logType.ID;
         this.name = logType.Name;
+        this.logText = logType.Text;
       }
       catch (e) {
 

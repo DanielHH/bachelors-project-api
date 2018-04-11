@@ -223,7 +223,7 @@ class Server {
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
         'User.UserType, User.Username, User.Name, User.Email,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName,' +
-        'LogType.ID AS LogTypeID, LogType.Name AS LogTypeName ' +
+        'LogType.ID AS LogTypeID, LogType.Name AS LogTypeName, LogType.LogText AS LogTypeText ' +
         'FROM LogEvent LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=LogEvent.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = LogEvent.ItemTypeID) ' +
