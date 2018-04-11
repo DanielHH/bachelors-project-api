@@ -1,35 +1,45 @@
+import { ItemTypeDTO } from "./itemTypeDTO";
+import { CardDTO } from "./cardDTO";
+import { DocumentDTO } from "./documentDTO";
+import { UserDTO } from "./userDTO";
+import { LogTypeDTO } from "./logTypeDTO";
+
+
 /**
  * Log event data transfer object
  */
 export class LogEventDTO {
+
     /**
      * Database ID of the log event
      */
     id: number;
+
     /**
-     * ID of log event item type (Card or Document)
+     *  of log event item type (Card or Document)
      */
-    itemTypeID: number;
+    itemType: ItemTypeDTO;
+
     /**
      * Card ID of log event
      */
-    cardID?: number;
+    card?: CardDTO;
+
     /**
      * Document ID of log event
      */
-    documentID?: number;
-    /**
-     * Owner ID of log event
-     */
-    ownerID?: number;
+    document?: DocumentDTO;
+
     /**
      * User ID of user who made the event
      */
-    userID: number;
+    user: UserDTO;
+
     /**
      * ID of log event type (examples: Add new card, Requesting card, Returning card...)
      */
-    logTypeID: number;
+    logType: LogTypeDTO;
+
     /**
      * Log date of the event
      */
@@ -42,17 +52,35 @@ export class LogEventDTO {
       try {
         this.id = Number(logEvent.ID);
   
-        this.itemTypeID = Number(logEvent.ItemTypeID);
+        this.itemType = new ItemTypeDTO(logEvent.ItemTypeID, logEvent.ItemTypeName);
 
-        this.cardID = logEvent.CardID ? Number(logEvent.CardID) : null;
-  
-        this.documentID = logEvent.DocumentID ? Number(logEvent.DocumentID) : null;
+        
+      if(logEvent.CardID) {
+        this.card = new CardDTO(logEvent);
+      }
+      else {
+        this.card = null;
+      }
 
-        this.ownerID = logEvent.OwnerID ? Number(logEvent.OwnerID) : null;
-  
-        this.userID = Number(logEvent.UserID);
-  
-        this.logTypeID = Number(logEvent.LogTypeID);
+      if(logEvent.DocumentID) {
+        this.document = new DocumentDTO(logEvent);
+      }
+      else {
+        this.document = null;
+      }
+
+      this.user = new UserDTO(
+        null,
+        logEvent.UserID,
+        logEvent.UserTypeID,
+        logEvent.UserTypeName,
+        logEvent.Username,
+        logEvent.Name,
+        logEvent.Email
+      );
+
+
+        this.logType = new LogTypeDTO(logEvent.LogTypeID, logEvent.LogTypeName);
   
         this.logDate = logEvent.LogDate;
         

@@ -75,7 +75,7 @@ export class ReceiptDTO {
         null,
         receipt.UserID,
         receipt.UserTypeID,
-        receipt.userTypeName,
+        receipt.UserTypeName,
         receipt.Username,
         receipt.Name,
         receipt.Email
