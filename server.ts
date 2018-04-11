@@ -202,7 +202,35 @@ class Server {
     });
 
     this.app.get('/getLogEvents', (req, res) => {
-      this.sqlUtil.sqlSelectAll('LogEvent').then((logEventList: any[]) => {
+
+      const query =
+        'SELECT LogEvent.*,' +
+        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
+        'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
+        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
+        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
+        'Document.Comment AS DocumentComment, Document.DocumentDate,' +
+        'Document.RegistrationDate AS DocumentRegistrationDate,' +
+        'Document.CreationDate AS DocumentCreationDate,' +
+        'Document.ModifiedDate AS DocumentModifiedDate,' +
+        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
+        'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
+        'User.UserType, User.Username, User.Name, User.Email,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName,' +
+        'LogType.ID AS LogTypeID, LogType.Name AS LogTypeName ' +
+        'FROM LogEvent LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=LogEvent.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'LEFT JOIN (ItemType) ON (ItemType.ID = LogEvent.ItemTypeID) ' +
+        'LEFT JOIN (User, UserType) ON (User.ID=LogEvent.UserID AND UserType.ID=User.UserType) ' +
+        'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';        
+
+      this.sqlUtil.sqlSelectQuery(query).then((logEventList: any[]) => {
         res.send(
           logEventList.map(logEvent => {
             return new LogEventDTO(logEvent);

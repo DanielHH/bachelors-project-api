@@ -94,7 +94,7 @@ export class CardDTO {
         null,
         data.UserID,
         data.UserTypeID,
-        data.userTypeName,
+        data.UserTypeName,
         data.Username,
         data.Name,
         data.Email
