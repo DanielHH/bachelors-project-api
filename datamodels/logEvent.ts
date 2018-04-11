@@ -36,9 +36,9 @@ export class LogEvent {
   LogDate: Date;
 
   /**
-   * Log data
+   * Log text
    */
-  LogData: string;
+  LogText: string;
 
   constructor();
   constructor(logEvent: any);
@@ -81,7 +81,7 @@ export class LogEvent {
 
       this.LogDate = logEvent.logDate;
 
-      this.LogData = logEvent.logData;
+      this.LogText = logEvent.logText;
     } catch (e) {}
   }
 }
