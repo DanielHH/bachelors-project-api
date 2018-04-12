@@ -87,7 +87,7 @@ export class CardDTO {
     try {
       this.id = Number(data.CardID);
 
-      this.cardType = new CardTypeDTO(data.CardTypeID, data.CardTypeName);
+      this.cardType = new CardTypeDTO(data);
       this.cardNumber = data.CardNumber;
 
       this.user = new UserDTO(
@@ -105,7 +105,7 @@ export class CardDTO {
       this.expirationDate = data.CardExpirationDate;
       this.creationDate = data.CardCreationDate;
       this.modifiedDate = data.CardModifiedDate;
-      this.status = new StatusTypeDTO(data.CardStatusTypeID, data.CardStatusTypeName);
+      this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
       this.activeReceipt = Number(data.CardActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
@@ -117,7 +117,7 @@ export class CardDTO {
     try {
       this.id = Number(card.ID);
 
-      this.cardType = new CardTypeDTO(card.CardTypeID, card.CardTypeName);
+      this.cardType = new CardTypeDTO(card);
       this.cardNumber = card.CardNumber;
 
       this.user = new UserDTO(

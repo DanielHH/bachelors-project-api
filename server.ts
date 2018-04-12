@@ -81,6 +81,7 @@ class Server {
       const query =
         'SELECT Card.*,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'CardType.CreationDate AS CardTypeCreationDate, CardType.ModifiedDate AS CardTypeModifiedDate,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
@@ -90,7 +91,6 @@ class Server {
         'LEFT JOIN (User, UserType) ON (User.ID=Card.UserID AND UserType.ID=User.UserType) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification)';
 
-        console.log(query);
       this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
@@ -114,6 +114,7 @@ class Server {
       const query =
         'SELECT Document.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'DocumentType.CreationDate AS DocumentTypeCreationDate, DocumentType.ModifiedDate AS DocumentTypeModifiedDate,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +

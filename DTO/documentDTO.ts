@@ -106,7 +106,7 @@ export class DocumentDTO {
     try {
       this.id = Number(data.DocumentID);
 
-      this.documentType = new DocumentTypeDTO(data.DocumentTypeID, data.DocumentTypeName);
+      this.documentType = new DocumentTypeDTO(data);
       this.documentNumber = data.DocumentNumber;
 
       this.name = data.DocumentName;
@@ -141,7 +141,7 @@ export class DocumentDTO {
     try {
       this.id = Number(document.ID);
 
-      this.documentType = new DocumentTypeDTO(document.DocumentTypeID, document.DocumentTypeName);
+      this.documentType = new DocumentTypeDTO(document);
       this.documentNumber = document.DocumentNumber;
 
       this.name = document.Name;

@@ -1,3 +1,6 @@
+import { StatusType } from "../datamodels/statusType";
+import { StatusTypeDTO } from "./statusTypeDTO";
+
 /**
  * DocumentType data transfer object
  */
@@ -13,13 +16,31 @@ export class DocumentTypeDTO {
    */
   name: string;
 
+  /**
+   * Creation date of DocumentType in database
+   */
+  creationDate: Date;
+
+  /**
+   * Last modified date of the DocumentType
+   */
+  modifiedDate: Date;
+
+  /**
+   * DocumentType active/inactive status
+   */
+  status: StatusType;
+
   constructor();
-  constructor(id?: number, name?: string);
+  constructor(data?: any);
 
-  constructor(id?: number, name?: string) {
+  constructor(data?: any) {
 
-    this.id = Number(id);
-    this.name = name;
+    this.id = Number(data.DocumentTypeID);
+    this.name = data.DocumentTypeName;
+    this.creationDate = data.DocumentTypeCreationDate;
+    this.modifiedDate = data.DocumentTypeModifiedDate;
+    this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
 
   }
 }
