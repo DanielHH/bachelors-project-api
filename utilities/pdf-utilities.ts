@@ -42,6 +42,13 @@ export class PdfUtilities {
     }
   }
 
+  /**
+   * Compiles and creates a template for a card receipt.
+   * @param body Card to be turned into receipt
+   * @param receipt The receipt which shall be updated
+   * @param pdfType The type of pdf that shall be returned
+   * @returns A promise that the receipt has been created and updated
+   */
   createCardReceipt(body: CardDTO, receipt, pdfType) {
     const compiled = PdfUtilities.ejs.compile(PdfUtilities.fs.readFileSync(PdfUtilities.templatePath + "/card/card_receipt_template.html", 'utf8'));
     // Add variables to template
@@ -54,6 +61,13 @@ export class PdfUtilities {
     return this.receiptPromise(html, receipt, pdfType, body);
   }
 
+  /**
+   * Compiles and creates a template for a document receipt.
+   * @param body Document to be turned into receipt
+   * @param receipt The receipt which shall be updated
+   * @param pdfType The type of pdf that shall be returned
+   * @returns A promise that the receipt has been created and updated
+   */
   createDokReceipt(body: DocumentDTO, receipt, pdfType) {
     const compiled = PdfUtilities.ejs.compile(PdfUtilities.fs.readFileSync(PdfUtilities.templatePath + "/document/document_receipt_template.html", 'utf8'));
     // Add variables to template
@@ -66,47 +80,84 @@ export class PdfUtilities {
 
   }
 
+  /**
+   * Generates a dynamically sized pdf
+   * @param inventory a list of items to be verified
+   * @returns a promise of a dynamically sized pdf
+   */
   createInventory(inventory: VerificationDTO[]) {
     return this.generatePages(this.inventory, inventory, '/inventory');
   }
 
-  createReceiptList(receiptsList: ReceiptDTO[]){
-    return this.generatePages(this.receipts, receiptsList, '/receipts');
+  /**
+   * Generates a dynamically sized pdf
+   * @param receipts a list of receipts
+   * @returns a promise of a dynamically sized pdf
+   */
+  createReceiptList(receipts: ReceiptDTO[]){
+    return this.generatePages(this.receipts, receipts, '/receipts');
   }
 
+  /**
+   * Generates a dynamically sized pdf
+   * @param documents a list of documents
+   * @returns a promise of a dynamically sized pdf
+   */
   createDokList(documents: DocumentDTO[]){
-    return this.generatePages(this.documents, documents, '/receipts');
+    return this.generatePages(this.documents, documents, '/documents');
   }
 
+  /**
+   * Generates a dynamically sized pdf
+   * @param cards a list of cards
+   * @returns a promise of a dynamically sized pdf
+   */
   createCardList(cards: CardDTO[]){
     return this.generatePages(this.cards, cards, '/cards');
   }
 
+  /**
+   * Extracts relevant information from a number of cards
+   * and compiles them into a pdf template
+   * @param length The number of items to extract from
+   * @param cards The list of cards to extract from
+   * @param template The type of template to be used
+   * @param curPage The current working page
+   * @param pages The total number of pages
+   */
   cards(length, cards: CardDTO[], template, curPage, pages){
     let items = [];
     let status, type, number, user, endDate, sender, comment, location;
 
     let done = false;
     let i = 0
-    while (i < length) {
-        const card = cards[i];
-        type = card.cardType
-        status = card.status.name;
-        number = card.cardNumber;
-        comment = card.comment;
-        location = card.location;
-        endDate = card.expirationDate;
+    for (let i = 0; i < length; i++) {
+      const card = cards[i];
+      type = card.cardType.name
+      status = card.status.name;
+      number = card.cardNumber;
+      comment = card.comment;
+      location = card.location;
+      endDate = card.expirationDate;
 
-        if (card.user){ 
-          user = card.user.name;
-        }
-      i++;
-      items.push([status, type, number, user, location, comment, endDate]);
+      if (card.user){ 
+        user = card.user.name;
+      }
+      items.push([status, number, type, user, location, comment, endDate]);
     }
 
     return PdfUtilities.fillTemplate(items, curPage, pages, '/card/card_template_' + template + '.html');
   }
   
+  /**
+   * Extracts relevant information from a number of documents
+   * and compiles them into a pdf template
+   * @param length The number of items to extract from
+   * @param documents The list of documents to extract from
+   * @param template The type of template to be used
+   * @param curPage The current working page
+   * @param pages The total number of pages
+   */
   documents(length, documents: DocumentDTO[], template, curPage, pages) {
     let items = [];
     let status, type, number, user, desc, sender, comment, location;
@@ -115,7 +166,7 @@ export class PdfUtilities {
     let i = 0
     while (i < length) {
         const document = documents[i];
-        type = document.documentType
+        type = document.documentType.name;
         status = document.status.name;
         number = document.documentNumber;
         desc = document.name;
@@ -133,7 +184,16 @@ export class PdfUtilities {
     return PdfUtilities.fillTemplate(items, curPage, pages, '/document/document_template_' + template + '.html');
   }
 
-  receipts(this: PdfUtilities, length, receipts: ReceiptDTO[], template, curPage, pages) {
+  /**
+   * Extracts relevant information from a number of receipts
+   * and compiles them into a pdf template
+   * @param length The number of items to extract from
+   * @param receipts The list of receipts to extract from
+   * @param template The type of template to be used
+   * @param curPage The current working page
+   * @param pages The total number of pages
+   */
+  receipts(length, receipts: ReceiptDTO[], template, curPage, pages) {
     let items = [];
     let status, type, number, user, startDate, endDate;
 
@@ -143,6 +203,8 @@ export class PdfUtilities {
       type = number = user = startDate = endDate = "";
         const receipt = receipts[i];
         type = receipt.itemType.name;
+
+        // Extracts form different fields depending on itemType
         switch (type) {
           case 'Card':  number = receipt.card.cardNumber;
                         startDate = receipt.startDate;
@@ -167,6 +229,15 @@ export class PdfUtilities {
     return PdfUtilities.fillTemplate(items, curPage, pages, "/receipt/receipt_template_" + template + ".html")
   }
 
+  /**
+   * Extracts relevant information from a number of inventory items
+   * and compiles them into a pdf template
+   * @param length The number of items to extract from
+   * @param verifications The list of verifications to extract from
+   * @param template The type of template to be used
+   * @param curPage The current working page
+   * @param pages The total number of pages
+   */
   inventory(length: number, verifications: VerificationDTO[], template: string, curPage: number, pages: number) {
     let items = [];
     let type, number, user, location, comment;
@@ -179,6 +250,7 @@ export class PdfUtilities {
         const verification = verifications[i];
         type = verification.itemType.name;
         
+        // Extracts form different fields depending on itemType
         switch (type) {
           case 'Card':  number = verification.card.cardNumber;
                         location = verification.card.location;
@@ -203,38 +275,58 @@ export class PdfUtilities {
     return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html');
   }
 
-  generatePages(func: Function, itemList: any[], path){
+  /**
+   * Iterates over the list and generates pages of appropriate length
+   * @param dataFiller A function that extracts data from a list and returns a template
+   * @param itemList A list of items to be turned into filled templates
+   * @param path The path where the template is to be saved
+   */
+  generatePages(dataFiller: Function, itemList: any[], path){
     let items = itemList.length
     const itemsThatFit = 20;
     if (items <= itemsThatFit) {
-      return this.filePromise(func(items, itemList, 'base', 1, 1), path);
+      return this.filePromise(dataFiller(items, itemList, 'base', 1, 1), path);
     } else {
       const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit+2))+1;
-      const startPage = func(itemsThatFit, itemList, 'base', 1, pages);
+      const startPage = dataFiller(itemsThatFit, itemList, 'base', 1, pages);
       
       items -= itemsThatFit;
       let itemsLeft = itemList.slice(itemsThatFit);
       const extraPages: any[] = new Array(pages - 1);
 
       for (let page = 2; page <= pages; page++) {
-        extraPages[page - 2] = func(itemsThatFit+2, itemsLeft, 'extra', page, pages);
         if (items > itemsThatFit+2) {
+          extraPages[page - 2] = dataFiller(itemsThatFit+2, itemsLeft, 'extra', page, pages);
           items -= itemsThatFit+2;
           itemsLeft = itemsLeft.slice(itemsThatFit+2);
+        }else {
+          extraPages[page - 2] = dataFiller(items, itemsLeft, 'extra', page, pages);
         }
       }
 
-      var pdfFilePath = './pdfs' + path;
-      return this.pdfPagesSync(pages, pdfFilePath, extraPages, startPage)
-
+      const pdfFilePath = './pdfs' + path;
+      return this.pdfPagesSync(pdfFilePath, extraPages, startPage)
     }
   }
 
+  /**
+   * Fills a template with the parameters
+   * @param items A list of items to be input into the template
+   * @param curPage The current page of the template
+   * @param pages The total number of pages of the template
+   * @param template The kind of template to use
+   */
   static fillTemplate(items, curPage, pages, template){
     var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + template, 'utf8'));
     return compiled({items: items, curPage: curPage, totalPage: pages, curDate: moment(new Date()).format('YYYY-MM-DD')});
   }
 
+  /**
+   * Ensures that a template is saved to disk
+   * in a synchronous fashion.
+   * @param html the template to be save 
+   * @param path the path to where the file is saved
+   */
   filePromise(html, path){
     var pdfFilePath = './pdfs' + path + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';;
       return new Promise((resolve, reject) => {
@@ -249,6 +341,14 @@ export class PdfUtilities {
       });
   }
 
+  /**
+   * Ensures that the template is saved and the receipt is updated
+   * synchronously
+   * @param html The template to save to disk
+   * @param receipt The receipt that shall be updated
+   * @param pdfType The type of pdf receipt
+   * @param object The object that is saved as a receipt
+   */
   receiptPromise(html, receipt, pdfType, object){
     const pdfFileName = pdfType + '_' + _.replace(object.user.name, /[/\s\\?%*:|"<>]/g, '', ) + '_' +
       moment(object.modifiedDate).format('YYYY-MM-DD') + '.pdf';
@@ -273,63 +373,72 @@ export class PdfUtilities {
     });
   }
 
-  pdfPagesSync(pages, pdfFilePath, extraPages, startPage){
-    const files = [];
+  /**
+   * Ensueres that the templates saves, are merged and are deleted synchronously
+   * @param pdfFilePath the path where the template is to be saved
+   * @param extraPages the secondary pages of the template
+   * @param startPage the main page of the template
+   */
+  pdfPagesSync(pdfFilePath, extraPages, startPage){
+    const fileNames = [];
     let currentPath: string;
 
-    async function sleep(ms) {
-      return await (() => { return new Promise(resolve => setTimeout(resolve, ms))});
-    }
-
+    // Creates and Saves the main page of the template to disk
     return new Promise((resolve, reject) => {
         PdfUtilities.pdf.create(startPage, PdfUtilities.options).toFile(pdfFilePath + '_start.pdf', function (err, res) {
           if (err) reject(err);
           else{
-            files.push(pdfFilePath + '_start.pdf');
-            resolve(res);
+            fileNames.push(pdfFilePath + '_start.pdf');
+            resolve();
           }
         });
-      }).then(() => new Promise((resolve, reject) => {
-      for (let i = 0; i < pages - 1; i++) {
-        currentPath = pdfFilePath + '_' + i + '_extra.pdf';
-        PdfUtilities.pdf.create(extraPages[i], PdfUtilities.options).toFile(currentPath, (err,res) => {
-          if (err) {
-            reject(err);
-          }
-        })
-        files.push(currentPath);
-      }
-      resolve();
-    })).then(() => {
-      return new Promise((resolve,reject) => {
-      const dest_path = pdfFilePath + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';
-      var merge = require('easy-pdf-merge');
-      console.log(files);
-
-      sleep(5000);
-      merge(files, dest_path, function (err) {
-        if (!err) {
-          resolve(dest_path.substring(1));
+      }).then(() => {
+        // Creates and Saves the secondary pages of the template to disk
+        return new Promise((resolve, reject) => {
+        for (let i = 0; i < extraPages.length; i++) {
+          currentPath = pdfFilePath + '_' + i + '_extra.pdf';
+          fileNames.push(currentPath);
+          PdfUtilities.pdf.create(extraPages[i], PdfUtilities.options).toFile(currentPath, (err,res) => {
+            if (!err) {
+              if (i == extraPages.length-1){
+                resolve();
+              }
+            } else{
+              reject(err);
+            }
+          })
         }
-        else {
-          reject(err)
+      })
+    }).then(() => {
+      // Merge the template pages
+      return new Promise((resolve,reject) => {
+        const dest_path = pdfFilePath + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';
+        var merge = require('easy-pdf-merge');
+        console.log(fileNames);
+        merge(fileNames, dest_path, function (err) {
+          if (!err) {
+            resolve(dest_path.substring(1));
+          }
+          else {
+            reject(err)
+          }
+        });
+      });
+    }).then(result => {
+      // Delete the now irrelevant files
+      return new Promise((resolve, reject) => {
+        for (let i = 0; i < fileNames.length; i++){
+          PdfUtilities.fs.unlink(fileNames[i], (err) => {
+            if (!err) {
+              if (i == fileNames.length-1){
+                resolve(result);
+              }
+            } else {
+              reject(err);
+            }
+          });
         }
       });
     });
-    }).then(result => {
-      return new Promise((resolve, reject) => {
-      for (let i = 0; i < files.length; i++){
-        console.log(files[i]);
-        sleep(2000);
-        PdfUtilities.fs.unlink(files[i], (err) => {
-          if (err) {
-            reject(err);
-          }
-        });
-      }
-      console.log(result);
-      resolve(result);
-    });
-    });
   }
-}
+}  

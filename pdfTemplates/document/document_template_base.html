@@ -23,45 +23,45 @@
     <h1 class="">Handlingar</h1>
 
     <div class="row">
-        <div class="column7 border-top border-left">Status</div>
-        <div class="column7 border-top border-left">Reg.Nr</div>
-        <div class="column7 border-top border-left">Benämning</div>
-        <div class="column7 border-top border-left">Typ</div>
-        <div class="column7 border-top border-left">Avsändare</div>
+        <div class="column7 border-top border-bottom border-left">Status</div>
+        <div class="column7 border-top border-bottom border-left">Reg.Nr</div>
+        <div class="column7 border-top border-bottom border-left">Benämning</div>
+        <div class="column7 border-top border-bottom border-left">Typ</div>
+        <div class="column7 border-top border-bottom border-left">Avsändare</div>
         <!-- <div class="column9 border-top border-left">Daterat Datum</div> -->
         <!-- <div class="column9 border-top border-left">Inkommet Datum</div> -->
         <!-- <div class="column9 border-top border-left">Ansvarig på Sectra</div> -->
-        <div class="column7 border-top border-left">Kommentar</div>
-        <div class="column7 border-top border-left border-right">Förvaras</div>
+        <div class="column7 border-top border-bottom border-left">Kommentar</div>
+        <div class="column7 border-top border-bottom border-left border-right">Förvaras</div>
     </div>
     <% for( let i = 0; i < items.length; i++) { %>
         <div class="row">
             <!-- status -->
-            <div class="column7 border-top border-bottom border-left">
+            <div class="column7 border-bottom border-left">
                 <%= items[i][0] %>
             </div>
             <!-- number -->
-            <div class="column7 border-top border-bottom border-left">
+            <div class="column7 border-bottom border-left">
                 <%= items[i][1] %>
             </div>
             <!-- description -->
-            <div class="column7 border-top border-bottom border-left">
+            <div class="column7 border-bottom border-left">
                 <%= items[i][2] %>
             </div>
             <!-- type -->
-            <div class="column7 border-top border-bottom border-left">
+            <div class="column7 border-bottom border-left">
                 <%= items[i][3] %>
             </div>
             <!-- sender -->
-            <div class="column7 border-top border-bottom border-left">
+            <div class="column7 border-bottom border-left">
                 <%= items[i][4] %>
             </div>
             <!-- comment -->
-            <div class="column7 border-top border-bottom border-left">
+            <div class="column7 border-bottom border-left">
                 <%= items[i][5] %>
             </div>
             <!-- location -->
-            <div class="column7 border-top border-bottom border-left border-right">
+            <div class="column7 border-bottom border-left border-right">
                 <%= items[i][6] %>
             </div>
         </div>
