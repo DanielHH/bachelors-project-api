@@ -120,7 +120,8 @@ export class DocumentDTO {
       this.user = new UserDTO(
         null,
         data.UserID,
-        data.UserType,
+        data.UserTypeID,
+        data.UserTypeName,
         data.Username,
         data.UsersName,
         data.Email
@@ -154,7 +155,8 @@ export class DocumentDTO {
       this.user = new UserDTO(
         null,
         document.UserID,
-        document.UserType,
+        document.UserTypeID,
+        document.UserTypeName,
         document.Username,
         document.UsersName,
         document.Email

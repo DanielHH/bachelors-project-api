@@ -74,7 +74,8 @@ export class ReceiptDTO {
       this.user = new UserDTO(
         null,
         receipt.UserID,
-        receipt.UserType,
+        receipt.UserTypeID,
+        receipt.UserTypeName,
         receipt.Username,
         receipt.Name,
         receipt.Email

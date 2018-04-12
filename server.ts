@@ -19,6 +19,7 @@ import { Delivery } from './datamodels/delivery';
 import { DocumentType } from './datamodels/documentType';
 import { Receipt } from './datamodels/receipt';
 import { LogEvent } from './datamodels/logEvent';
+import { LogType } from './datamodels/logType';
 import { ItemType } from './datamodels/itemType';
 import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
@@ -83,11 +84,13 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
-        'User.UserType, User.Username, User.Name, User.Email ' +
+        'User.UserType, User.Username, User.Name, User.Email,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) ' +
-        'LEFT JOIN (User) ON (User.ID=Card.UserID) ' +
+        'LEFT JOIN (User, UserType) ON (User.ID=Card.UserID AND UserType.ID=User.UserType) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification)';
 
+        console.log(query);
       this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
@@ -114,9 +117,10 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
-        'User.UserType, User.Username, User.Name AS UsersName, User.Email ' +
+        'User.UserType, User.Username, User.Name AS UsersName, User.Email,' +        
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
-        'LEFT JOIN (User) ON (User.ID=Document.UserID) ' +
+        'LEFT JOIN (User, UserType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification)';
 
       this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
@@ -155,7 +159,7 @@ class Server {
     });
 
     this.app.get('/getReceipts', (req, res) => {
-      const query =
+      let query =
         'SELECT Receipt.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
@@ -173,13 +177,22 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email ' +
+        'User.UserType, User.Username, User.Name, User.Email,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Receipt LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Receipt.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Receipt.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
-        'LEFT JOIN (User) ON (User.ID=Receipt.UserID)';
+        'LEFT JOIN (User, UserType) ON (User.ID=Receipt.UserID AND UserType.ID=User.UserType)';
 
-      this.sqlUtil.sqlSelectQuery(query).then((receiptList: any[]) => {
+        let queryData = [];
+
+        if(req.query.userID) {
+          query += ' WHERE Receipt.UserID=?';
+          queryData.push(req.query.userID);
+          
+        }
+
+      this.sqlUtil.sqlSelectQuery(query, queryData).then((receiptList: any[]) => {
         res.send(
           receiptList.map(receipt => {
             receipt.host = 'http://' + req.headers.host;
@@ -190,7 +203,35 @@ class Server {
     });
 
     this.app.get('/getLogEvents', (req, res) => {
-      this.sqlUtil.sqlSelectAll('LogEvent').then((logEventList: any[]) => {
+
+      const query =
+        'SELECT LogEvent.*,' +
+        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
+        'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
+        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
+        'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
+        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
+        'Document.Comment AS DocumentComment, Document.DocumentDate,' +
+        'Document.RegistrationDate AS DocumentRegistrationDate,' +
+        'Document.CreationDate AS DocumentCreationDate,' +
+        'Document.ModifiedDate AS DocumentModifiedDate,' +
+        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
+        'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
+        'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
+        'User.UserType, User.Username, User.Name, User.Email,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName,' +
+        'LogType.ID AS LogTypeID, LogType.Name AS LogTypeName, LogType.LogText AS LogTypeText ' +
+        'FROM LogEvent LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=LogEvent.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'LEFT JOIN (ItemType) ON (ItemType.ID = LogEvent.ItemTypeID) ' +
+        'LEFT JOIN (User, UserType) ON (User.ID=LogEvent.UserID AND UserType.ID=User.UserType) ' +
+        'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';        
+
+      this.sqlUtil.sqlSelectQuery(query).then((logEventList: any[]) => {
         res.send(
           logEventList.map(logEvent => {
             return new LogEventDTO(logEvent);
@@ -204,6 +245,16 @@ class Server {
         res.send(
           itemTypeList.map(itemType => {
             return new ItemType(itemType);
+          })
+        );
+      });
+    });
+
+    this.app.get('/getLogTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('LogType').then((logTypeList: any[]) => {
+        res.send(
+          logTypeList.map(logType => {
+            return new LogType(logType);
           })
         );
       });
@@ -228,11 +279,12 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email ' +
+        'User.UserType, User.Username, User.Name, User.Email,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
-        'LEFT JOIN (User) ON (User.ID=Verification.UserID)';
+        'LEFT JOIN (User, UserType) ON (User.ID=Verification.UserID AND UserType.ID=User.UserType)';
 
       this.sqlUtil.sqlSelectQuery(query).then((verificationList: any[]) => {
         res.send(
@@ -254,7 +306,12 @@ class Server {
     });
 
     this.app.get('/getUsers', (req, res) => {
-      this.sqlUtil.sqlSelectAll('User').then((userList: any[]) => {
+      const query =
+      'SELECT User.*,' +
+      'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
+      'FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserType)';
+
+      this.sqlUtil.sqlSelectQuery(query).then((userList: any[]) => {
         res.send(
           userList.map(user => {
             return new UserDTO(user);
