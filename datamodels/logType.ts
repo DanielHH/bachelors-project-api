@@ -27,7 +27,7 @@ export class LogType {
         if(logType.ID)
           this.id = logType.ID;
         this.name = logType.Name;
-        this.logText = logType.Text;
+        this.logText = logType.LogText;
       }
       catch (e) {
 

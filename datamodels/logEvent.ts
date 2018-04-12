@@ -19,10 +19,6 @@ export class LogEvent {
    */
   DocumentID?: number;
   /**
-   * Current owner ID of log event
-   */
-  ownerID?: number;
-  /**
    * User ID of user who made the event
    */
   UserID: number;
@@ -44,44 +40,39 @@ export class LogEvent {
   constructor(logEvent: any);
 
   constructor(logEvent?: any) {
+    
     try {
-      if (logEvent.ID) {
+      if (logEvent.id) {
         this.ID = Number(logEvent.id);
       } else {
         this.ID = null;
       }
 
-      this.ItemTypeID = logEvent.itemTypeID;
+      this.ItemTypeID = logEvent.itemType.id;
 
-      if (logEvent.cardID) {
-        this.CardID = logEvent.cardID;
+      if (logEvent.card) {
+        this.CardID = logEvent.card.id;
       } else {
         this.CardID = null;
       }
 
-      if (logEvent.documentID) {
-        this.DocumentID = logEvent.documentID;
+      if (logEvent.document) {
+        this.DocumentID = logEvent.document.id;
       } else {
         this.DocumentID = null;
       }
 
-      if (logEvent.ownerID) {
-        this.ownerID = logEvent.ownerID;
-      } else {
-        this.ownerID = null;
-      }
-
-      if (logEvent.userID) {
-        this.UserID = logEvent.userID;
+      if (logEvent.user) {
+        this.UserID = logEvent.user.id;
       } else {
         this.UserID = null;
       }
 
-      this.LogTypeID = logEvent.logTypeID;
+      this.LogTypeID = logEvent.logType.id;
 
       this.LogDate = logEvent.logDate;
 
-      this.LogData = logEvent.logData;
+      this.LogData = logEvent.logText;
     } catch (e) {}
   }
 }

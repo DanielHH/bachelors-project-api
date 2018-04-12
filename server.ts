@@ -19,6 +19,7 @@ import { Delivery } from './datamodels/delivery';
 import { DocumentType } from './datamodels/documentType';
 import { Receipt } from './datamodels/receipt';
 import { LogEvent } from './datamodels/logEvent';
+import { LogType } from './datamodels/logType';
 import { ItemType } from './datamodels/itemType';
 import { Verification } from './datamodels/verification';
 import { VerificationType } from './datamodels/verificationType';
@@ -244,6 +245,16 @@ class Server {
         res.send(
           itemTypeList.map(itemType => {
             return new ItemType(itemType);
+          })
+        );
+      });
+    });
+
+    this.app.get('/getLogTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('LogType').then((logTypeList: any[]) => {
+        res.send(
+          logTypeList.map(logType => {
+            return new LogType(logType);
           })
         );
       });
