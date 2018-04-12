@@ -48,7 +48,7 @@ export class LogEventDTO {
     /**
      * Log text
      */
-    logText;
+    logText: string;
   
     constructor();
     constructor(logEvent: any);
