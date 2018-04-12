@@ -36,6 +36,9 @@ export class CardType {
 
     this.ID = cardType.id;
     this.Name = cardType.name;
+    this.CreationDate = cardType.creationDate;
+    this.ModifiedDate = cardType.modifiedDate;
+    this.Status = cardType.status.id;
 
   }
 }
