@@ -34,12 +34,32 @@ export class CardTypeDTO {
   constructor(data?: any);
 
   constructor(data?: any) {
+    if (data.CardTypeID) {
+      this.fromJoin(data);
+    }
+    else {
+      this.fromCardType(data);
+    }
+  }
 
-    this.id = Number(data.CardTypeID);
-    this.name = data.CardTypeName;
-    this.creationDate = data.CardTypeCreationDate;
-    this.modifiedDate = data.CardTypeModifiedDate;
-    this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
+  fromJoin(data: any) {
+    try {
+      this.id = Number(data.CardTypeID);
+      this.name = data.CardTypeName;
+      this.creationDate = data.CardTypeCreationDate;
+      this.modifiedDate = data.CardTypeModifiedDate;
+      this.status = new StatusTypeDTO(data.CardTypeStatusTypeID, data.CardTypeStatusTypeName);
 
+    } catch (e) { }
+  }
+
+  fromCardType(cardType: any) {
+    try {
+      this.id = Number(cardType.ID);
+      this.name = cardType.Name;
+      this.creationDate = cardType.CreationDate;
+      this.modifiedDate = cardType.ModifiedDate;
+      this.status = new StatusTypeDTO(cardType.StatusTypeID, cardType.StatusTypeName);
+    } catch (e) { }
   }
 }

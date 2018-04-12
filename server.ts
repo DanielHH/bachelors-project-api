@@ -33,6 +33,8 @@ import { ReceiptDTO } from './DTO/receiptDTO';
 import { DeliveryDTO } from './DTO/deliveryDTO';
 import { LogEventDTO } from './DTO/logEventDTO';
 import { VerificationDTO } from './DTO/verificationDTO';
+import { CardTypeDTO } from './DTO/cardTypeDTO';
+import { DocumentTypeDTO } from './DTO/documentTypeDTO';
 
 class Server {
   public app: express.Application;
@@ -101,13 +103,26 @@ class Server {
     });
 
     this.app.get('/getCardTypes', (req, res) => {
-      this.sqlUtil.sqlSelectAll('CardType').then((cardTypeList: any[]) => {
+      const query =
+        'SELECT CardType.*,' +
+        'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
+        'FROM CardType LEFT JOIN (StatusType) ON (StatusType.ID=CardType.Status)';
+
+      this.sqlUtil.sqlSelectQuery(query).then((cardTypeList: any[]) => {
         res.send(
           cardTypeList.map(cardType => {
-            return new CardType(cardType);
+            return new CardTypeDTO(cardType);
           })
         );
       });
+      
+      /*this.sqlUtil.sqlSelectAll('CardType').then((cardTypeList: any[]) => {
+        res.send(
+          cardTypeList.map(cardType => {
+            return new CardTypeDTO(cardType);
+          })
+        );
+      });*/
     });
 
     this.app.get('/getDocuments', (req, res) => {
@@ -150,13 +165,25 @@ class Server {
     });
 
     this.app.get('/getDocumentTypes', (req, res) => {
-      this.sqlUtil.sqlSelectAll('DocumentType').then((documentTypeList: any[]) => {
+      const query =
+        'SELECT DocumentType.*,' +
+        'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
+        'FROM DocumentType LEFT JOIN (StatusType) ON (StatusType.ID=DocumentType.Status)';
+
+      this.sqlUtil.sqlSelectQuery(query).then((documentTypeList: any[]) => {
         res.send(
           documentTypeList.map(documentType => {
-            return new DocumentType(documentType);
+            return new DocumentTypeDTO(documentType);
           })
         );
       });
+      /*this.sqlUtil.sqlSelectAll('DocumentType').then((documentTypeList: any[]) => {
+        res.send(
+          documentTypeList.map(documentType => {
+            return new DocumentTypeDTO(documentType);
+          })
+        );
+      });*/
     });
 
     this.app.get('/getReceipts', (req, res) => {

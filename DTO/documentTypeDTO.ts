@@ -35,12 +35,33 @@ export class DocumentTypeDTO {
   constructor(data?: any);
 
   constructor(data?: any) {
-
-    this.id = Number(data.DocumentTypeID);
-    this.name = data.DocumentTypeName;
-    this.creationDate = data.DocumentTypeCreationDate;
-    this.modifiedDate = data.DocumentTypeModifiedDate;
-    this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
-
+    if (data.DocumentTypeID) {
+      this.fromJoin(data);
+    }
+    else {
+      this.fromDocumentType(data);
+    }
   }
+
+  fromJoin(data: any) {
+    try {
+      this.id = Number(data.DocumentTypeID);
+      this.name = data.DocumentTypeName;
+      this.creationDate = data.DocumentTypeCreationDate;
+      this.modifiedDate = data.DocumentTypeModifiedDate;
+      this.status = new StatusTypeDTO(data.DocumentTypeStatusTypeID, data.DocumentTypeStatusTypeName);
+
+    } catch (e) { }
+  }
+
+  fromDocumentType(documentType: any) {
+    try {
+      this.id = Number(documentType.ID);
+      this.name = documentType.Name;
+      this.creationDate = documentType.CreationDate;
+      this.modifiedDate = documentType.ModifiedDate;
+      this.status = new StatusTypeDTO(documentType.StatusTypeID, documentType.StatusTypeName);
+    } catch (e) { }
+  }
+
 }
