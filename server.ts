@@ -90,7 +90,7 @@ class Server {
         'LEFT JOIN (User, UserType) ON (User.ID=Card.UserID AND UserType.ID=User.UserType) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification)';
 
-        console.log(query);
+      console.log(query);
       this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
@@ -117,7 +117,7 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
-        'User.UserType, User.Username, User.Name AS UsersName, User.Email,' +        
+        'User.UserType, User.Username, User.Name AS UsersName, User.Email,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
         'LEFT JOIN (User, UserType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType) ' +
@@ -184,13 +184,12 @@ class Server {
         'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
         'LEFT JOIN (User, UserType) ON (User.ID=Receipt.UserID AND UserType.ID=User.UserType)';
 
-        let queryData = [];
+      let queryData = [];
 
-        if(req.query.userID) {
-          query += ' WHERE Receipt.UserID=?';
-          queryData.push(req.query.userID);
-          
-        }
+      if (req.query.userID) {
+        query += ' WHERE Receipt.UserID=?';
+        queryData.push(req.query.userID);
+      }
 
       this.sqlUtil.sqlSelectQuery(query, queryData).then((receiptList: any[]) => {
         res.send(
@@ -203,7 +202,6 @@ class Server {
     });
 
     this.app.get('/getLogEvents', (req, res) => {
-
       const query =
         'SELECT LogEvent.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
@@ -229,7 +227,7 @@ class Server {
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = LogEvent.ItemTypeID) ' +
         'LEFT JOIN (User, UserType) ON (User.ID=LogEvent.UserID AND UserType.ID=User.UserType) ' +
-        'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';        
+        'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((logEventList: any[]) => {
         res.send(
@@ -307,9 +305,9 @@ class Server {
 
     this.app.get('/getUsers', (req, res) => {
       const query =
-      'SELECT User.*,' +
-      'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
-      'FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserType)';
+        'SELECT User.*,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
+        'FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserType)';
 
       this.sqlUtil.sqlSelectQuery(query).then((userList: any[]) => {
         res.send(
@@ -362,9 +360,28 @@ class Server {
     });
 
     this.app.post('/addNewReceipt', (req, res) => {
-      this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body)).then(id => {
-        req.body.id = Number(id);
-        res.send({ message: 'success', data: req.body });
+      this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body.receipt)).then(id => {
+        let table;
+        let item;
+        if (req.body.card) {
+          table = 'Card';
+          item = new Card(req.body.card);
+          req.body.card.activeReceipt = id;
+        } else {
+          table = 'Document';
+          item = new Document(req.body.document);
+          req.body.document.activeReceipt = id;
+        }
+        req.body.receipt.id = id;
+        item.activeReceipt = Number(id);
+
+        this.sqlUtil.sqlUpdate(table, item).then(success => {
+          this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
+            req.body.logEvent.id = Number(id);
+            req.body.logEvent.LogText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
+            res.send({ message: 'success', data: req.body });
+          });
+        });
       });
     });
 
