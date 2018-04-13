@@ -6,26 +6,38 @@ export class DocumentType {
     /**
      * Database ID of the document type
      */
-    id: number;
+    ID: number;
 
     /**
      * Name of the document type
      */
-    name: string;
+    Name: string;
+
+    /**
+     * Creation date of DocumentType in database
+     */
+    CreationDate: Date;
+
+    /**
+     * Last modified date of the DocumentType
+     */
+    ModifiedDate: Date;
+
+    /**
+     * DocumentType active/inactive status
+     */
+    Status: Number;
 
     constructor();
     constructor(documentType: any);
 
     constructor(documentType?: any) {
 
-      try {
-        if(documentType.ID)
-          this.id = documentType.ID;
-        this.name = documentType.Name;
-      }
-      catch (e) {
-
-      }
+      this.ID = documentType.id;
+      this.Name = documentType.name;
+      this.CreationDate = documentType.creationDate;
+      this.ModifiedDate = documentType.modifiedDate;
+      this.Status = documentType.status.id;
     }
   
   }

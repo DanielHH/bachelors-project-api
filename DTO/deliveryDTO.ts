@@ -68,7 +68,7 @@ export class DeliveryDTO {
     try {
       this.id = Number(document.ID);
 
-      this.documentType = new DocumentTypeDTO(document.DocumentTypeID, document.DocumentTypeName);
+      this.documentType = new DocumentTypeDTO(document);
 
 
       this.documentNumber = document.DocumentNumber;

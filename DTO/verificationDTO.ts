@@ -67,15 +67,7 @@ export class VerificationDTO {
         this.document = null;
       }
 
-      this.user = new UserDTO(
-        null,
-        verification.UserID,
-        verification.UserTypeID,
-        verification.UserTypeName,
-        verification.Username,
-        verification.Name,
-        verification.Email
-      );
+      this.user = new UserDTO(verification);
 
 
       this.verificationDate = verification.VerificationDate;
