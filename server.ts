@@ -115,14 +115,6 @@ class Server {
           })
         );
       });
-      
-      /*this.sqlUtil.sqlSelectAll('CardType').then((cardTypeList: any[]) => {
-        res.send(
-          cardTypeList.map(cardType => {
-            return new CardTypeDTO(cardType);
-          })
-        );
-      });*/
     });
 
     this.app.get('/getDocuments', (req, res) => {
@@ -177,13 +169,6 @@ class Server {
           })
         );
       });
-      /*this.sqlUtil.sqlSelectAll('DocumentType').then((documentTypeList: any[]) => {
-        res.send(
-          documentTypeList.map(documentType => {
-            return new DocumentTypeDTO(documentType);
-          })
-        );
-      });*/
     });
 
     this.app.get('/getReceipts', (req, res) => {
@@ -382,8 +367,22 @@ class Server {
       });
     });
 
+    this.app.post('/addNewCardType', (req, res) => {
+      this.sqlUtil.sqlInsert('CardType', new CardType(req.body)).then(id => {
+        req.body.id = Number(id);
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
     this.app.post('/addNewDocument', (req, res) => {
       this.sqlUtil.sqlInsert('Document', new Document(req.body)).then(id => {
+        req.body.id = Number(id);
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
+    this.app.post('/addNewDocumentType', (req, res) => {
+      this.sqlUtil.sqlInsert('DocumentType', new DocumentType(req.body)).then(id => {
         req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
@@ -424,8 +423,22 @@ class Server {
       });
     });
 
+    this.app.put('/updateCardType', (req, res) => {
+      this.sqlUtil.sqlUpdate('CardType', new CardType(req.body)).then(success => {
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
+      });
+    });
+
     this.app.put('/updateDocument', (req, res) => {
       this.sqlUtil.sqlUpdate('Document', new Document(req.body)).then(success => {
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
+      });
+    });
+
+    this.app.put('/updateDocumentType', (req, res) => {
+      this.sqlUtil.sqlUpdate('DocumentType', new DocumentType(req.body)).then(success => {
         if (success) res.send({ message: 'success' });
         else res.send({ message: 'failure' });
       });
