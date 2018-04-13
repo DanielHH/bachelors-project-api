@@ -71,15 +71,7 @@ export class ReceiptDTO {
         this.document = null;
       }
 
-      this.user = new UserDTO(
-        null,
-        receipt.UserID,
-        receipt.UserTypeID,
-        receipt.UserTypeName,
-        receipt.Username,
-        receipt.Name,
-        receipt.Email
-      );
+      this.user = new UserDTO(receipt);
 
       this.startDate = receipt.StartDate;
       this.endDate = receipt.EndDate;

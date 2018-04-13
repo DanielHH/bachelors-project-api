@@ -1,4 +1,5 @@
 import { UserTypeDTO } from "./userTypeDTO";
+import { StatusTypeDTO } from "./statusTypeDTO";
 
 /**
  * User data transfer object
@@ -29,53 +30,58 @@ export class UserDTO {
    */
   email: string;
 
+  /**
+   * Creation date of User in database
+   */
+  creationDate: Date;
+
+  /**
+   * Last modified date of User
+   */
+  modifiedDate: Date;
+
+  /**
+   * User active/inactive status
+   */
+  status: StatusTypeDTO;
+
   constructor();
-  constructor(
-    user?: any,
-    id?: number,
-    userTypeID?: number,
-    userTypeName?: string,    
-    username?: string,
-    name?: string,
-    email?: string
-  );
 
-  constructor(
-    user?: any,
-    id?: number,
-    userTypeID?: number,
-    userTypeName?: string,
-    username?: string,
-    name?: string,
-    email?: string
-  ) {
+  constructor(data?: any);
+
+  constructor(data?: any) {
+    if (data.UserID) {
+      this.fromJoin(data);
+    }
+    else {
+      this.fromUser(data);
+    }
+  }
+
+  fromJoin(data: any) {
     try {
-      if (user) {
-        if (user.ID) {
-          this.id = Number(user.ID);
-        }
-        else {
-          this.id = null;
-        }
-        this.userType = new UserTypeDTO(user.UserTypeID, user.UserTypeName);
-        this.username = user.Username;
-        this.name = user.Name;
-        this.email = user.Email;
+      this.id = Number(data.UserID);
+      this.username = data.UserUsername;
+      this.name = data.UserName;
+      this.userType = new UserTypeDTO(data.UserTypeID, data.UserTypeName);
+      this.email = data.Email;
+      this.creationDate = data.UserCreationDate;
+      this.modifiedDate = data.UserModifiedDate;
+      this.status = new StatusTypeDTO(data.UserStatusTypeID, data.UserStatusTypeName);
 
-      }
-      else {
-        if (id) {
-          this.id = Number(id);
-        }
-        else {
-          this.id = null;
-        }
-        this.userType = new UserTypeDTO(userTypeID, userTypeName);
-        this.username = username;
-        this.name = name;
-        this.email = email;
-      }
+    } catch (e) { }
+  }
 
+  fromUser(user: any) {
+    try {
+      this.id = Number(user.ID);
+      this.username = user.Username;
+      this.name = user.Name;
+      this.userType = new UserTypeDTO(user.UserTypeID, user.UserTypeName);
+      this.email = user.Email;
+      this.creationDate = user.CreationDate;
+      this.modifiedDate = user.ModifiedDate;
+      this.status = new StatusTypeDTO(user.StatusTypeID, user.StatusTypeName);
     } catch (e) { }
   }
 }

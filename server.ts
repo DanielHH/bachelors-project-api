@@ -416,6 +416,13 @@ class Server {
       });
     });
 
+    this.app.post('/addNewUser', (req, res) => {
+      this.sqlUtil.sqlInsert('User', new User(req.body)).then(id => {
+        req.body.id = Number(id);
+        res.send({ message: 'success', data: req.body });
+      });
+    });
+
     this.app.put('/updateCard', (req, res) => {
       this.sqlUtil.sqlUpdate('Card', new Card(req.body)).then(success => {
         if (success) res.send({ message: 'success' });
@@ -460,6 +467,13 @@ class Server {
 
     this.app.put('/updateVerification', (req, res) => {
       this.sqlUtil.sqlUpdate('Verification', new Verification(req.body)).then(success => {
+        if (success) res.send({ message: 'success' });
+        else res.send({ message: 'failure' });
+      });
+    });
+
+    this.app.put('/updateUser', (req, res) => {
+      this.sqlUtil.sqlUpdate('User', new User(req.body)).then(success => {
         if (success) res.send({ message: 'success' });
         else res.send({ message: 'failure' });
       });

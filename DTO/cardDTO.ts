@@ -90,15 +90,7 @@ export class CardDTO {
       this.cardType = new CardTypeDTO(data);
       this.cardNumber = data.CardNumber;
 
-      this.user = new UserDTO(
-        null,
-        data.UserID,
-        data.UserTypeID,
-        data.UserTypeName,
-        data.Username,
-        data.Name,
-        data.Email
-      );
+      this.user = new UserDTO(data);
 
       this.location = data.CardLocation;
       this.comment = data.CardComment;
@@ -120,15 +112,7 @@ export class CardDTO {
       this.cardType = new CardTypeDTO(card);
       this.cardNumber = card.CardNumber;
 
-      this.user = new UserDTO(
-        null,
-        card.UserID,
-        card.UserTypeID,
-        card.UserTypeName,
-        card.Username,
-        card.Name,
-        card.Email
-      );
+      this.user = new UserDTO(card);
 
       this.location = card.Location;
       this.comment = card.Comment;

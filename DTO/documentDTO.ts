@@ -117,15 +117,7 @@ export class DocumentDTO {
       this.creationDate = data.DocumentCreationDate;
       this.modifiedDate = data.DocumentModifiedDate;
 
-      this.user = new UserDTO(
-        null,
-        data.UserID,
-        data.UserTypeID,
-        data.UserTypeName,
-        data.Username,
-        data.UsersName,
-        data.Email
-      );
+      this.user = new UserDTO(data);
 
       this.location = data.DocumentLocation;
       this.comment = data.DocumentComment;
@@ -152,15 +144,7 @@ export class DocumentDTO {
       this.creationDate = document.CreationDate;
       this.modifiedDate = document.ModifiedDate;
 
-      this.user = new UserDTO(
-        null,
-        document.UserID,
-        document.UserTypeID,
-        document.UserTypeName,
-        document.Username,
-        document.UsersName,
-        document.Email
-      );
+      this.user = new UserDTO(document);
 
       this.location = document.Location;
       this.comment = document.Comment;
