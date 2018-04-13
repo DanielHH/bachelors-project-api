@@ -87,7 +87,8 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
-        'User.UserType, User.Username, User.Name, User.Email,' +
+        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
+        'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) ' +
         'LEFT JOIN (User, UserType) ON (User.ID=Card.UserID AND UserType.ID=User.UserType) ' +
@@ -125,7 +126,7 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
-        'User.UserType, User.Username, User.Name AS UsersName, User.Email,' +        
+        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +        
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
         'LEFT JOIN (User, UserType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType) ' +
@@ -190,7 +191,7 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email,' +
+        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Receipt LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Receipt.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Receipt.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
@@ -235,7 +236,7 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email,' +
+        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName,' +
         'LogType.ID AS LogTypeID, LogType.Name AS LogTypeName, LogType.LogText AS LogTypeText ' +
         'FROM LogEvent LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=LogEvent.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
@@ -292,7 +293,7 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, User.Username, User.Name, User.Email,' +
+        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
         'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
