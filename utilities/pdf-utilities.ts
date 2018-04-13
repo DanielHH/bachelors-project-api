@@ -414,7 +414,6 @@ export class PdfUtilities {
       return new Promise((resolve,reject) => {
         const dest_path = pdfFilePath + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';
         var merge = require('easy-pdf-merge');
-        console.log(fileNames);
         merge(fileNames, dest_path, function (err) {
           if (!err) {
             resolve(dest_path.substring(1));
