@@ -127,10 +127,10 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' + 
-        'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
-        'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
-        'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
+        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
+        'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate,' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
+        'UserStatusType.ID AS UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification)';

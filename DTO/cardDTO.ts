@@ -22,7 +22,7 @@ export class CardDTO {
   cardNumber: string;
 
   /**
-   * ID of current card holder
+   * Current card holder
    */
   user: UserDTO;
 
@@ -72,25 +72,25 @@ export class CardDTO {
   lastVerificationDate?: Date;
 
   constructor();
-  constructor(data?: any);
+  constructor(data?: any, fromOtherType?: boolean);
 
-  constructor(data?: any) {
-    if (data.CardID) {
-      this.fromJoin(data);
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromOtherType(data);
     }
     else {
       this.fromCard(data);
     }
   }
 
-  fromJoin(data: any) {
+  fromOtherType(data: any) {
     try {
       this.id = Number(data.CardID);
 
-      this.cardType = new CardTypeDTO(data);
+      this.cardType = new CardTypeDTO(data, true);
       this.cardNumber = data.CardNumber;
 
-      this.user = new UserDTO(data);
+      this.user = new UserDTO(data, true);
 
       this.location = data.CardLocation;
       this.comment = data.CardComment;
@@ -109,10 +109,10 @@ export class CardDTO {
     try {
       this.id = Number(card.ID);
 
-      this.cardType = new CardTypeDTO(card);
+      this.cardType = new CardTypeDTO(card, true);
       this.cardNumber = card.CardNumber;
 
-      this.user = new UserDTO(card);
+      this.user = new UserDTO(card, true);
 
       this.location = card.Location;
       this.comment = card.Comment;

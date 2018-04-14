@@ -47,18 +47,18 @@ export class UserDTO {
 
   constructor();
 
-  constructor(data?: any);
+  constructor(data?: any, fromOtherType?: boolean);
 
-  constructor(data?: any) {
-    if (data.UserID) {
-      this.fromJoin(data);
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromOtherType(data);
     }
     else {
       this.fromUser(data);
     }
   }
 
-  fromJoin(data: any) {
+  fromOtherType(data: any) {
     try {
       this.id = Number(data.UserID);
       this.username = data.UserUsername;

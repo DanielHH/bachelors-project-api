@@ -32,18 +32,18 @@ export class DocumentTypeDTO {
   status: StatusType;
 
   constructor();
-  constructor(data?: any);
+  constructor(data?: any, fromOtherType?: boolean);
 
-  constructor(data?: any) {
-    if (data.DocumentTypeID) {
-      this.fromJoin(data);
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromOtherType(data);
     }
     else {
       this.fromDocumentType(data);
     }
   }
 
-  fromJoin(data: any) {
+  fromOtherType(data: any) {
     try {
       this.id = Number(data.DocumentTypeID);
       this.name = data.DocumentTypeName;

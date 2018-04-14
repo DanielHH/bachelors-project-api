@@ -56,18 +56,18 @@ export class VerificationDTO {
       this.itemType = new ItemTypeDTO(verification.ItemTypeID, verification.ItemTypeName);
 
       if (verification.CardID) {
-        this.card = new CardDTO(verification);
+        this.card = new CardDTO(verification, true);
       } else {
         this.card = null;
       }
 
       if (verification.DocumentID) {
-        this.document = new DocumentDTO(verification);
+        this.document = new DocumentDTO(verification, true);
       } else {
         this.document = null;
       }
 
-      this.user = new UserDTO(verification);
+      this.user = new UserDTO(verification, true);
 
 
       this.verificationDate = verification.VerificationDate;

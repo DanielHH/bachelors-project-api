@@ -31,18 +31,18 @@ export class CardTypeDTO {
   status: StatusType;
 
   constructor();
-  constructor(data?: any);
+  constructor(data?: any, fromOtherType?: boolean);
 
-  constructor(data?: any) {
-    if (data.CardTypeID) {
-      this.fromJoin(data);
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromFromOtherType(data);
     }
     else {
       this.fromCardType(data);
     }
   }
 
-  fromJoin(data: any) {
+  fromFromOtherType(data: any) {
     try {
       this.id = Number(data.CardTypeID);
       this.name = data.CardTypeName;
