@@ -47,17 +47,18 @@ export class User {
 
   constructor(user?: any) {
     try {
-      if (user) {
-        if(user.id)
-          this.ID = user.id;
-          this.UserType = user.userType.id;
-          this.Username = user.username;
-          this.Name = user.name;
-          this.Email = user.email;
-          this.CreationDate = user.creationDate;
-          this.ModifiedDate = user.modifiedDate;
-          this.Status = user.status.id;
+      if (user.id) {
+        this.ID = user.id;
+      } else {
+        this.ID = null;
       }
+      this.UserType = user.userType.id;
+      this.Username = user.username;
+      this.Name = user.name;
+      this.Email = user.email;
+      this.CreationDate = user.creationDate;
+      this.ModifiedDate = user.modifiedDate;
+      this.Status = user.status.id;
     } catch (e) { }
   }
 }

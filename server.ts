@@ -35,6 +35,8 @@ import { LogEventDTO } from './DTO/logEventDTO';
 import { VerificationDTO } from './DTO/verificationDTO';
 import { CardTypeDTO } from './DTO/cardTypeDTO';
 import { DocumentTypeDTO } from './DTO/documentTypeDTO';
+import { UserType } from './datamodels/userType';
+import { UserTypeDTO } from './DTO/userTypeDTO';
 
 class Server {
   public app: express.Application;
@@ -271,6 +273,16 @@ class Server {
       });
     });
 
+    this.app.get('/getUserTypes', (req, res) => {
+      this.sqlUtil.sqlSelectAll('UserType').then((userTypeList: any[]) => {
+        res.send(
+          userTypeList.map(userType => {
+            return new UserTypeDTO(userType);
+          })
+        );
+      });
+    });
+
     this.app.get('/getLogTypes', (req, res) => {
       this.sqlUtil.sqlSelectAll('LogType').then((logTypeList: any[]) => {
         res.send(
@@ -428,6 +440,7 @@ class Server {
     });
 
     this.app.post('/addNewUser', (req, res) => {
+      console.log(req.body);
       this.sqlUtil.sqlInsert('User', new User(req.body)).then(id => {
         req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
