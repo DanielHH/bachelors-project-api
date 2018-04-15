@@ -196,7 +196,7 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' + 
+        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
@@ -205,13 +205,12 @@ class Server {
         'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Receipt.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status)';
 
-        let queryData = [];
+      let queryData = [];
 
-        if(req.query.userID) {
-          query += ' WHERE Receipt.UserID=?';
-          queryData.push(req.query.userID);
-          
-        }
+      if (req.query.userID) {
+        query += ' WHERE Receipt.UserID=?';
+        queryData.push(req.query.userID);
+      }
 
       this.sqlUtil.sqlSelectQuery(query, queryData).then((receiptList: any[]) => {
         res.send(
@@ -224,7 +223,6 @@ class Server {
     });
 
     this.app.get('/getLogEvents', (req, res) => {
-
       const query =
         'SELECT LogEvent.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
@@ -243,7 +241,7 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' + 
+        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName, ' +
@@ -252,7 +250,7 @@ class Server {
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = LogEvent.ItemTypeID) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=LogEvent.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
-        'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';        
+        'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((logEventList: any[]) => {
         res.send(
@@ -312,7 +310,7 @@ class Server {
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' + 
+        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
@@ -342,10 +340,10 @@ class Server {
 
     this.app.get('/getUsers', (req, res) => {
       const query =
-      'SELECT User.*,' +
-      'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName, ' +
-      'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
-      'FROM User LEFT JOIN (UserType, StatusType) ON (UserType.ID=User.UserType AND StatusType.ID=User.Status)';
+        'SELECT User.*,' +
+        'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName, ' +
+        'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
+        'FROM User LEFT JOIN (UserType, StatusType) ON (UserType.ID=User.UserType AND StatusType.ID=User.Status)';
 
       this.sqlUtil.sqlSelectQuery(query).then((userList: any[]) => {
         res.send(
@@ -440,10 +438,13 @@ class Server {
     });
 
     this.app.post('/addNewUser', (req, res) => {
-      console.log(req.body);
-      this.sqlUtil.sqlInsert('User', new User(req.body)).then(id => {
-        req.body.id = Number(id);
-        res.send({ message: 'success', data: req.body });
+
+      bcrypt.hash(atob(req.body.password), 12, (err, hash) => {
+        req.body.password = hash;
+        this.sqlUtil.sqlInsert('User', new User(req.body)).then(id => {
+          req.body.id = Number(id);
+          res.send({ message: 'success', data: req.body });
+        });
       });
     });
 
