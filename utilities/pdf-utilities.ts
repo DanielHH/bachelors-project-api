@@ -138,7 +138,7 @@ export class PdfUtilities {
       number = card.cardNumber;
       comment = card.comment;
       location = card.location;
-      endDate = card.expirationDate;
+      endDate = moment(card.expirationDate).format('YYYY-MM-DD');
 
       if (card.user){ 
         user = card.user.name;
@@ -202,27 +202,14 @@ export class PdfUtilities {
     while (i < length) {
       type = number = user = startDate = endDate = "";
         const receipt = receipts[i];
-        type = receipt.itemType.name;
-
-        // Extracts form different fields depending on itemType
-        switch (type) {
-          case 'Card':  number = receipt.card.cardNumber;
-                        startDate = receipt.startDate;
-                        endDate = receipt.endDate;
-                        break;
-
-          case 'Document': number = receipt.document.documentNumber;
-                           startDate = receipt.startDate;
-                           endDate = receipt.endDate;
-                           break;
-          default: type = number = user = startDate = endDate = "";
-        }
 
         status = receipt.endDate ? 'Inaktiv' : "Aktiv";
+        type = receipt.itemType.name === 'Card' ? 'Kort' : 'Handling';
+        number = receipt.itemType.name == 'Card' ? receipt.card.cardNumber : receipt.document.documentNumber;
+        user = receipt.user ? receipt.user.name : '-';
+        startDate = receipt.startDate ? moment(receipt.startDate).format('YYYY-MM-DD') : '-';;
+        endDate = receipt.endDate ? moment(receipt.endDate).format('YYYY-MM-DD') : '-';
 
-        if (receipt.user){ 
-          user = receipt.user.name;
-        }
       i++;
       items.push([status, type, number, user, startDate, endDate])
     }
