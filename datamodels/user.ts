@@ -42,22 +42,31 @@ export class User {
    */
   Status: number;
 
+  /**
+   * User password for when adding a new user
+   */
+  Password?: string;
+
   constructor();
   constructor(user?: any);
 
   constructor(user?: any) {
     try {
-      if (user) {
-        if(user.id)
-          this.ID = user.id;
-          this.UserType = user.userType.id;
-          this.Username = user.username;
-          this.Name = user.name;
-          this.Email = user.email;
-          this.CreationDate = user.creationDate;
-          this.ModifiedDate = user.modifiedDate;
-          this.Status = user.status.id;
+      if (user.id) {
+        this.ID = user.id;
+      } else {
+        this.ID = null;
       }
-    } catch (e) { }
+      this.UserType = user.userType.id;
+      this.Username = user.username;
+      this.Name = user.name;
+      this.Email = user.email;
+      this.CreationDate = user.creationDate;
+      this.ModifiedDate = user.modifiedDate;
+      this.Status = user.status.id;
+      if (user.password) {
+        this.Password = user.password;
+      }
+    } catch (e) {}
   }
 }

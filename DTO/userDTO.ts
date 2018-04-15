@@ -47,23 +47,23 @@ export class UserDTO {
 
   constructor();
 
-  constructor(data?: any);
+  constructor(data?: any, fromOtherType?: boolean);
 
-  constructor(data?: any) {
-    if (data.UserID) {
-      this.fromJoin(data);
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromOtherType(data);
     }
     else {
       this.fromUser(data);
     }
   }
 
-  fromJoin(data: any) {
+  fromOtherType(data: any) {
     try {
       this.id = Number(data.UserID);
       this.username = data.UserUsername;
       this.name = data.UserName;
-      this.userType = new UserTypeDTO(data.UserTypeID, data.UserTypeName);
+      this.userType = new UserTypeDTO(data, true);
       this.email = data.Email;
       this.creationDate = data.UserCreationDate;
       this.modifiedDate = data.UserModifiedDate;
@@ -77,7 +77,7 @@ export class UserDTO {
       this.id = Number(user.ID);
       this.username = user.Username;
       this.name = user.Name;
-      this.userType = new UserTypeDTO(user.UserTypeID, user.UserTypeName);
+      this.userType = new UserTypeDTO(user, true);
       this.email = user.Email;
       this.creationDate = user.CreationDate;
       this.modifiedDate = user.ModifiedDate;

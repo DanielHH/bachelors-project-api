@@ -68,13 +68,13 @@ export class LogEventDTO {
       }
 
       if(logEvent.DocumentID) {
-        this.document = new DocumentDTO(logEvent);
+        this.document = new DocumentDTO(logEvent, true);
       }
       else {
         this.document = null;
       }
 
-      this.user = new UserDTO(logEvent);
+      this.user = new UserDTO(logEvent, true);
 
 
         this.logType = new LogTypeDTO(logEvent.LogTypeID, logEvent.LogTypeName, logEvent.LogTypeText);
