@@ -240,36 +240,37 @@ export class PdfUtilities {
    */
   inventory(length: number, verifications: VerificationDTO[], template: string, curPage: number, pages: number) {
     let items = [];
-    let type, number, user, location, comment;
+    let date, type, number, user, location, comment;
 
     let done = false;
     let i = 0
     while (i < length) {
-      type = number = user = location = comment = "";
       if (i < length) {
         const verification = verifications[i];
-        type = verification.itemType.name;
+
+        date = verification.verificationDate ? moment(verification.verificationDate).format('YYYY-MM-DD') : '-';
+        user = verification.user.id ? verification.user.name : '-';
         
-        // Extracts form different fields depending on itemType
-        switch (type) {
-          case 'Card':  number = verification.card.cardNumber;
-                        location = verification.card.location;
-                        comment = verification.card.comment;
-                        break;
+        switch (verification.itemType.name) {
+          case 'Card':  
+            type = 'Kort';
+            number = verification.card.cardNumber;
+            location = verification.card.location;
+            comment = verification.card.comment;
+            break;
 
-          case 'Document': number = verification.document.documentNumber;
-                           location = verification.document.location;
-                           comment = verification.document.comment;
-                           break;
-          default: type = number = user = location = comment = "";
-        }
-
-        if (verification.user){ 
-          user = verification.user.name;
+          case 'Document': 
+            type = 'Handling';
+            number = verification.document.documentNumber;
+            location = verification.document.location;
+            comment = verification.document.comment;
+            break;
+          default:
+            type = number = user = location = comment = '';
         }
       }
       i++;
-      items.push(['', type, number, user, location, comment])
+      items.push([date, type, number, user, location, comment])
     }
 
     return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html');
@@ -283,7 +284,7 @@ export class PdfUtilities {
    */
   generatePages(dataFiller: Function, itemList: any[], path){
     let items = itemList.length
-    const itemsThatFit = 20;
+    const itemsThatFit = 14;
     if (items <= itemsThatFit) {
       return this.filePromise(dataFiller(items, itemList, 'base', 1, 1), path);
     } else {
