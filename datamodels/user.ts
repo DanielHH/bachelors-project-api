@@ -42,6 +42,11 @@ export class User {
    */
   Status: number;
 
+  /**
+   * User password for when adding a new user
+   */
+  Password?: string;
+
   constructor();
   constructor(user?: any);
 
@@ -59,6 +64,9 @@ export class User {
       this.CreationDate = user.creationDate;
       this.ModifiedDate = user.modifiedDate;
       this.Status = user.status.id;
-    } catch (e) { }
+      if (user.password) {
+        this.Password = user.password;
+      }
+    } catch (e) {}
   }
 }
