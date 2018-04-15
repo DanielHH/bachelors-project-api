@@ -1,0 +1,69 @@
+<!-- <!DOCTYPE html> -->
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="pdfTemplates/card/card.css" />
+    <title></title>
+</head>
+
+
+
+<body>
+
+    <div class="row bottom-spacer">
+        <div class="column-top-left">
+            <%= curDate %>
+        </div>
+        <div class="column-top-right">Sida
+            <%= curPage %> av
+                <%= totalPage %>
+        </div>
+    </div>
+
+
+    <h1 class="">Kort</h1>
+
+    <div class="row centre">
+        <div class="column7 border-top border-bottom border-left">Status</div>
+        <div class="column7 border-top border-bottom border-left">Ser.Nr</div>
+        <div class="column7 border-top border-bottom border-left">Typ</div>
+        <div class="column7 border-top border-bottom border-left">Användare</div>
+        <div class="column7 border-top border-bottom border-left">Förvaras</div>
+        <div class="column7 border-top border-bottom border-left">Kommentar</div>
+        <div class="column7 border-top border-bottom border-left border-right">Utgångsdatum</div>
+    </div>
+    <% for( let i = 0; i < items.length; i++) { %>
+        <div class="row">
+            <!-- status -->
+            <div class="column7 border-bottom border-left">
+                <%= items[i][0] %>
+            </div>
+            <!-- type -->
+            <div class="column7 border-bottom border-left">
+                <%= items[i][1] %>
+            </div>
+            <!-- number -->
+            <div class="column7 border-bottom border-left">
+                <%= items[i][2] %>
+            </div>
+            <!-- user -->
+            <div class="column7 border-bottom border-left">
+                <%= items[i][3] %>
+            </div>
+            <!-- location -->
+            <div class="column7 border-bottom border-left">
+                <%= items[i][4] %>
+            </div>
+            <!-- comment -->
+            <div class="column7 border-bottom border-left">
+                <%= items[i][5] %>
+            </div>
+            <!-- endDate -->
+            <div class="column7 border-bottom border-left border-right">
+                <%= items[i][6] %>
+            </div>
+        </div>
+        <%} %>
+</body>
