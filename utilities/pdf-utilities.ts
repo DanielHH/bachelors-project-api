@@ -13,6 +13,7 @@ import { start } from "repl";
 import { ReceiptDTO } from "../DTO/receiptDTO";
 import * as fs from "fs";
 import * as ejs from "ejs";
+import * as pdf from "html-pdf"
 
 
 
@@ -22,8 +23,7 @@ export class PdfUtilities {
   templatePath = './pdfTemplates/';
   sqlUtil: SqlUtilities;
   merge = require('easy-pdf-merge');
-  pdf = require('html-pdf');
-  options = { format: "A4", type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
+  options: pdf.CreateOptions = { format: "A4", type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
 
   constructor() {
     this.sqlUtil = new SqlUtilities();
@@ -319,7 +319,7 @@ export class PdfUtilities {
   filePromise(html, path){
     var pdfFilePath = './pdfs' + path + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';
     return new Promise((resolve, reject) => {
-      this.pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
+      pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
         if (!err) {
           resolve(pdfFilePath.substring(1));          
         }
@@ -343,7 +343,7 @@ export class PdfUtilities {
       moment(object.modifiedDate).format('YYYY-MM-DD') + '.pdf';
     const pdfFilePath = './pdfs/' + pdfFileName;
     return new Promise((resolve, reject) => {
-      this.pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
+      pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
         if (!err) {
           receipt.url = pdfFileName;
           this.sqlUtil.sqlUpdate('Receipt', new Receipt(receipt)).then(success => {
@@ -374,7 +374,7 @@ export class PdfUtilities {
 
     // Creates and Saves the main page of the template to disk
     return new Promise((resolve, reject) => {
-        this.pdf.create(startPage, this.options).toFile(pdfFilePath + '_start.pdf', function (err, res) {
+        pdf.create(startPage, this.options).toFile(pdfFilePath + '_start.pdf', function (err, res) {
           if (err) reject(err);
           else{
             fileNames.push(pdfFilePath + '_start.pdf');
@@ -387,7 +387,7 @@ export class PdfUtilities {
         for (let i = 0; i < extraPages.length; i++) {
           currentPath = pdfFilePath + '_' + i + '_extra.pdf';
           fileNames.push(currentPath);
-          this.pdf.create(extraPages[i], this.options).toFile(currentPath, (err,res) => {
+          pdf.create(extraPages[i], this.options).toFile(currentPath, (err,res) => {
             if (!err) {
               if (i == extraPages.length-1){
                 resolve();
