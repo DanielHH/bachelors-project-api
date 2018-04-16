@@ -346,9 +346,14 @@ class Server {
     });
 
     this.app.post('/addNewCard', (req, res) => {
-      this.sqlUtil.sqlInsert('Card', new Card(req.body)).then(id => {
-        req.body.id = Number(id);
-        res.send({ message: 'success', data: req.body });
+      this.sqlUtil.sqlInsert('Card', new Card(req.body.card)).then(id => {
+        req.body.card.id = Number(id);
+        this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
+          req.body.logEvent.id = Number(id);
+          req.body.logEvent.card.id = req.body.card.id;
+          req.body.logEvent.LogText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
+          res.send({ message: 'success', data: req.body });
+        });
       });
     });
 
