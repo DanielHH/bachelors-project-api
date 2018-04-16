@@ -11,19 +11,19 @@ import { Receipt } from "../datamodels/receipt";
 import { resolve } from "path";
 import { start } from "repl";
 import { ReceiptDTO } from "../DTO/receiptDTO";
+import * as fs from "fs";
+import * as ejs from "ejs";
 
 
 
 export class PdfUtilities {
 
 
-  static templatePath = './pdfTemplates/';
+  templatePath = './pdfTemplates/';
   sqlUtil: SqlUtilities;
-  static fs = require('fs');
-  static ejs = require('ejs');
-  static pdf = require('html-pdf')
-  static merge = require('easy-pdf-merge');
-  static options = { format: 'A4', type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
+  merge = require('easy-pdf-merge');
+  pdf = require('html-pdf');
+  options = { format: "A4", type: 'pdf', base: 'file:///' + _.replace(__dirname, /\\/g, '/')};
 
   constructor() {
     this.sqlUtil = new SqlUtilities();
@@ -50,7 +50,7 @@ export class PdfUtilities {
    * @returns A promise that the receipt has been created and updated
    */
   createCardReceipt(body: CardDTO, receipt, pdfType) {
-    const compiled = PdfUtilities.ejs.compile(PdfUtilities.fs.readFileSync(PdfUtilities.templatePath + "/card/card_receipt_template.html", 'utf8'));
+    const compiled = ejs.compile(fs.readFileSync(this.templatePath + "/card/card_receipt_template.html", 'utf8'));
     // Add variables to template
     const html = compiled({
       serNumber: body.cardNumber, type: body.cardType.name, user: body.user.name,
@@ -69,7 +69,7 @@ export class PdfUtilities {
    * @returns A promise that the receipt has been created and updated
    */
   createDokReceipt(body: DocumentDTO, receipt, pdfType) {
-    const compiled = PdfUtilities.ejs.compile(PdfUtilities.fs.readFileSync(PdfUtilities.templatePath + "/document/document_receipt_template.html", 'utf8'));
+    const compiled = ejs.compile(fs.readFileSync(this.templatePath + "/document/document_receipt_template.html", 'utf8'));
     // Add variables to template
     const html =compiled({
       serNumber: body.documentNumber, info: body.name, type: body.documentType.name, sender: body.sender,
@@ -305,7 +305,8 @@ export class PdfUtilities {
    * @param template The kind of template to use
    */
   static fillTemplate(items, curPage, pages, template){
-    var compiled = this.ejs.compile(this.fs.readFileSync(this.templatePath + template, 'utf8'));
+    const templatePath = './pdfTemplates/';
+    var compiled = ejs.compile(fs.readFileSync(templatePath + template, 'utf8'));
     return compiled({items: items, curPage: curPage, totalPage: pages, curDate: moment(new Date()).format('YYYY-MM-DD')});
   }
 
@@ -316,17 +317,17 @@ export class PdfUtilities {
    * @param path the path to where the file is saved
    */
   filePromise(html, path){
-    var pdfFilePath = './pdfs' + path + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';;
-      return new Promise((resolve, reject) => {
-        PdfUtilities.pdf.create(html, PdfUtilities.options).toFile(pdfFilePath, (err, res) => {
-          if (!err) {
-            resolve(pdfFilePath.substring(1));          
-          }
-          else {
-            reject(err);
-          }
-        });
+    var pdfFilePath = './pdfs' + path + '_' + moment(new Date).format('YYYY-MM-DD') + '.pdf';
+    return new Promise((resolve, reject) => {
+      this.pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
+        if (!err) {
+          resolve(pdfFilePath.substring(1));          
+        }
+        else {
+          reject(err);
+        }
       });
+    });
   }
 
   /**
@@ -342,7 +343,7 @@ export class PdfUtilities {
       moment(object.modifiedDate).format('YYYY-MM-DD') + '.pdf';
     const pdfFilePath = './pdfs/' + pdfFileName;
     return new Promise((resolve, reject) => {
-      PdfUtilities.pdf.create(html, PdfUtilities.options).toFile(pdfFilePath, (err, res) => {
+      this.pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
         if (!err) {
           receipt.url = pdfFileName;
           this.sqlUtil.sqlUpdate('Receipt', new Receipt(receipt)).then(success => {
@@ -373,7 +374,7 @@ export class PdfUtilities {
 
     // Creates and Saves the main page of the template to disk
     return new Promise((resolve, reject) => {
-        PdfUtilities.pdf.create(startPage, PdfUtilities.options).toFile(pdfFilePath + '_start.pdf', function (err, res) {
+        this.pdf.create(startPage, this.options).toFile(pdfFilePath + '_start.pdf', function (err, res) {
           if (err) reject(err);
           else{
             fileNames.push(pdfFilePath + '_start.pdf');
@@ -386,7 +387,7 @@ export class PdfUtilities {
         for (let i = 0; i < extraPages.length; i++) {
           currentPath = pdfFilePath + '_' + i + '_extra.pdf';
           fileNames.push(currentPath);
-          PdfUtilities.pdf.create(extraPages[i], PdfUtilities.options).toFile(currentPath, (err,res) => {
+          this.pdf.create(extraPages[i], this.options).toFile(currentPath, (err,res) => {
             if (!err) {
               if (i == extraPages.length-1){
                 resolve();
@@ -415,7 +416,7 @@ export class PdfUtilities {
       // Delete the now irrelevant files
       return new Promise((resolve, reject) => {
         for (let i = 0; i < fileNames.length; i++){
-          PdfUtilities.fs.unlink(fileNames[i], (err) => {
+          fs.unlink(fileNames[i], (err) => {
             if (!err) {
               if (i == fileNames.length-1){
                 resolve(result);
