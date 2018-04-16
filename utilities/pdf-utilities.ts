@@ -56,7 +56,7 @@ export class PdfUtilities {
     // Add variables to template
     const html = compiled({
       currentDate: moment(new Date()).format('YYYY-MM-DD'),
-      cardType: body.cardType,
+      cardType: body.cardType.name,
       cardNumber: body.cardNumber,
       cardLocation: body.location,
       cardExpirationDate: body.expirationDate,
