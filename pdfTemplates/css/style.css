@@ -1,0 +1,173 @@
+html {
+    zoom: 0.7;
+    /* 94px is the standard header/footer size for A4 */
+}
+
+body {
+    background-color: white;
+    font-family: sans-serif;
+    width: 794px;
+    height: 1028px;
+}
+
+/* Container CSS */
+.container {
+    margin: 0px 94px 0px 78px;
+    white-space: nowrap;
+}
+
+.row {
+    position: relative;
+}
+
+.header {
+    height: 94px;
+}
+
+.col {
+    width: 50%;
+    height: inherit;
+    display: inline-block;
+    position: relative;
+    
+
+}
+
+p {
+    margin: 0 !important;
+    width: 100% !important;
+    white-space: normal;
+    word-break: break-all;
+}
+
+/* Font CSS */
+.font-12 {
+    font-size: 12px !important;
+}
+
+.font-14 {
+    font-size: 14px !important;
+}
+
+.font-16 {
+    font-size: 16px !important;
+}
+
+.font-24 {
+    font-size: 24px !important;
+}
+
+.font-32 {
+    font-size: 32px !important;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+/* Alignment CSS */
+.align-center {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+}
+
+.align-bottom {
+    position: absolute;
+    bottom: 0;
+}
+
+.align-center.align-right {
+    right: 0;
+}
+
+.align-middle {
+    text-align: center !important;
+
+}
+
+.align-right {
+    text-align: right !important;
+}
+
+.mt-4 {
+    margin-top: 4px !important;
+}
+
+.mt-8 {
+    margin-top: 8px !important;
+}
+
+.mt-16 {
+    margin-top: 16px !important;
+}
+
+.mt-32 {
+    margin-top: 32px !important;
+}
+
+.mt-48 {
+    margin-top: 48px !important;
+}
+
+.mt-64 {
+    margin-top: 64px !important;
+}
+
+.mt-70 {
+    margin-top: 70px !important;
+}
+
+.ml-5 {
+    margin-left: 5px !important;
+}
+
+.ml-32 {
+    margin-left: 32px !important;
+}
+
+.mh-50 {
+    min-height: 50px;
+}
+
+.s-32 {
+    width: calc(100% - 32px);
+}
+
+
+/* Border CSS */
+.border-bottom {
+    border-bottom: 2px solid black;  
+}
+
+.border-top {
+    border-top: 1px solid black;  
+}
+
+span {
+    position: relative;
+}
+
+/* Table CSS */
+.table {
+    border: 2px solid black;
+}
+
+.table-row {
+    height: 36px;
+    border-bottom: 2px solid black;    
+}
+
+.table-row .col:first-child {
+    border-right: 2px solid black;
+}
+
+.table-row:last-child {
+    border: none;
+}
+
+/* custom  */
+.page-break {
+    page-break-after: always;
+}

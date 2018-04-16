@@ -58,28 +58,20 @@ export class ReceiptDTO {
       this.itemType = new ItemTypeDTO(receipt.ItemTypeID, receipt.ItemTypeName);
 
       if(receipt.CardID) {
-        this.card = new CardDTO(receipt);
+        this.card = new CardDTO(receipt, true);
       }
       else {
         this.card = null;
       }
 
       if(receipt.DocumentID) {
-        this.document = new DocumentDTO(receipt);
+        this.document = new DocumentDTO(receipt, true);
       }
       else {
         this.document = null;
       }
 
-      this.user = new UserDTO(
-        null,
-        receipt.UserID,
-        receipt.UserTypeID,
-        receipt.UserTypeName,
-        receipt.Username,
-        receipt.Name,
-        receipt.Email
-      );
+      this.user = new UserDTO(receipt, true);
 
       this.startDate = receipt.StartDate;
       this.endDate = receipt.EndDate;

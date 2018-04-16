@@ -89,12 +89,11 @@ export class DocumentDTO {
 
 
   constructor();
-  constructor(data: any);
+  constructor(data: any, fromOtherType?: boolean);
 
-  constructor(data?: any) {
-
-    if (data.DocumentID) {
-      this.fromJoin(data);
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromOtherType(data);
     }
     else {
       this.fromDocument(data);
@@ -102,11 +101,11 @@ export class DocumentDTO {
 
   }
 
-  fromJoin(data: any) {
+  fromOtherType(data: any) {
     try {
       this.id = Number(data.DocumentID);
 
-      this.documentType = new DocumentTypeDTO(data.DocumentTypeID, data.DocumentTypeName);
+      this.documentType = new DocumentTypeDTO(data, true);
       this.documentNumber = data.DocumentNumber;
 
       this.name = data.DocumentName;
@@ -117,15 +116,7 @@ export class DocumentDTO {
       this.creationDate = data.DocumentCreationDate;
       this.modifiedDate = data.DocumentModifiedDate;
 
-      this.user = new UserDTO(
-        null,
-        data.UserID,
-        data.UserTypeID,
-        data.UserTypeName,
-        data.Username,
-        data.UsersName,
-        data.Email
-      );
+      this.user = new UserDTO(data, true);
 
       this.location = data.DocumentLocation;
       this.comment = data.DocumentComment;
@@ -141,7 +132,7 @@ export class DocumentDTO {
     try {
       this.id = Number(document.ID);
 
-      this.documentType = new DocumentTypeDTO(document.DocumentTypeID, document.DocumentTypeName);
+      this.documentType = new DocumentTypeDTO(document, true);
       this.documentNumber = document.DocumentNumber;
 
       this.name = document.Name;
@@ -152,15 +143,7 @@ export class DocumentDTO {
       this.creationDate = document.CreationDate;
       this.modifiedDate = document.ModifiedDate;
 
-      this.user = new UserDTO(
-        null,
-        document.UserID,
-        document.UserTypeID,
-        document.UserTypeName,
-        document.Username,
-        document.UsersName,
-        document.Email
-      );
+      this.user = new UserDTO(document, true);
 
       this.location = document.Location;
       this.comment = document.Comment;

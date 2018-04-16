@@ -14,12 +14,29 @@ export class UserTypeDTO {
   name: string;
 
   constructor();
-  constructor(id?: number, name?: string);
+  constructor(data?: any, fromOtherType?: boolean);
 
-  constructor(id?: number, name?: string) {
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromFromOtherType(data);
+    }
+    else {
+      this.fromUserType(data);
+    }
+  }
 
-    this.id = Number(id);
-    this.name = name;
+  fromFromOtherType(data: any) {
+    try {
+      this.id = Number(data.UserTypeID);
+      this.name = data.UserTypeName;
 
+    } catch (e) { }
+  }
+
+  fromUserType(userType: any) {
+    try {
+      this.id = Number(userType.ID);
+      this.name = userType.Name;
+    } catch (e) { }
   }
 }

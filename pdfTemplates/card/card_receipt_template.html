@@ -1,140 +1,177 @@
-<!-- <!DOCTYPE html> -->
+<!-- <!DOCTYPE html pdfTemplates/card> -->
 
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="pdfTemplates/card/card.css" />
-    <title></title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="pdfTemplates/css/style.css" />
+  <title></title>
 </head>
 
 
 
 <body>
+  <% for(var i=0; i<2; i++) { %>
+    <div class="container">
 
-    <div class="row bottom-spacer">
-        <div class="column-top-left">
-            <%= curDate %>
+      <!-- Page header -->
+      <div class="row font-12 header">
+        <div class="col">
+          <span class="align-center">
+            <%= currentDate %>
+          </span>
         </div>
-        <div class="column-top-right">Sida 1 av 1</div>
-    </div>
+        <div class="col">
+          <span class="align-center align-right">
+            <%if (i) { %>
+              Användarkopia              
+            <% } else {%>
+              Registratorkopia              
+            <% } %>
+
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="align-middle">
+          <span class="font-32 border-bottom">Kortkvittens</span>
+        </div>
+      </div>
+
+      <div class="row mt-32">
+        <div class="col">
+          <span class="text-bold">Korttyp:</span>
+          <p class="mt-4">
+            <%= cardType %>
+          </p>
+        </div>
+
+        <div class="col">
+          <span class="text-bold">Kort-ID:</span>
+          <p class="mt-4">
+            <%= cardNumber %>
+          </p>
+        </div>
+      </div>
 
 
-    <h1 class="">Kvittens kort</h1>
-    <h2 class="">Användarkopia</h2>
+      <div class="row mt-16">
+        <div class="col">
+          <span class="text-bold">Förvaringsplats:</span>
+          <p class="mt-4">
+            <%= cardLocation %>
+          </p>
+        </div>
 
-    <div class="row centre">
-        <div class="column6 border-top border-left">Ser.Nr</div>
-        <div class="column6 border-top border-left">Typ</div>
-        <div class="column6 border-top border-left">Användare</div>
-        <div class="column6 border-top border-left">Förvaras</div>
-        <div class="column6 border-top border-left">Kommentar</div>
-        <div class="column6 border-top border-left border-right">Utgångsdatum</div>
-    </div>
-    <div class="row centre">
-        <div class="column6 border-top border-bottom border-left">
-            <%= serNumber %>
+        <div class="col">
+          <span class="text-bold">Utgångsdatum:</span>
+          <p class="mt-4">
+            <%= cardExpirationDate %>
+          </p>
         </div>
-        <div class="column6 border-top border-bottom border-left">
-            <%= type %>
+      </div>
+
+      <div class="row mt-16">
+        <span class="text-bold">Kommentar:</span>
+        <p class="mt-4 mh-50">
+          <%= cardComment %>
+        </p>
+      </div>
+
+      <div class="row mt-48">
+        <div class="col">
+          <div class="s-32">
+            <p class="border-top">Utlämningsdatum</p>
+          </div>
         </div>
-        <div class="column6 border-top border-bottom border-left">
-            <%= user %>
+        <div class="col text-right">
+          <div class="s-32 ml-32">
+            <p class="border-top">Utlämningsdatum</p>
+          </div>
         </div>
-        <div class="column6 border-top border-bottom border-left">
-            <%= location %>
+      </div>
+
+      <div class="row mt-48">
+        <div class="col">
+          <div class="s-32">
+            <p class="border-top">
+              <%= cardUser %>
+            </p>
+          </div>
         </div>
-        <div class="column6 border-top border-bottom border-left">
-            <%= comment %>
+        <div class="col text-right">
+          <div class="s-32 ml-32">
+            <p class="border-top">
+              <%= adminUser %>
+            </p>
+          </div>
         </div>
-        <div class="column6 border-top border-bottom border-left border-right">
-            <%= expDate %>
-        </div>
-    </div>
+      </div>
+
+      <%if (i) { %>
 
 
-    <div class="row">
-        <div class="signing column2">
-            <h3 class="enlarge">Mottagare/Användare</h3>
-            <div class="enlarge">Signatur/Datum:</div>
-            <div class="enlarge">Förtydligande:</div>
-        </div>
-        <div class="signing column2">
-            <h3 class="enlarge">Registrator</h3>
-            <div class="enlarge">Signatur/Datum:</div>
-            <div class="enlarge">Förtydligande:</div>
-        </div>
-    </div>
-    <hr>
 
-    <div class="row">
-        <div class="signing column2">
-            <div class="enlarge2">Återlämning:</div>
-            <h3 class="enlarge">Mottagare/Användare</h3>
-            <div class="enlarge">Signatur/Datum:</div>
-            <div class="enlarge">Förtydligande:</div>
+        <div class="row mt-48">
+          <div class="align-middle">
+            <span class="font-32 border-bottom">Egenkontroll</span>
+          </div>
         </div>
-        <div class="signing column2">
-            <div class="enlarge2">Mottaget:</div>
-            <h3 class="enlarge">Registrator</h3>
-            <div class="enlarge">Signatur/Datum:</div>
-            <div class="enlarge">Förtydligande:</div>
-        </div>
-    </div>
-    <hr>
 
-    <div class="row top-spacer">
-        <div class="signing2 column2">
-            <div class="enlarge">Egenkontroll utförd
-                <input type="checkbox">
+        <div class="table mt-32">
+          <div class="table-row">
+            <div class="col">
+              <p class="ml-5 text-bold align-bottom">Datum</span>
             </div>
-            <div class="enlarge">Datum:</div>
-            <div class="enlarge">Signatur:</div>
-        </div>
-        <div class="signing2 column2">
-            <div class="enlarge">Egenkontroll utförd
-                <input type="checkbox">
+            <div class="col">
+              <p class="text-bold align-bottom">Signatur</span>
             </div>
-            <div class="enlarge">Datum:</div>
-            <div class="enlarge">Signatur:</div>
+          </div>
+          <% for(var k=0; k<6; k++) { %>
+
+            <div class="table-row">
+              <div class="col"></div>
+            </div>
+
+            <% } %>
         </div>
+
+        <% } %>
+
+          <div class="row mt-48">
+            <div class="col">
+              <div class="s-32">
+                <p class="border-top">Återlämningsdatum</p>
+              </div>
+            </div>
+            <div class="col text-right">
+              <div class="s-32 ml-32">
+                <p class="border-top">Återlämningsdatum</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-48">
+            <div class="col">
+              <div class="s-32">
+                <p class="border-top">
+                  <%= cardUser %>
+                </p>
+              </div>
+            </div>
+            <div class="col text-right">
+              <div class="s-32 ml-32">
+                <p class="border-top">
+                  <%= adminUser %>
+                </p>
+              </div>
+            </div>
+          </div>
+
     </div>
-
-    <div class="row top-spacer">
-        <div class="signing2 column2">
-            <div class="enlarge">Egenkontroll utförd
-                <input type="checkbox">
-            </div>
-            <div class="enlarge">Datum:</div>
-            <div class="enlarge">Signatur:</div>
-        </div>
-        <div class="signing2 column2">
-            <div class="enlarge">Egenkontroll utförd
-                <input type="checkbox">
-            </div>
-            <div class="enlarge">Datum:</div>
-            <div class="enlarge">Signatur:</div>
-        </div>
-    </div>
-
-    <div class="row top-spacer">
-        <div class="signing2 column2">
-            <div class="enlarge">Egenkontroll utförd
-                <input type="checkbox">
-            </div>
-            <div class="enlarge">Datum:</div>
-            <div class="enlarge">Signatur:</div>
-        </div>
-        <div class="signing2 column2">
-            <div class="enlarge">Egenkontroll utförd
-                <input type="checkbox">
-            </div>
-            <div class="enlarge">Datum:</div>
-            <div class="enlarge">Signatur:</div>
-        </div>
-    </div>
-
-
+    <div class="page-break"></div>
+    <% } %>
 </body>
 
 </html>

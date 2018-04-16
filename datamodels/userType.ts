@@ -6,12 +6,12 @@ export class UserType {
     /**
      * Database ID of the user type
      */
-    id: number;
+    ID: number;
 
     /**
      * Name of the user type
      */
-    name: string;
+    Name: string;
 
     constructor();
     constructor(userType: any);
@@ -19,9 +19,10 @@ export class UserType {
     constructor(userType?: any) {
 
       try {
-        if(userType.ID)
-          this.id = userType.ID;
-        this.name = userType.Name;
+        if(userType.ID) {
+          this.ID = userType.ID;
+        }
+        this.Name = userType.Name;
       }
       catch (e) {
 

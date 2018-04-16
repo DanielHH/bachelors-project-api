@@ -5,41 +5,68 @@ export class User {
   /**
    * Database ID of the user
    */
-  id: number;
+  ID: number;
 
   /**
-   * User type
+   * User type ID
    */
-  userType: number;
+  UserType: number;
 
   /**
    * Username
    */
-  username: string;
+  Username: string;
 
   /**
    * Full name of user
    */
-  name: string;
+  Name: string;
 
   /**
    * Email
    */
-  email: string;
+  Email: string;
+
+  /**
+   * Creation date of User in database
+   */
+  CreationDate: Date;
+
+  /**
+   * Last modified date of User
+   */
+  ModifiedDate: Date;
+
+  /**
+   * User active/inactive status
+   */
+  Status: number;
+
+  /**
+   * User password for when adding a new user
+   */
+  Password?: string;
 
   constructor();
   constructor(user?: any);
 
   constructor(user?: any) {
     try {
-      if (user) {
-        if(user.id)
-          this.id = user.id;
-        this.userType = user.userType;
-        this.username = user.username;
-        this.name = user.name;
-        this.email = user.email;
+      if (user.id) {
+        this.ID = user.id;
+      } else {
+        this.ID = null;
       }
-    } catch (e) { }
+      this.UserType = user.userType.id;
+      this.Username = user.username;
+      this.Name = user.name;
+      this.Email = user.email;
+      this.CreationDate = user.creationDate;
+      this.ModifiedDate = user.modifiedDate;
+      this.Status = user.status.id;
+      if (user.password) {
+        this.Password = user.password;
+      }
+    } catch (e) {}
   }
 }

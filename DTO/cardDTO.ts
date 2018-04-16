@@ -22,7 +22,7 @@ export class CardDTO {
   cardNumber: string;
 
   /**
-   * ID of current card holder
+   * Current card holder
    */
   user: UserDTO;
 
@@ -71,41 +71,39 @@ export class CardDTO {
    */
   lastVerificationDate?: Date;
 
-  constructor();
-  constructor(data?: any);
+  /**
+   * Registrator
+   */
+  registrator?: string;
 
-  constructor(data?: any) {
-    if (data.CardID) {
-      this.fromJoin(data);
+
+  constructor();
+  constructor(data?: any, fromOtherType?: boolean);
+
+  constructor(data?: any, fromOtherType?: boolean) {
+    if (fromOtherType) {
+      this.fromOtherType(data);
     }
     else {
       this.fromCard(data);
     }
   }
 
-  fromJoin(data: any) {
+  fromOtherType(data: any) {
     try {
       this.id = Number(data.CardID);
 
-      this.cardType = new CardTypeDTO(data.CardTypeID, data.CardTypeName);
+      this.cardType = new CardTypeDTO(data, true);
       this.cardNumber = data.CardNumber;
 
-      this.user = new UserDTO(
-        null,
-        data.UserID,
-        data.UserTypeID,
-        data.UserTypeName,
-        data.Username,
-        data.Name,
-        data.Email
-      );
+      this.user = new UserDTO(data, true);
 
       this.location = data.CardLocation;
       this.comment = data.CardComment;
       this.expirationDate = data.CardExpirationDate;
       this.creationDate = data.CardCreationDate;
       this.modifiedDate = data.CardModifiedDate;
-      this.status = new StatusTypeDTO(data.CardStatusTypeID, data.CardStatusTypeName);
+      this.status = new StatusTypeDTO(data.StatusTypeID, data.StatusTypeName);
       this.activeReceipt = Number(data.CardActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
@@ -117,18 +115,10 @@ export class CardDTO {
     try {
       this.id = Number(card.ID);
 
-      this.cardType = new CardTypeDTO(card.CardTypeID, card.CardTypeName);
+      this.cardType = new CardTypeDTO(card, true);
       this.cardNumber = card.CardNumber;
 
-      this.user = new UserDTO(
-        null,
-        card.UserID,
-        card.UserTypeID,
-        card.UserTypeName,
-        card.Username,
-        card.Name,
-        card.Email
-      );
+      this.user = new UserDTO(card, true);
 
       this.location = card.Location;
       this.comment = card.Comment;
