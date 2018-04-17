@@ -225,7 +225,7 @@ class Server {
     this.app.get('/getLogEvents', (req, res) => {
       const query =
         'SELECT LogEvent.*,' +
-        'Card.ID as CardID, Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
         'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
         'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
