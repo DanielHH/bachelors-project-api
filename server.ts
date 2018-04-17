@@ -498,22 +498,21 @@ class Server {
     });
 
     this.app.put('/updateUser', (req, res) => {
-      this.sqlUtil.sqlUpdate('User', new User(req.body)).then(success => {
-        if (success) res.send({ message: 'success' });
-        else res.send({ message: 'failure' });
-      });
-    });
-
-    /*
-    this.app.get('/updatePassword', (req, res) => {
-      this.sqlUtil.sqlSelectID('User', 8).then((user: any) => {
-        bcrypt.hash(user.Password, 12, (err, hash) => {
-          user.Password = hash;
-          this.sqlUtil.sqlUpdate('User', user);
-          res.send('done');
+      if (req.body.password) {
+        bcrypt.hash(atob(req.body.password), 12, (err, hash) => {
+          req.body.password = hash;
+          this.sqlUtil.sqlUpdate('User', new User(req.body)).then(success => {
+            if (success) res.send({ message: 'success' });
+            else res.send({ message: 'failure' });
+          });
         });
-      });
-    });*/
+      } else {
+        this.sqlUtil.sqlUpdate('User', new User(req.body)).then(success => {
+          if (success) res.send({ message: 'success' });
+          else res.send({ message: 'failure' });
+        });
+      }
+    });
 
     this.app.post('/login', (req, res) => {
       this.sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
