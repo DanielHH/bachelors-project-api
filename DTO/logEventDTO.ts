@@ -61,7 +61,7 @@ export class LogEventDTO {
 
         
       if(logEvent.CardID) {
-        this.card = new CardDTO(logEvent);
+        this.card = new CardDTO(logEvent, true);
       }
       else {
         this.card = null;
