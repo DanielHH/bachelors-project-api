@@ -37,7 +37,7 @@ export class PdfUtilities {
       case 'card':
         return this.createCardReceipt(data[1], data[2], pdfType);
       case 'document':
-        return this.createDokReceipt(data[1], data[2], pdfType);
+        return this.createDocumentReceipt(data[1], data[2], pdfType);
       case 'inventory':
         return this.createInventory(data[1], data[2]);
       case 'receipts':
@@ -80,7 +80,7 @@ export class PdfUtilities {
    * @param pdfType The type of pdf that shall be returned
    * @returns A promise that the receipt has been created and updated
    */
-  createDokReceipt(body: DocumentDTO, receipt, pdfType) {
+  createDocumentReceipt(body: DocumentDTO, receipt, pdfType) {
     const compiled = ejs.compile(
       fs.readFileSync(this.templatePath + '/document/document_receipt_template.html', 'utf8')
     );
@@ -161,28 +161,14 @@ export class PdfUtilities {
   }
 
   /**
-   * Iterates over the list and generates pages of appropriate length
-   * @param dataFiller A function that extracts data from a list and returns a template
-   * @param itemList A list of items to be turned into filled templates
-   * @param path The path where the template is to be saved
-   */
-  generatePages(dataFiller: Function, itemList: any[], path, filters: any[]) {
-    console.log(itemList[0]);
-    let items = itemList.length;
-    const itemsThatFit = 13;
-    const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit + 3)) + 1;
-    const pdfFilePath = './pdfs' + path;
-    return this.filePromise(dataFiller(items, itemList, 'base', 1, pages, filters), path);
-  }
-
-  /**
    * Ensures that a template is saved to disk
    * in a synchronous fashion.
    * @param html the template to be save
    * @param path the path to where the file is saved
    */
   filePromise(html, path) {
-    var pdfFilePath = './pdfs' + path + '_' + moment(new Date()).format('YYYY-MM-DD') + '.pdf';
+    var pdfFilePath =
+      './pdfs' + path + '_' + moment(new Date()).format('YYYY-MM-DD') + '_' + this.getIdentifier() + '.pdf';
     return new Promise((resolve, reject) => {
       pdf.create(html, this.options).toFile(pdfFilePath, (err, res) => {
         if (!err) {
@@ -209,6 +195,8 @@ export class PdfUtilities {
       _.replace(object.user.name, /[/\s\\?%*:|"<>]/g, '') +
       '_' +
       moment(object.modifiedDate).format('YYYY-MM-DD') +
+      '_' +
+      this.getIdentifier() +
       '.pdf';
     const pdfFilePath = './pdfs/' + pdfFileName;
     return new Promise((resolve, reject) => {
@@ -230,73 +218,9 @@ export class PdfUtilities {
   }
 
   /**
-   * Ensueres that the templates saves, are merged and are deleted synchronously
-   * @param pdfFilePath the path where the template is to be saved
-   * @param extraPages the secondary pages of the template
-   * @param startPage the main page of the template
-   * @deprecated Since we no longer need to merge multiple files
+   * Generates a random number
    */
-  pdfPagesSync(pdfFilePath, extraPages, startPage) {
-    const fileNames = [];
-    let currentPath: string;
-
-    // Creates and Saves the main page of the template to disk
-    return new Promise((resolve, reject) => {
-      pdf.create(startPage, this.options).toFile(pdfFilePath + '_start.pdf', function(err, res) {
-        if (err) reject(err);
-        else {
-          fileNames.push(pdfFilePath + '_start.pdf');
-          resolve();
-        }
-      });
-    })
-      .then(() => {
-        // Creates and Saves the secondary pages of the template to disk
-        return new Promise((resolve, reject) => {
-          for (let i = 0; i < extraPages.length; i++) {
-            currentPath = pdfFilePath + '_' + i + '_extra.pdf';
-            fileNames.push(currentPath);
-            pdf.create(extraPages[i], this.options).toFile(currentPath, (err, res) => {
-              if (!err) {
-                if (i == extraPages.length - 1) {
-                  resolve();
-                }
-              } else {
-                reject(err);
-              }
-            });
-          }
-        });
-      })
-      .then(() => {
-        // Merge the template pages
-        return new Promise((resolve, reject) => {
-          const dest_path = pdfFilePath + '_' + moment(new Date()).format('YYYY-MM-DD') + '.pdf';
-          var merge = require('easy-pdf-merge');
-          merge(fileNames, dest_path, function(err) {
-            if (!err) {
-              resolve(dest_path.substring(1));
-            } else {
-              reject(err);
-            }
-          });
-        });
-      })
-      .then(result => {
-        // Delete the now irrelevant files
-        return new Promise((resolve, reject) => {
-          for (let i = 0; i < fileNames.length; i++) {
-            fs.unlink(fileNames[i], err => {
-              if (!err) {
-                if (i == fileNames.length - 1) {
-                  resolve(result);
-                }
-              } else {
-                reject(err);
-              }
-            });
-          }
-        });
-      });
+  getIdentifier() {
+    return Math.floor(Math.random() * (99999999 - 10000000 + 1)) + 10000000;
   }
 }
