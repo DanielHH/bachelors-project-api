@@ -71,6 +71,12 @@ export class CardDTO {
    */
   lastVerificationDate?: Date;
 
+  /**
+   * Registrator
+   */
+  registrator?: string;
+
+
   constructor();
   constructor(data?: any, fromOtherType?: boolean);
 
