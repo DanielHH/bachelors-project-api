@@ -93,46 +93,6 @@ export class PdfUtilities {
     return this.receiptPromise(html, receipt, pdfType, body);
   }
 
-  testGenerate() {
-    const compiled = ejs.compile(fs.readFileSync(this.templatePath + '/inventory/inventory_template.html', 'utf8'));
-
-    const cardItem = { id: 1, cardType: {id: 1, name: "test"}, cardNumber: "A435478923", location: "Testskåp 1", user: {name: "Pummelinas pum"}, comment: "Här kanske man kan skriva något lång om man orkar, men orkar man verkligen det? Nej det gör man faktiskt inte, men ändå görs det. Helt otroligt! ;)" };
-    const documentItem = { id: 2, documentType: { id: 1, name: "prutt"}, documentNumber: "D476343", location: "Testskåp 1", user: {name: "Pummelinas pum"}, comment: "Här kanske man kan skriva något lång om man orkar, men orkar man verkligen det? Nej det gör man faktiskt inte, men ändå görs det. Helt otroligt! ;)" };
-    const items = []
-    items.push(cardItem);
-    items.push(documentItem);
-    items.push(cardItem);
-    items.push(documentItem);    
-    items.push(cardItem);
-    items.push(documentItem);    
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    items.push(documentItem);        
-    items.push(cardItem);
-    // Add variables to template
-    const html = compiled({
-      currentDate: moment(new Date()).format('YYYY-MM-DD'),
-      items: items,
-      filters: ['test', 'test2']
-    });
-
-    const pdfFilePath = './pdfs/' + 'testttttt.pdf';
-    pdf.create(html, this.options).toFile(pdfFilePath, (res, err) => {});
-  }
-
   /**
    * Generates a dynamically sized pdf
    * @param inventory a list of items to be verified
