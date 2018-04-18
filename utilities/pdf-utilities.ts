@@ -35,10 +35,10 @@ export class PdfUtilities {
     switch (pdfType) {
       case "card": return this.createCardReceipt(data[1], data[2], pdfType);
       case "document": return this.createDokReceipt(data[1], data[2], pdfType);
-      case "inventory": return this.createInventory(data[1]);      
-      case "receipts": return this.createReceiptList(data[1]);
-      case "documents": return this.createDokList(data[1]);
-      case "cards": return this.createCardList(data[1]);
+      case "inventory": return this.createInventory(data[1], data[2]);      
+      case "receipts": return this.createReceiptList(data[1], data[2]);
+      case "documents": return this.createDokList(data[1], data[2]);
+      case "cards": return this.createCardList(data[1], data[2]);
     }
   }
 
@@ -85,8 +85,8 @@ export class PdfUtilities {
    * @param inventory a list of items to be verified
    * @returns a promise of a dynamically sized pdf
    */
-  createInventory(inventory: VerificationDTO[]) {
-    return this.generatePages(this.inventory, inventory, '/inventory');
+  createInventory(inventory: VerificationDTO[], filters:any[]) {
+    return this.generatePages(this.inventory, inventory, '/inventory', filters);
   }
 
   /**
@@ -94,8 +94,8 @@ export class PdfUtilities {
    * @param receipts a list of receipts
    * @returns a promise of a dynamically sized pdf
    */
-  createReceiptList(receipts: ReceiptDTO[]){
-    return this.generatePages(this.receipts, receipts, '/receipts');
+  createReceiptList(receipts: ReceiptDTO[], filters:any[]){
+    return this.generatePages(this.receipts, receipts, '/receipts', filters);
   }
 
   /**
@@ -103,8 +103,8 @@ export class PdfUtilities {
    * @param documents a list of documents
    * @returns a promise of a dynamically sized pdf
    */
-  createDokList(documents: DocumentDTO[]){
-    return this.generatePages(this.documents, documents, '/documents');
+  createDokList(documents: DocumentDTO[], filters:any[]){
+    return this.generatePages(this.documents, documents, '/documents', filters);
   }
 
   /**
@@ -112,8 +112,8 @@ export class PdfUtilities {
    * @param cards a list of cards
    * @returns a promise of a dynamically sized pdf
    */
-  createCardList(cards: CardDTO[]){
-    return this.generatePages(this.cards, cards, '/cards');
+  createCardList(cards: CardDTO[], filters:any[]){
+    return this.generatePages(this.cards, cards, '/cards', filters);
   }
 
   /**
@@ -125,7 +125,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  cards(length, cards: CardDTO[], template, curPage, pages){
+  cards(length, cards: CardDTO[], template, curPage, pages, filters:any[]){
     let items = [];
     let status, type, number, user, endDate, sender, comment, location;
 
@@ -158,7 +158,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  documents(length, documents: DocumentDTO[], template, curPage, pages) {
+  documents(length, documents: DocumentDTO[], template, curPage, pages, filters:any[]) {
     let items = [];
     let status, type, number, user, desc, sender, comment, location;
 
@@ -193,7 +193,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  receipts(length, receipts: ReceiptDTO[], template, curPage, pages) {
+  receipts(length, receipts: ReceiptDTO[], template, curPage, pages, filters:any[]) {
     let items = [];
     let status, type, number, user, startDate, endDate;
 
@@ -225,7 +225,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  inventory(length: number, verifications: VerificationDTO[], template: string, curPage: number, pages: number) {
+  inventory(length: number, verifications: VerificationDTO[], template: string, curPage: number, pages: number, filters:any[]) {
     let items = [];
     let date, type, number, user, location, comment;
 
@@ -234,10 +234,11 @@ export class PdfUtilities {
     while (i < length) {
       if (i < length) {
         const verification = verifications[i];
+        // console.log(verification);
 
         date = verification.verificationDate ? moment(verification.verificationDate).format('YYYY-MM-DD') : '-';
         user = verification.user.id ? verification.user.name : '-';
-        
+        // type = verification.itemType.name;
         switch (verification.itemType.name) {
           case 'Card':  
             type = 'Kort';
@@ -257,10 +258,10 @@ export class PdfUtilities {
         }
       }
       i++;
-      items.push([date, type, number, user, location, comment])
+      items.push(['', type, number, user, location, comment, date])
     }
 
-    return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html');
+    return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html', filters);
   }
 
   /**
@@ -269,14 +270,14 @@ export class PdfUtilities {
    * @param itemList A list of items to be turned into filled templates
    * @param path The path where the template is to be saved
    */
-  generatePages(dataFiller: Function, itemList: any[], path){
+  generatePages(dataFiller: Function, itemList: any[], path, filters){
     let items = itemList.length
     const itemsThatFit = 14;
     if (items <= itemsThatFit) {
-      return this.filePromise(dataFiller(items, itemList, 'base', 1, 1), path);
+      return this.filePromise(dataFiller(items, itemList, 'base', 1, 1, filters), path);
     } else {
       const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit+2))+1;
-      const startPage = dataFiller(itemsThatFit, itemList, 'base', 1, pages);
+      /*const startPage = dataFiller(itemsThatFit, itemList, 'base', 1, pages, filters);
       
       items -= itemsThatFit;
       let itemsLeft = itemList.slice(itemsThatFit);
@@ -284,15 +285,16 @@ export class PdfUtilities {
 
       for (let page = 2; page <= pages; page++) {
         if (items > itemsThatFit+2) {
-          extraPages[page - 2] = dataFiller(itemsThatFit+2, itemsLeft, 'extra', page, pages);
+          extraPages[page - 2] = dataFiller(itemsThatFit+2, itemsLeft, 'extra', page, pages, filters);
           items -= itemsThatFit+2;
           itemsLeft = itemsLeft.slice(itemsThatFit+2);
         }else {
-          extraPages[page - 2] = dataFiller(items, itemsLeft, 'extra', page, pages);
+          extraPages[page - 2] = dataFiller(items, itemsLeft, 'extra', page, pages, filters);
         }
-      }
-
+      }*/
+      
       const pdfFilePath = './pdfs' + path;
+      return this.filePromise(dataFiller(items, itemList, 'base', 1 , pages), path);
       return this.pdfPagesSync(pdfFilePath, extraPages, startPage)
     }
   }
@@ -304,10 +306,10 @@ export class PdfUtilities {
    * @param pages The total number of pages of the template
    * @param template The kind of template to use
    */
-  static fillTemplate(items, curPage, pages, template){
+  static fillTemplate(items, curPage, pages, template, filters=[]){
     const templatePath = './pdfTemplates/';
     var compiled = ejs.compile(fs.readFileSync(templatePath + template, 'utf8'));
-    return compiled({items: items, curPage: curPage, totalPage: pages, curDate: moment(new Date()).format('YYYY-MM-DD')});
+    return compiled({items: items, /*curPage: curPage,*/ pages: pages, curDate: moment(new Date()).format('YYYY-MM-DD'), filters: filters});
   }
 
   /**

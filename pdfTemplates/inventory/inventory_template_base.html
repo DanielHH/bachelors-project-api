@@ -12,57 +12,75 @@
 
 <body>
 
-    <div class="row bottom-spacer">
-        <div class="column-top-left">
-            <%= curDate %>
-        </div>
-        <div class="column-top-right">Sida
-            <%= curPage %> av
-                <%= totalPage %>
-        </div>
-    </div>
+    <%  let totalLength = items.length; let distance = 0; for( let y = 0; y < pages; y++){ let length=16; let spacer=16; %>
 
-
-    <h1 class="">Inventering</h1>
-    <!-- <h2 class="">Användarkopia</h2> -->
-
-    <div class="row">
-        <div class="column6 border-top border-bottom border-left">Senast verifierad</div>
-        <div class="column6 border-top border-bottom border-left">Typ</div>
-        <div class="column6 border-top border-bottom border-left">ID</div>
-        <div class="column6 border-top border-bottom border-left">Användare</div>
-        <div class="column6 border-top border-bottom border-left">Förvaras</div>
-        <div class="column6 border-top border-bottom border-left border-right">Kommentar</div>
-
-    </div>
-    <% for( let i = 0; i < items.length; i++) { %>
-        <div class="row">
-            <!-- status -->
-            <div class="column6 border-bottom border-left">
-                <%= items[i][0] %>
+        <div class="row bottom-spacer">
+            <div class="column-top-left">
+                <%= curDate %>
             </div>
-            <!-- type -->
-            <div class="column6 border-bottom border-left">
-                <%= items[i][1] %>
-            </div>
-            <!-- number -->
-            <div class="column6 border-bottom border-left">
-                <%= items[i][2] %>
-            </div>
-            <!-- user -->
-            <div class="column6 border-bottom border-left">
-                <%= items[i][3] %>
-            </div>
-            <!-- location -->
-            <div class="column6 border-bottom border-left">
-                <%= items[i][4] %>
-            </div>
-            <!-- comment -->
-            <div class="column6 border-bottom border-left border-right">
-                <%= items[i][5] %>
+            <div class="column-top-right">Sida
+                <%= y+1 %> av
+                    <%= pages %>
             </div>
         </div>
-        <%} %>
+
+        <% if (y == 0) { %>
+            <h1 class="">Inventering</h1>
+            <!-- <h2 class="">Användarkopia</h2> -->
+
+            <div>Listan genererades utifrån dessa filter:
+                <% for( let i = 0; i < filters.length; i++){ %>
+                    <span><%= filters[i][0] %>: <%=filters[i][1] %></span>
+                    <%} %>
+            </div>
+            <%  length = 13; spacer=0} %>
+
+                <div class="row">
+                    <div class="column7 border-top border-bottom border-left">verifierad</div>
+                    <div class="column7 border-top border-bottom border-left">Typ</div>
+                    <div class="column7 border-top border-bottom border-left">ID</div>
+                    <div class="column7 border-top border-bottom border-left">Användare</div>
+                    <div class="column7 border-top border-bottom border-left">Förvaras</div>
+                    <div class="column7 border-top border-bottom border-left border-right">Kommentar</div>
+                    <div class="column7 border-top border-bottom border-left border-right">Senast verifierad</div>
+
+                </div>
+                <% for( let i = 0; i < length; i++) {%>
+                    <% if (i < totalLength) { %>
+                        <div class="row">
+                            <span><%= (y-1)*spacer+distance %></span>
+                            <!-- status -->
+                            <div class="column7 border-bottom border-left">
+                                <%= items[i][0] %>
+                            </div>
+                            <!-- type -->
+                            <div class="column7 border-bottom border-left">
+                                <%= items[i][1] %>
+                            </div>
+                            <!-- number -->
+                            <div class="column7 border-bottom border-left">
+                                <%= items[i][2] %>
+                            </div>
+                            <!-- user -->
+                            <div class="column7 border-bottom border-left">
+                                <%= items[i][3] %>
+                            </div>
+                            <!-- location -->
+                            <div class="column7 border-bottom border-left">
+                                <%= items[i][4] %>
+                            </div>
+                            <!-- comment -->
+                            <div class="column7 border-bottom border-left">
+                                <%= items[i][5] %>
+                            </div>
+                            <!-- last verified -->
+                            <div class="column7 border-bottom border-left border-right">
+                                <%= items[i][6] %>
+                            </div>
+                        </div>
+                        <%}} totalLength = totalLength - length; distance=13;%>
+                            <div class="page-break"></div>
+                            <% } %>
 </body>
 
 </html>
