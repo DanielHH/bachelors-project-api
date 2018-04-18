@@ -294,12 +294,9 @@ export class PdfUtilities {
    * @param template The kind of template to use
    */
   static fillTemplate(items, curPage, pages, template, filters=[]){
-    console.log(filters);
     const filt = filters.filter(filt => {
-      // console.log(filt);
       if (filt[1]) return filt;
     });
-    console.log(filt);
     const templatePath = './pdfTemplates/';
     var compiled = ejs.compile(fs.readFileSync(templatePath + template, 'utf8'));
     return compiled({items: items, pages: pages, curDate: moment(new Date()).format('YYYY-MM-DD'), filters: filt});
