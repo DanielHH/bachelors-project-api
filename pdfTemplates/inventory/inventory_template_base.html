@@ -14,7 +14,7 @@
 
     <%  let totalLength = items.length; let distance = 0; for( let y = 0; y < pages; y++){ let length=16; let spacer=16; %>
 
-        <div class="row bottom-spacer">
+        <div class="bottom-spacer">
             <div class="column-top-left">
                 <%= curDate %>
             </div>
@@ -28,10 +28,16 @@
             <h1 class="">Inventering</h1>
             <!-- <h2 class="">Användarkopia</h2> -->
 
-            <div>Listan genererades utifrån dessa filter:
-                <% for( let i = 0; i < filters.length; i++){ %>
-                    <span><%= filters[i][0] %>: <%=filters[i][1] %></span>
-                    <%} %>
+            <div>
+                <% let filterTitle = false;
+                   for( let i = 0; i < filters.length; i++){ 
+                    if (!filterTitle) {%>
+                    <span>Listan genererades utifrån dessa filter: </span>
+                    <% filterTitle=true;} %>
+                        <span><%= filters[i][0] %></span>
+                        <%if (i < filters.length-1) {%>
+                            <span>,</span>
+                            <% }} %>
             </div>
             <%  length = 13; spacer=0} %>
 
@@ -46,41 +52,43 @@
 
                 </div>
                 <% for( let i = 0; i < length; i++) {%>
-                    <% if (i < totalLength) { %>
-                        <div class="row">
-                            <span><%= (y-1)*spacer+distance %></span>
+                    <% if (i < totalLength) {  let index = i+(y-1)*spacer+distance;%>
+                        <div class="">
                             <!-- status -->
                             <div class="column7 border-bottom border-left">
-                                <%= items[i][0] %>
+                                <%= items[index][0] %>
                             </div>
                             <!-- type -->
                             <div class="column7 border-bottom border-left">
-                                <%= items[i][1] %>
+                                <%= items[index][1] %>
                             </div>
                             <!-- number -->
                             <div class="column7 border-bottom border-left">
-                                <%= items[i][2] %>
+                                <%= items[index][2] %>
                             </div>
                             <!-- user -->
                             <div class="column7 border-bottom border-left">
-                                <%= items[i][3] %>
+                                <%= items[index][3] %>
                             </div>
                             <!-- location -->
                             <div class="column7 border-bottom border-left">
-                                <%= items[i][4] %>
+                                <%= items[index][4] %>
                             </div>
                             <!-- comment -->
                             <div class="column7 border-bottom border-left">
-                                <%= items[i][5] %>
+                                <%= items[index][5] %>
                             </div>
                             <!-- last verified -->
                             <div class="column7 border-bottom border-left border-right">
-                                <%= items[i][6] %>
+                                <%= items[index][6] %>
                             </div>
                         </div>
-                        <%}} totalLength = totalLength - length; distance=13;%>
+                        <%}} totalLength = totalLength - length;
+                         distance=13;
+                         if (y < pages-1) {
+                         %>
                             <div class="page-break"></div>
-                            <% } %>
+                            <% }} %>
 </body>
 
 </html>

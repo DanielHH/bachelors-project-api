@@ -269,7 +269,6 @@ export class PdfUtilities {
       i++;
       items.push(['', type, number, user, location, comment, date])
     }
-
     return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html', filters);
   }
 
@@ -279,33 +278,12 @@ export class PdfUtilities {
    * @param itemList A list of items to be turned into filled templates
    * @param path The path where the template is to be saved
    */
-  generatePages(dataFiller: Function, itemList: any[], path, filters){
-    let items = itemList.length
-    const itemsThatFit = 14;
-    if (items <= itemsThatFit) {
-      return this.filePromise(dataFiller(items, itemList, 'base', 1, 1, filters), path);
-    } else {
-      const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit+2))+1;
-      /*const startPage = dataFiller(itemsThatFit, itemList, 'base', 1, pages, filters);
-      
-      items -= itemsThatFit;
-      let itemsLeft = itemList.slice(itemsThatFit);
-      const extraPages: any[] = new Array(pages - 1);
-
-      for (let page = 2; page <= pages; page++) {
-        if (items > itemsThatFit+2) {
-          extraPages[page - 2] = dataFiller(itemsThatFit+2, itemsLeft, 'extra', page, pages, filters);
-          items -= itemsThatFit+2;
-          itemsLeft = itemsLeft.slice(itemsThatFit+2);
-        }else {
-          extraPages[page - 2] = dataFiller(items, itemsLeft, 'extra', page, pages, filters);
-        }
-      }*/
-      
-      const pdfFilePath = './pdfs' + path;
-      return this.filePromise(dataFiller(items, itemList, 'base', 1 , pages), path);
-      // return this.pdfPagesSync(pdfFilePath, extraPages, startPage)
-    }
+  generatePages(dataFiller: Function, itemList: any[], path, filters:any[]){
+    let items = itemList.length;
+    const itemsThatFit = 13;
+    const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit+3))+1;
+    const pdfFilePath = './pdfs' + path;
+    return this.filePromise(dataFiller(items, itemList, 'base', 1 , pages, filters), path);
   }
 
   /**
@@ -316,9 +294,15 @@ export class PdfUtilities {
    * @param template The kind of template to use
    */
   static fillTemplate(items, curPage, pages, template, filters=[]){
+    console.log(filters);
+    const filt = filters.filter(filt => {
+      // console.log(filt);
+      if (filt[1]) return filt;
+    });
+    console.log(filt);
     const templatePath = './pdfTemplates/';
     var compiled = ejs.compile(fs.readFileSync(templatePath + template, 'utf8'));
-    return compiled({items: items, /*curPage: curPage,*/ pages: pages, curDate: moment(new Date()).format('YYYY-MM-DD'), filters: filters});
+    return compiled({items: items, pages: pages, curDate: moment(new Date()).format('YYYY-MM-DD'), filters: filt});
   }
 
   /**
@@ -380,6 +364,7 @@ export class PdfUtilities {
    * @param pdfFilePath the path where the template is to be saved
    * @param extraPages the secondary pages of the template
    * @param startPage the main page of the template
+   * @deprecated Since we no longer need to merge multiple files
    */
   pdfPagesSync(pdfFilePath, extraPages, startPage) {
     const fileNames = [];
