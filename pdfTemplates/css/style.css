@@ -5,12 +5,13 @@ html {
 
 body {
   background-color: white;
-  font-family: sans-serif;
+  font-family: sans-serif !important;
   width: 794px;
   height: 1028px;
 }
 
 /* Container CSS */
+
 .container {
   margin: 0px 40px 0px 78px;
   white-space: nowrap;
@@ -35,10 +36,12 @@ p {
   margin: 0 !important;
   width: 100% !important;
   white-space: normal;
-  word-break: break-all;
+  overflow-wrap: break-word;
+  font-family: sans-serif !important;
 }
 
 /* Font CSS */
+
 .font-12 {
   font-size: 12px !important;
 }
@@ -64,6 +67,7 @@ p {
 }
 
 /* Alignment CSS */
+
 .align-center {
   position: absolute;
   top: 50%;
@@ -85,6 +89,10 @@ p {
 
 .align-right {
   text-align: right !important;
+}
+
+.mt-2 {
+  margin-top: 2px !important;
 }
 
 .mt-4 {
@@ -131,6 +139,10 @@ p {
   min-height: 50px;
 }
 
+.mh-28 {
+  min-height: 28px;
+}
+
 .s-32 {
   width: calc(100% - 32px);
 }
@@ -139,7 +151,24 @@ p {
   padding-top: 2px !important;
 }
 
+.pb-2 {
+  padding-bottom: 2px !important;
+}
+
+.pl-2 {
+  padding-left: 2px !important;
+}
+
+.pr-2 {
+  padding-right: 2px !important;
+}
+
+.px-2 {
+  padding: 0 2px !important;
+}
+
 /* Border CSS */
+
 .border-bottom {
   border-bottom: 2px solid black;
 }
@@ -150,9 +179,12 @@ p {
 
 span {
   position: relative;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 /* Table CSS */
+
 .table {
   border: 2px solid black;
 }
@@ -170,7 +202,28 @@ span {
   border: none;
 }
 
+.table p {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 99% !important;
+}
+
+.table .inventory-row {
+  border-bottom: 2px solid black;
+}
+
+.table .row .col {
+  vertical-align: top !important;
+}
+
+.table .inventory-row:last-child {
+  border: none !important;
+}
+
 /* custom  */
+
 .page-break {
   page-break-after: always;
 }

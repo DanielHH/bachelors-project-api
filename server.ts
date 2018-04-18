@@ -67,7 +67,8 @@ class Server {
 
   private config() {
     this.app.use(logger('dev'));
-    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.json({limit: '50mb'}));
+    this.app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
     this.app.use(methodOverride());
     this.app.use(cors());
 
