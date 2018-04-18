@@ -1,0 +1,111 @@
+<!-- <!DOCTYPE html pdfTemplates/card> -->
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="pdfTemplates/css/style.css" />
+  <title></title>
+</head>
+
+
+
+<body>
+  <% let pages = Math.ceil(items.length / 13); for(var i=0; i < pages; i++) { %>
+    <div class="container">
+
+      <!-- Page header -->
+      <div class="header">
+        <div class="row font-12">
+          <div class="col">
+            <span class="align-center">
+              <%= currentDate %>
+            </span>
+          </div>
+          <div class="col">
+            <span class="align-center align-right">Sida
+              <%= i+1 %> av
+                <%= pages %>
+            </span>
+          </div>
+        </div>
+        <div class="row font-12 mt-16">
+          <span>Listan är skapad utifrån följande filter: <% for(var j=0; j < filters.length; j++) { %>
+            <%= filters[j] %><% if(j < filters.length - 1) {%>,
+            <% } } %>
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="align-middle">
+          <span class="font-32 border-bottom">Inventering</span>
+        </div>
+      </div>
+
+      <div class="table font-12 mt-16">
+
+        <% for(var l=0; (l < 13) && ((i*13)+l < items.length); l++) { %>
+          <div class="inventory-row">
+
+          <div class="row mt-2">
+            <div class="col"><span class="text-bold pl-2">Typ: </span>
+              <span>
+                <% let item = items[(i*13+l)]; if (item.itemType.id == 1) { %> 
+                  <%= item.card.cardType.name %>
+                <% } else { %>
+                  <%= item.document.documentType.name %>
+                <% } %>
+              </span>
+            </div>
+            <div class="col"><span class="text-bold">ID: </span>
+              <span>
+                <% if (item.itemType.id == 1) { %> 
+                  <%= item.card.cardNumber %>
+                <% } else { %>
+                  <%= item.document.documentNumber %>
+                <% } %>
+            </span>
+          </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col">
+              <span class="text-bold pl-2">Plats: </span>
+              <span>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.location %>
+                  <% } else { %>
+                    <%= item.document.location %>
+                  <% } %>
+              </span>
+            </div>
+            <div class="col"><span class="text-bold">Användare: </span>
+              <span>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.user.name %>
+                  <% } else { %>
+                    <%= item.document.user.name %>
+                  <% } %>
+              </span>
+            </div>
+          </div>
+          <div class="row mh-28 mt-2">
+            <div class="pl-2">
+              <span class="text-bold">Kommentar:</span>
+              <span>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.comment %>
+                  <% } else { %>
+                    <%= item.document.comment %>
+                  <% } %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <% } %>
+    </div>
+    </div>
+    <div class="page-break"></div>
+    <% } %>
+</body>
+</html>
