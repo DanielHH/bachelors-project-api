@@ -75,16 +75,14 @@ export class PdfUtilities {
     );
     // Add variables to template
     const html = compiled({
-      serNumber: body.documentNumber,
-      info: body.name,
-      type: body.documentType.name,
-      sender: body.sender,
-      dokDate: moment(body.documentDate).format('YYYY-MM-DD'),
-      arrDate: moment(body.registrationDate).format('YYYY-MM-DD'),
-      receiver: body.user.name,
-      comment: body.comment,
-      location: body.location,
-      curDate: moment(body.modifiedDate).format('YYYY-MM-DD')
+      currentDate: moment(new Date()).format('YYYY-MM-DD'),
+      documentType: body.documentType.name,
+      documentNumber: body.documentNumber,
+      documentName: body.name,
+      documentLocation: body.location,
+      documentComment: body.comment,
+      documentUser: body.user.name,
+      adminUser: body.registrator,
     });
     return this.receiptPromise(html, receipt, pdfType, body);
   }
