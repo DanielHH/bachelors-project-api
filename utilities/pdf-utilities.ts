@@ -99,7 +99,8 @@ export class PdfUtilities {
     // Add variables to template
     const html = compiled({
       currentDate: moment(new Date()).format('YYYY-MM-DD'),
-      items: [{ id: 1 }, { id: 2 }],
+      items: [{ id: 1, cardType: {id: 1, name: "test"}, cardNumber: "A435478923", location: "Testskåp 1", user: {name: "Pummelinas pum"}, comment: "Här kanske man kan skriva något lång om man orkar, men orkar man verkligen det? Nej det gör man faktiskt inte, men ändå görs det. Helt otroligt! ;)" },
+       { id: 2, documentType: { id: 1, name: "prutt"}, documentNumber: "D476343", location: "Testskåp 1", user: {name: "Pummelinas pum"}, comment: "Här kanske man kan skriva något lång om man orkar, men orkar man verkligen det? Nej det gör man faktiskt inte, men ändå görs det. Helt otroligt! ;)" }],
       filters: ['test', 'test2'],
       pages: 1
     });

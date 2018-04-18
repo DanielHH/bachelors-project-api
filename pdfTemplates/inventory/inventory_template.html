@@ -48,15 +48,43 @@
           <div class="inventory-row">
 
           <div class="row mt-2">
-            <div class="col"><p class="text-bold pl-2">Typ:<%= items[(i*13+l)].id %></p></div>
-            <div class="col"><p class="text-bold">ID:</p></div>
+            <div class="col"><span class="text-bold pl-2">Typ: </span>
+              <span>
+                <% let item = items[(i*13+l)]; if (item.cardType) { %> 
+                  <%= item.cardType.name %>
+                <% } else { %>
+                  <%= item.documentType.name %>
+                <% } %>
+              </span>
+            </div>
+            <div class="col"><span class="text-bold">ID: </span>
+              <span>
+                <% if (item.cardNumber) { %> 
+                  <%= item.cardNumber %>
+                <% } else { %>
+                  <%= item.documentNumber %>
+                <% } %>
+            </span>
+          </div>
           </div>
           <div class="row mt-2 ml-1">
-            <div class="col"><span class="text-bold pl-2">Plats:</span></div>
-            <div class="col"><span class="text-bold">Användare:</span></div>
+            <div class="col">
+              <span class="text-bold pl-2">Plats: </span>
+              <span>
+                <%= item.location %>
+              </span>
+            </div>
+            <div class="col"><span class="text-bold">Användare: </span>
+              <span>
+                <%= item.user.name %>
+              </span>
+            </div>
           </div>
           <div class="row mh-28 mt-2 ml-1">
-            <span class="text-bold pl-2">Kommentar:</span><span></span>
+            <span class="text-bold pl-2">Kommentar:</span>
+            <span>
+              <%= item.comment %>
+            </span>
           </div>
         </div>
         <% } %>
