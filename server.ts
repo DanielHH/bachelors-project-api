@@ -381,7 +381,6 @@ class Server {
       res.send({ message: 'success' });
     });
 
-    // LOGGAD
     this.app.post('/addNewCard', (req, res) => {
       this.sqlUtil.sqlInsert('Card', new Card(req.body.card)).then(id => {
         req.body.card.id = Number(id);
@@ -403,7 +402,6 @@ class Server {
       });
     });
 
-    // LOGGAD
     this.app.post('/addNewDocument', (req, res) => {
       this.sqlUtil.sqlInsert('Document', new Document(req.body.document)).then(id => {
         req.body.document.id = Number(id);
@@ -425,7 +423,6 @@ class Server {
       });
     });
 
-    // LOGGAD
     this.app.post('/addNewReceipt', (req, res) => {
       this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body.receipt)).then(id => {
         let table;
