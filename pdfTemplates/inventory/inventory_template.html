@@ -72,20 +72,20 @@
             <div class="col">
               <span class="text-bold pl-2">Plats: </span>
               <span>
-                  <% if (item.itemType.id == 1) { %> 
-                    <%= item.card.location %>
-                  <% } else { %>
-                    <%= item.document.location %>
-                  <% } %>
+                <% if (item.itemType.id == 1) { %> 
+                  <%= item.card.location %>
+                <% } else { %>
+                  <%= item.document.location %>
+                <% } %>
               </span>
             </div>
             <div class="col"><span class="text-bold">Användare: </span>
               <span>
-                  <% if (item.itemType.id == 1) { %> 
-                    <%= item.card.user.name %>
-                  <% } else { %>
-                    <%= item.document.user.name %>
-                  <% } %>
+                <% if (item.itemType.id == 1) { %> 
+                  <%= item.card.user.name %>
+                <% } else { %>
+                  <%= item.document.user.name %>
+                <% } %>
               </span>
             </div>
           </div>
@@ -93,11 +93,11 @@
             <div class="pl-2">
               <span class="text-bold">Kommentar:</span>
               <span>
-                  <% if (item.itemType.id == 1) { %> 
-                    <%= item.card.comment %>
-                  <% } else { %>
-                    <%= item.document.comment %>
-                  <% } %>
+                <% if (item.itemType.id == 1) { %> 
+                  <%= item.card.comment %>
+                <% } else { %>
+                  <%= item.document.comment %>
+                <% } %>
               </span>
             </div>
           </div>
