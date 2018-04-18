@@ -104,7 +104,7 @@ export class PdfUtilities {
    * @returns a promise of a dynamically sized pdf
    */
   createInventory(inventory: VerificationDTO[], filters: any[]) {
-    const compiled = ejs.compile(fs.readFileSync(this.templatePath + '/inventory/inventory_template.html', 'utf8'), {
+    const compiled = ejs.render(fs.readFileSync(this.templatePath + '/inventory/inventory_template.html', 'utf8'), {
       currentDate: moment(new Date()).format('YYYY-MM-DD'),
       items: inventory,
       filters: filters
