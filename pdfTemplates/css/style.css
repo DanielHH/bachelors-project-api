@@ -36,7 +36,7 @@ p {
   margin: 0 !important;
   width: 100% !important;
   white-space: normal;
-  word-break: break-all;
+  overflow-wrap: break-word;
   font-family: sans-serif !important;;
 }
 
@@ -180,7 +180,7 @@ p {
 span {
   position: relative;
   white-space: normal;
-  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 /* Table CSS */

@@ -63,8 +63,6 @@ class Server {
     }
 
     this.httpRequests();
-
-    this.pdfUtil.testGenerate();
   }
 
   private config() {
