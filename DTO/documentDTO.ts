@@ -87,6 +87,11 @@ export class DocumentDTO {
    */
   lastVerificationDate?: Date;
 
+  /**
+   * Registrator
+   */
+  registrator?: string;
+
 
   constructor();
   constructor(data: any, fromOtherType?: boolean);
