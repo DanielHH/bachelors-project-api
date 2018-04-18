@@ -1,0 +1,68 @@
+<!-- <!DOCTYPE html pdfTemplates/card> -->
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="pdfTemplates/css/style.css" />
+  <title></title>
+</head>
+
+
+
+<body>
+  <% for(var i=0; i < pages; i++) { %>
+    <div class="container">
+
+      <!-- Page header -->
+      <div class="header">
+        <div class="row font-12">
+          <div class="col">
+            <span class="align-center">
+              <%= currentDate %>
+            </span>
+          </div>
+          <div class="col">
+            <span class="align-center align-right">Sida
+              <%= i+1 %> av
+                <%= pages %>
+            </span>
+          </div>
+        </div>
+        <div class="row font-12 mt-16">
+          <span>Listan är skapad utifrån följande filter:
+
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="align-middle">
+          <span class="font-32 border-bottom">Inventering</span>
+        </div>
+      </div>
+
+      <div class="table font-12 mt-16">
+
+        <% for(var l=0; l < 2; l++) { %>
+          <div class="inventory-row">
+
+          <div class="row mt-2">
+            <div class="col"><p class="text-bold pl-2">Typ:<%= items[(i*13+l)].id %></p></div>
+            <div class="col"><p class="text-bold">ID:</p></div>
+          </div>
+          <div class="row mt-2 ml-1">
+            <div class="col"><span class="text-bold pl-2">Plats:</span></div>
+            <div class="col"><span class="text-bold">Användare:</span></div>
+          </div>
+          <div class="row mh-28 mt-2 ml-1">
+            <span class="text-bold pl-2">Kommentar:</span><span></span>
+          </div>
+        </div>
+        <% } %>
+    </div>
+    </div>
+    <div class="page-break"></div>
+    <% } %>
+</body>
+</html>

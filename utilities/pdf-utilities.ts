@@ -29,12 +29,18 @@ export class PdfUtilities {
     // Read and compile variable html template
     const pdfType = data[0];
     switch (pdfType) {
-      case "card": return this.createCardReceipt(data[1], data[2], pdfType);
-      case "document": return this.createDokReceipt(data[1], data[2], pdfType);
-      case "inventory": return this.createInventory(data[1], data[2]);      
-      case "receipts": return this.createReceiptList(data[1], data[2]);
-      case "documents": return this.createDokList(data[1], data[2]);
-      case "cards": return this.createCardList(data[1], data[2]);
+      case 'card':
+        return this.createCardReceipt(data[1], data[2], pdfType);
+      case 'document':
+        return this.createDokReceipt(data[1], data[2], pdfType);
+      case 'inventory':
+        return this.createInventory(data[1], data[2]);
+      case 'receipts':
+        return this.createReceiptList(data[1], data[2]);
+      case 'documents':
+        return this.createDokList(data[1], data[2]);
+      case 'cards':
+        return this.createCardList(data[1], data[2]);
     }
   }
 
@@ -56,7 +62,7 @@ export class PdfUtilities {
       cardExpirationDate: body.expirationDate,
       cardComment: body.comment,
       cardUser: body.user.name,
-      adminUser: body.registrator,
+      adminUser: body.registrator
     });
 
     return this.receiptPromise(html, receipt, pdfType, body);
@@ -82,9 +88,24 @@ export class PdfUtilities {
       documentLocation: body.location,
       documentComment: body.comment,
       documentUser: body.user.name,
-      adminUser: body.registrator,
+      adminUser: body.registrator
     });
     return this.receiptPromise(html, receipt, pdfType, body);
+  }
+
+  testGenerate() {
+    const compiled = ejs.compile(fs.readFileSync(this.templatePath + '/inventory/inventory_template.html', 'utf8'));
+
+    // Add variables to template
+    const html = compiled({
+      currentDate: moment(new Date()).format('YYYY-MM-DD'),
+      items: [{ id: 1 }, { id: 2 }],
+      filters: ['test', 'test2'],
+      pages: 1
+    });
+
+    const pdfFilePath = './pdfs/' + 'testttttt.pdf';
+    pdf.create(html, this.options).toFile(pdfFilePath, (res, err) => {});
   }
 
   /**
@@ -92,7 +113,7 @@ export class PdfUtilities {
    * @param inventory a list of items to be verified
    * @returns a promise of a dynamically sized pdf
    */
-  createInventory(inventory: VerificationDTO[], filters:any[]) {
+  createInventory(inventory: VerificationDTO[], filters: any[]) {
     return this.generatePages(this.inventory, inventory, '/inventory', filters);
   }
 
@@ -101,7 +122,7 @@ export class PdfUtilities {
    * @param receipts a list of receipts
    * @returns a promise of a dynamically sized pdf
    */
-  createReceiptList(receipts: ReceiptDTO[], filters:any[]){
+  createReceiptList(receipts: ReceiptDTO[], filters: any[]) {
     return this.generatePages(this.receipts, receipts, '/receipts', filters);
   }
 
@@ -110,7 +131,7 @@ export class PdfUtilities {
    * @param documents a list of documents
    * @returns a promise of a dynamically sized pdf
    */
-  createDokList(documents: DocumentDTO[], filters:any[]){
+  createDokList(documents: DocumentDTO[], filters: any[]) {
     return this.generatePages(this.documents, documents, '/documents', filters);
   }
 
@@ -119,7 +140,7 @@ export class PdfUtilities {
    * @param cards a list of cards
    * @returns a promise of a dynamically sized pdf
    */
-  createCardList(cards: CardDTO[], filters:any[]){
+  createCardList(cards: CardDTO[], filters: any[]) {
     return this.generatePages(this.cards, cards, '/cards', filters);
   }
 
@@ -132,7 +153,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  cards(length, cards: CardDTO[], template, curPage, pages, filters:any[]){
+  cards(length, cards: CardDTO[], template, curPage, pages, filters: any[]) {
     let items = [];
     let status, type, number, user, endDate, sender, comment, location;
 
@@ -165,7 +186,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  documents(length, documents: DocumentDTO[], template, curPage, pages, filters:any[]) {
+  documents(length, documents: DocumentDTO[], template, curPage, pages, filters: any[]) {
     let items = [];
     let status, type, number, user, desc, sender, comment, location;
 
@@ -200,7 +221,7 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  receipts(length, receipts: ReceiptDTO[], template, curPage, pages, filters:any[]) {
+  receipts(length, receipts: ReceiptDTO[], template, curPage, pages, filters: any[]) {
     let items = [];
     let status, type, number, user, startDate, endDate;
 
@@ -232,7 +253,14 @@ export class PdfUtilities {
    * @param curPage The current working page
    * @param pages The total number of pages
    */
-  inventory(length: number, verifications: VerificationDTO[], template: string, curPage: number, pages: number, filters:any[]) {
+  inventory(
+    length: number,
+    verifications: VerificationDTO[],
+    template: string,
+    curPage: number,
+    pages: number,
+    filters: any[]
+  ) {
     let items = [];
     let date, type, number, user, location, comment;
 
@@ -265,9 +293,15 @@ export class PdfUtilities {
         }
       }
       i++;
-      items.push(['', type, number, user, location, comment, date])
+      items.push(['', type, number, user, location, comment, date]);
     }
-    return PdfUtilities.fillTemplate(items, curPage, pages, '/inventory/inventory_template_' + template + '.html', filters);
+    return PdfUtilities.fillTemplate(
+      items,
+      curPage,
+      pages,
+      '/inventory/inventory_template_' + template + '.html',
+      filters
+    );
   }
 
   /**
@@ -276,12 +310,13 @@ export class PdfUtilities {
    * @param itemList A list of items to be turned into filled templates
    * @param path The path where the template is to be saved
    */
-  generatePages(dataFiller: Function, itemList: any[], path, filters:any[]){
+  generatePages(dataFiller: Function, itemList: any[], path, filters: any[]) {
+    console.log(itemList[0]);
     let items = itemList.length;
     const itemsThatFit = 13;
-    const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit+3))+1;
+    const pages = Math.ceil((items - itemsThatFit) / (itemsThatFit + 3)) + 1;
     const pdfFilePath = './pdfs' + path;
-    return this.filePromise(dataFiller(items, itemList, 'base', 1 , pages, filters), path);
+    return this.filePromise(dataFiller(items, itemList, 'base', 1, pages, filters), path);
   }
 
   /**
@@ -291,13 +326,13 @@ export class PdfUtilities {
    * @param pages The total number of pages of the template
    * @param template The kind of template to use
    */
-  static fillTemplate(items, curPage, pages, template, filters=[]){
+  static fillTemplate(items, curPage, pages, template, filters = []) {
     const filt = filters.filter(filt => {
       if (filt[1]) return filt;
     });
     const templatePath = './pdfTemplates/';
     var compiled = ejs.compile(fs.readFileSync(templatePath + template, 'utf8'));
-    return compiled({items: items, pages: pages, curDate: moment(new Date()).format('YYYY-MM-DD'), filters: filt});
+    return compiled({ items: items, pages: pages, curDate: moment(new Date()).format('YYYY-MM-DD'), filters: filt });
   }
 
   /**
