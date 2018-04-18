@@ -39,7 +39,7 @@
 
       <div class="row">
         <div class="align-middle">
-          <span class="font-32 border-bottom">Kort</span>
+          <span class="font-32 border-bottom">Kvittenser</span>
         </div>
       </div>
 
@@ -52,13 +52,21 @@
               <div class="col">
                 <span class="text-bold pl-2">Status: </span>
                 <span>                  
-                  <%= item.status.name %>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.status.name %>
+                  <% } else { %>
+                    <%= item.document.status.name %>
+                  <% } %>
                 </span>
               </div>
               <div class="col">
                 <span class="text-bold">Typ: </span>
                 <span>
-                  <%= item.cardType.name %>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.cardType.name %>
+                  <% } else { %>
+                    <%= item.document.documentType.name %>
+                  <% } %>
                 </span>
               </div>
             </div>
@@ -66,21 +74,11 @@
               <div class="col">
                 <span class="text-bold pl-2">ID: </span>
                 <span>
-                  <%= item.cardNumber %>
-                </span>
-              </div>
-              <div class="col">
-                <span class="text-bold">Utgångsdatum: </span>
-                <span>
-                  <%= formatDate(item.expirationDate) %>
-                </span>
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col">
-                <span class="text-bold pl-2">Plats: </span>
-                <span>
-                  <%= item.location %>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.cardNumber %>
+                  <% } else { %>
+                    <%= item.document.documentNumber %>
+                  <% } %>
                 </span>
               </div>
               <div class="col">
@@ -90,11 +88,31 @@
                 </span>
               </div>
             </div>
+            <div class="row mt-2">
+              <div class="col">
+                <span class="text-bold pl-2">Startdatum: </span>
+                <span>
+                  <%= formatDate(item.startDate) %>
+                </span>
+              </div>
+              <div class="col">
+                <span class="text-bold">Slutdatum: </span>
+                <span>
+                  <% if (item.endDate) { %>
+                  <%= formatDate(item.endDate) %>
+                  <% } %>
+                </span>
+              </div>
+            </div>
             <div class="row mh-28 mt-2">
               <div class="pl-2">
                 <span class="text-bold">Kommentar:</span>
                 <span>
-                  <%= item.comment %>
+                  <% if (item.itemType.id == 1) { %> 
+                    <%= item.card.comment %>
+                  <% } else { %>
+                    <%= item.document.comment %>
+                  <% } %>
                 </span>
               </div>
             </div>

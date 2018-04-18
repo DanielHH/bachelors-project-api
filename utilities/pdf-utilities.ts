@@ -150,8 +150,14 @@ export class PdfUtilities {
    * @returns a promise of a dynamically sized pdf
    */
   createReceiptList(receipts: ReceiptDTO[], filters: any[]) {
-    return null;
-    //return this.generatePages(this.receipts, receipts, '/receipts', filters);
+    const compiled = ejs.render(fs.readFileSync(this.templatePath + '/receipt/receipt_list_template.html', 'utf8'), {
+      currentDate: moment(new Date()).format('YYYY-MM-DD'),
+      items: receipts,
+      filters: filters,
+      formatDate: this.formatDate
+    });
+
+    return this.filePromise(compiled, '/receipts');
   }
 
   /**
