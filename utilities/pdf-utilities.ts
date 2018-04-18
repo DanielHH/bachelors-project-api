@@ -99,7 +99,6 @@ export class PdfUtilities {
    * @returns a promise of a dynamically sized pdf
    */
   createInventory(inventory: VerificationDTO[], filters: any[]) {
-
     const compiled = ejs.compile(fs.readFileSync(this.templatePath + '/inventory/inventory_template.html', 'utf8'));
 
     const html = compiled({
@@ -109,6 +108,23 @@ export class PdfUtilities {
     });
 
     return this.filePromise(html, '/inventory');
+  }
+
+  /**
+   * Generates a dynamically sized pdf
+   * @param cards a list of cards
+   * @returns a promise of a dynamically sized pdf
+   */
+  createCardList(cards: CardDTO[], filters: any[]) {
+    const compiled = ejs.compile(fs.readFileSync(this.templatePath + '/card/card_list_template.html', 'utf8'));
+
+    const html = compiled({
+      currentDate: moment(new Date()).format('YYYY-MM-DD'),
+      items: cards,
+      filters: filters
+    });
+
+    return this.filePromise(html, '/cards');
   }
 
   /**
@@ -127,15 +143,6 @@ export class PdfUtilities {
    */
   createDokList(documents: DocumentDTO[], filters: any[]) {
     return this.generatePages(this.documents, documents, '/documents', filters);
-  }
-
-  /**
-   * Generates a dynamically sized pdf
-   * @param cards a list of cards
-   * @returns a promise of a dynamically sized pdf
-   */
-  createCardList(cards: CardDTO[], filters: any[]) {
-    return this.generatePages(this.cards, cards, '/cards', filters);
   }
 
   /**
