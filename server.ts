@@ -526,7 +526,7 @@ class Server {
     });
 
     this.app.put('/updateReceipt', (req, res) => {
-      this.sqlUtil.sqlUpdate('Receipt', new Receipt(req.body)).then(id => {
+      this.sqlUtil.sqlUpdate('Receipt', new Receipt(req.body.receipt)).then(id => {
         let table;
         let item;
         if (req.body.card) {
