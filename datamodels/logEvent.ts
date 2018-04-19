@@ -40,7 +40,6 @@ export class LogEvent {
   constructor(logEvent: any);
 
   constructor(logEvent?: any) {
-    
     try {
       if (logEvent.id) {
         this.ID = Number(logEvent.id);

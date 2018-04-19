@@ -1,5 +1,5 @@
-import { UserTypeDTO } from "./userTypeDTO";
-import { StatusTypeDTO } from "./statusTypeDTO";
+import { UserTypeDTO } from './userTypeDTO';
+import { StatusTypeDTO } from './statusTypeDTO';
 
 /**
  * User data transfer object
@@ -52,8 +52,7 @@ export class UserDTO {
   constructor(data?: any, fromOtherType?: boolean) {
     if (fromOtherType) {
       this.fromOtherType(data);
-    }
-    else {
+    } else {
       this.fromUser(data);
     }
   }
@@ -68,8 +67,7 @@ export class UserDTO {
       this.creationDate = data.UserCreationDate;
       this.modifiedDate = data.UserModifiedDate;
       this.status = new StatusTypeDTO(data.UserStatusTypeID, data.UserStatusTypeName);
-
-    } catch (e) { }
+    } catch (e) {}
   }
 
   fromUser(user: any) {
@@ -82,6 +80,6 @@ export class UserDTO {
       this.creationDate = user.CreationDate;
       this.modifiedDate = user.ModifiedDate;
       this.status = new StatusTypeDTO(user.StatusTypeID, user.StatusTypeName);
-    } catch (e) { }
+    } catch (e) {}
   }
 }

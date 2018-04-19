@@ -1,11 +1,10 @@
-import { StatusType } from "../datamodels/statusType";
-import { StatusTypeDTO } from "./statusTypeDTO";
+import { StatusType } from '../datamodels/statusType';
+import { StatusTypeDTO } from './statusTypeDTO';
 
 /**
  * DocumentType data transfer object
  */
 export class DocumentTypeDTO {
-
   /**
    * Database ID of the document type
    */
@@ -37,8 +36,7 @@ export class DocumentTypeDTO {
   constructor(data?: any, fromOtherType?: boolean) {
     if (fromOtherType) {
       this.fromOtherType(data);
-    }
-    else {
+    } else {
       this.fromDocumentType(data);
     }
   }
@@ -50,8 +48,7 @@ export class DocumentTypeDTO {
       this.creationDate = data.DocumentTypeCreationDate;
       this.modifiedDate = data.DocumentTypeModifiedDate;
       this.status = new StatusTypeDTO(data.DocumentTypeStatusTypeID, data.DocumentTypeStatusTypeName);
-
-    } catch (e) { }
+    } catch (e) {}
   }
 
   fromDocumentType(documentType: any) {
@@ -61,7 +58,6 @@ export class DocumentTypeDTO {
       this.creationDate = documentType.CreationDate;
       this.modifiedDate = documentType.ModifiedDate;
       this.status = new StatusTypeDTO(documentType.StatusTypeID, documentType.StatusTypeName);
-    } catch (e) { }
+    } catch (e) {}
   }
-
 }

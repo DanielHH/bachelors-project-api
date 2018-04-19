@@ -36,8 +36,7 @@ export class CardTypeDTO {
   constructor(data?: any, fromOtherType?: boolean) {
     if (fromOtherType) {
       this.fromFromOtherType(data);
-    }
-    else {
+    } else {
       this.fromCardType(data);
     }
   }
@@ -49,8 +48,7 @@ export class CardTypeDTO {
       this.creationDate = data.CardTypeCreationDate;
       this.modifiedDate = data.CardTypeModifiedDate;
       this.status = new StatusTypeDTO(data.CardTypeStatusTypeID, data.CardTypeStatusTypeName);
-
-    } catch (e) { }
+    } catch (e) {}
   }
 
   fromCardType(cardType: any) {
@@ -60,6 +58,6 @@ export class CardTypeDTO {
       this.creationDate = cardType.CreationDate;
       this.modifiedDate = cardType.ModifiedDate;
       this.status = new StatusTypeDTO(cardType.StatusTypeID, cardType.StatusTypeName);
-    } catch (e) { }
+    } catch (e) {}
   }
 }

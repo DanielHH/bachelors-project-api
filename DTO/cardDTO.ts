@@ -76,15 +76,13 @@ export class CardDTO {
    */
   registrator?: string;
 
-
   constructor();
   constructor(data?: any, fromOtherType?: boolean);
 
   constructor(data?: any, fromOtherType?: boolean) {
     if (fromOtherType) {
       this.fromOtherType(data);
-    }
-    else {
+    } else {
       this.fromCard(data);
     }
   }
@@ -107,8 +105,7 @@ export class CardDTO {
       this.activeReceipt = Number(data.CardActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
-
-    } catch (e) { }
+    } catch (e) {}
   }
 
   fromCard(card: any) {
@@ -128,12 +125,11 @@ export class CardDTO {
       this.status = new StatusTypeDTO(card.StatusTypeID, card.StatusTypeName);
       if (card.ActiveReceipt) {
         this.activeReceipt = Number(card.ActiveReceipt);
-      }
-      else {
+      } else {
         this.activeReceipt = null;
       }
       this.lastVerificationID = Number(card.LastVerificationID);
       this.lastVerificationDate = card.LastVerificationDate;
-    } catch (e) { }
+    } catch (e) {}
   }
 }

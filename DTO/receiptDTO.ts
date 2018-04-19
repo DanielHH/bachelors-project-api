@@ -54,20 +54,17 @@ export class ReceiptDTO {
     try {
       this.id = Number(receipt.ID);
 
-      
       this.itemType = new ItemTypeDTO(receipt.ItemTypeID, receipt.ItemTypeName);
 
-      if(receipt.CardID) {
+      if (receipt.CardID) {
         this.card = new CardDTO(receipt, true);
-      }
-      else {
+      } else {
         this.card = null;
       }
 
-      if(receipt.DocumentID) {
+      if (receipt.DocumentID) {
         this.document = new DocumentDTO(receipt, true);
-      }
-      else {
+      } else {
         this.document = null;
       }
 
@@ -76,7 +73,6 @@ export class ReceiptDTO {
       this.startDate = receipt.StartDate;
       this.endDate = receipt.EndDate;
       this.url = receipt.host + '/pdfs/' + receipt.PDFName;
-
     } catch (e) {}
   }
 }

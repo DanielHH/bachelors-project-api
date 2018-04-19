@@ -1,19 +1,13 @@
-
 /**
  * Test data model
-*/
+ */
 export class TestModel {
+  id: number;
 
-    id: number;
-  
-    stringColumn: string;
+  stringColumn: string;
 
-    constructor(test?: any) {
-
-        this.id = test.ID;
-        this.stringColumn = test.StringColumn;
-
-    }
-  
+  constructor(test?: any) {
+    this.id = test.ID;
+    this.stringColumn = test.StringColumn;
+  }
 }
-

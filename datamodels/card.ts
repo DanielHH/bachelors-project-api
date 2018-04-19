@@ -1,8 +1,7 @@
 /**
  * Card data model
-*/
+ */
 export class Card {
-
   /**
    * Database ID of the card
    */
@@ -67,12 +66,10 @@ export class Card {
   constructor(card: any);
 
   constructor(card?: any) {
-
     try {
       if (card.id) {
         this.ID = card.id;
-      }
-      else {
+      } else {
         this.ID = null;
       }
       this.CardType = card.cardType.id;
@@ -80,8 +77,7 @@ export class Card {
 
       if (card.user.id) {
         this.UserID = card.user.id;
-      }
-      else {
+      } else {
         this.UserID = null;
       }
 
@@ -91,11 +87,10 @@ export class Card {
       this.CreationDate = card.creationDate;
       this.ModifiedDate = card.modifiedDate;
       this.Status = card.status.id;
-      
+
       if (card.activeReceipt) {
         this.ActiveReceipt = card.activeReceipt;
-      }
-      else {
+      } else {
         this.ActiveReceipt = null;
       }
 
@@ -104,10 +99,6 @@ export class Card {
       } else {
         this.LastVerification = null;
       }
-    }
-    catch (e) {
-
-    }
+    } catch (e) {}
   }
-
 }
