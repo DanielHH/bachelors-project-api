@@ -67,8 +67,8 @@ class Server {
 
   private config() {
     this.app.use(logger('dev'));
-    this.app.use(bodyParser.json({limit: '50mb'}));
-    this.app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+    this.app.use(bodyParser.json({ limit: '50mb' }));
+    this.app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
     this.app.use(methodOverride());
     this.app.use(cors());
 
@@ -83,7 +83,7 @@ class Server {
 
   httpRequests() {
     this.app.get('/getCards', (req, res) => {
-      const query =
+      let query =
         'SELECT Card.*,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'CardType.CreationDate AS CardTypeCreationDate, CardType.ModifiedDate AS CardTypeModifiedDate,' +
@@ -98,7 +98,14 @@ class Server {
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Card.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification)';
 
-      this.sqlUtil.sqlSelectQuery(query).then((cardList: any[]) => {
+      let queryData = [];
+
+      if (req.query.userID) {
+        query += ' WHERE Card.UserID=?';
+        queryData.push(req.query.userID);
+      }
+
+      this.sqlUtil.sqlSelectQuery(query, queryData).then((cardList: any[]) => {
         res.send(
           cardList.map(card => {
             return new CardDTO(card);
@@ -123,7 +130,7 @@ class Server {
     });
 
     this.app.get('/getDocuments', (req, res) => {
-      const query =
+      let query =
         'SELECT Document.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentType.CreationDate AS DocumentTypeCreationDate, DocumentType.ModifiedDate AS DocumentTypeModifiedDate,' +
@@ -138,7 +145,14 @@ class Server {
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
         'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification)';
 
-      this.sqlUtil.sqlSelectQuery(query).then((documentList: any[]) => {
+      let queryData = [];
+
+      if (req.query.userID) {
+        query += ' WHERE Document.UserID=?';
+        queryData.push(req.query.userID);
+      }
+
+      this.sqlUtil.sqlSelectQuery(query, queryData).then((documentList: any[]) => {
         res.send(
           documentList.map(document => {
             return new DocumentDTO(document);
@@ -320,12 +334,12 @@ class Server {
         'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Verification.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status)';
 
-        let queryData = [];
+      let queryData = [];
 
-        if (req.query.userID) {
-          query += ' WHERE Receipt.UserID=?';
-          queryData.push(req.query.userID);
-        }
+      if (req.query.userID) {
+        query += ' WHERE Verification.UserID=?';
+        queryData.push(req.query.userID);
+      }
 
       this.sqlUtil.sqlSelectQuery(query, queryData).then((verificationList: any[]) => {
         res.send(
@@ -390,10 +404,10 @@ class Server {
         req.body.card.id = Number(id);
         req.body.logEvent.card.id = req.body.card.id;
 
-        this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then((logID) => {
+        this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(logID => {
           req.body.logEvent.id = Number(logID);
           req.body.logEvent.logText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
-        
+
           res.send({ message: 'success', data: req.body });
         });
       });
@@ -411,10 +425,10 @@ class Server {
         req.body.document.id = Number(id);
         req.body.logEvent.document.id = req.body.document.id;
 
-        this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then((logID) => {
+        this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(logID => {
           req.body.logEvent.id = Number(logID);
           req.body.logEvent.logText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
-        
+
           res.send({ message: 'success', data: req.body });
         });
       });
@@ -446,7 +460,11 @@ class Server {
         this.sqlUtil.sqlUpdate(table, item).then(success => {
           this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
             req.body.logEvent.id = Number(id);
-            req.body.logEvent.LogText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
+            req.body.logEvent.LogText = _.replace(
+              req.body.logEvent.logType.logText,
+              '$data',
+              req.body.logEvent.logText
+            );
             res.send({ message: 'success', data: req.body });
           });
         });
@@ -475,7 +493,6 @@ class Server {
     });
 
     this.app.post('/addNewUser', (req, res) => {
-
       bcrypt.hash(atob(req.body.password), 12, (err, hash) => {
         req.body.password = hash;
         this.sqlUtil.sqlInsert('User', new User(req.body)).then(id => {
@@ -487,14 +504,17 @@ class Server {
 
     this.app.put('/updateCard', (req, res) => {
       this.sqlUtil.sqlUpdate('Card', new Card(req.body.cardItem)).then(success => {
-        if (success){
-          this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then((id) => {
+        if (success) {
+          this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(id => {
             req.body.logEvent.id = Number(id);
-            req.body.logEvent.LogText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
+            req.body.logEvent.LogText = _.replace(
+              req.body.logEvent.logType.logText,
+              '$data',
+              req.body.logEvent.logText
+            );
             res.send({ message: 'success', data: req.body });
           });
-        } 
-        else res.send({ message: 'failure' });
+        } else res.send({ message: 'failure' });
       });
     });
 
@@ -508,13 +528,16 @@ class Server {
     this.app.put('/updateDocument', (req, res) => {
       this.sqlUtil.sqlUpdate('Document', new Document(req.body.documentItem)).then(success => {
         if (success) {
-          this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then((id) => {
+          this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(id => {
             req.body.logEvent.id = Number(id);
-            req.body.logEvent.LogText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
+            req.body.logEvent.LogText = _.replace(
+              req.body.logEvent.logType.logText,
+              '$data',
+              req.body.logEvent.logText
+            );
             res.send({ message: 'success', data: req.body });
           });
-        }
-        else res.send({ message: 'failure' });
+        } else res.send({ message: 'failure' });
       });
     });
 
@@ -540,12 +563,16 @@ class Server {
         this.sqlUtil.sqlUpdate(table, item).then(success => {
           this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
             req.body.logEvent.id = Number(id);
-            req.body.logEvent.LogText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
+            req.body.logEvent.LogText = _.replace(
+              req.body.logEvent.logType.logText,
+              '$data',
+              req.body.logEvent.logText
+            );
             res.send({ message: 'success', data: req.body });
-        });      
+          });
+        });
       });
     });
-  });
 
     this.app.put('/updateDelivery', (req, res) => {
       this.sqlUtil.sqlUpdate('Delivery', new Delivery(req.body)).then(success => {
