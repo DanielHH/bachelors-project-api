@@ -293,7 +293,7 @@ class Server {
     });
 
     this.app.get('/getVerifications', (req, res) => {
-      const query =
+      let query =
         'SELECT Verification.*,' +
         'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
@@ -320,7 +320,14 @@ class Server {
         'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Verification.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status)';
 
-      this.sqlUtil.sqlSelectQuery(query).then((verificationList: any[]) => {
+        let queryData = [];
+
+        if (req.query.userID) {
+          query += ' WHERE Receipt.UserID=?';
+          queryData.push(req.query.userID);
+        }
+
+      this.sqlUtil.sqlSelectQuery(query, queryData).then((verificationList: any[]) => {
         res.send(
           verificationList.map(verification => {
             return new VerificationDTO(verification);
@@ -363,10 +370,6 @@ class Server {
           })
         );
       });
-    });
-
-    this.app.get('/genPDF', (req, res) => {
-      res.download('./pdfs/receipt.pdf');
     });
 
     this.app.post('/genPDF', (req, res) => {
