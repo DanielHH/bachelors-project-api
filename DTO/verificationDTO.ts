@@ -41,8 +41,7 @@ export class VerificationDTO {
   /**
    * Date of the verification
    */
-   verificationDate: Date;
-
+  verificationDate: Date;
 
   constructor();
   constructor(verification: any);
@@ -52,7 +51,7 @@ export class VerificationDTO {
       this.id = Number(verification.ID);
 
       this.verificationType = new VerificationTypeDTO(verification.ItemTypeID, verification.ItemTypeName);
-      
+
       this.itemType = new ItemTypeDTO(verification.ItemTypeID, verification.ItemTypeName);
 
       if (verification.CardID) {
@@ -69,9 +68,7 @@ export class VerificationDTO {
 
       this.user = new UserDTO(verification, true);
 
-
       this.verificationDate = verification.VerificationDate;
-
     } catch (e) {}
   }
 }

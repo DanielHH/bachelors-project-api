@@ -1,9 +1,7 @@
-
 /**
  * Document data model
-*/
+ */
 export class Document {
-
   /**
    * Database ID of the document
    */
@@ -70,8 +68,8 @@ export class Document {
   Status: number;
 
   /**
-  * Active receipt (if any)
-  */
+   * Active receipt (if any)
+   */
   ActiveReceipt?: number;
 
   /**
@@ -83,11 +81,9 @@ export class Document {
   constructor(document: any);
 
   constructor(document?: any) {
-
     if (document.id) {
       this.ID = document.id;
-    }
-    else {
+    } else {
       this.ID = null;
     }
     this.DocumentType = document.documentType.id;
@@ -98,14 +94,12 @@ export class Document {
     this.RegistrationDate = document.registrationDate;
     this.CreationDate = document.creationDate;
     this.ModifiedDate = document.modifiedDate;
-    
+
     if (document.user.id) {
       this.UserID = document.user.id;
-    }
-    else {
+    } else {
       this.UserID = null;
     }
-
 
     this.Location = document.location;
     this.Comment = document.comment;
@@ -113,11 +107,9 @@ export class Document {
 
     if (document.activeReceipt) {
       this.ActiveReceipt = document.activeReceipt;
-    }
-    else {
+    } else {
       this.ActiveReceipt = null;
     }
-
 
     if (document.lastVerificationID) {
       this.LastVerification = document.lastVerificationID;

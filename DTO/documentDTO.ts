@@ -1,12 +1,11 @@
-import { DocumentTypeDTO } from "./documentTypeDTO";
-import { UserDTO } from "./userDTO";
-import { StatusTypeDTO } from "./statusTypeDTO";
+import { DocumentTypeDTO } from './documentTypeDTO';
+import { UserDTO } from './userDTO';
+import { StatusTypeDTO } from './statusTypeDTO';
 
 /**
  * Document data transfer object
-*/
+ */
 export class DocumentDTO {
-
   /**
    * Database ID of the document
    */
@@ -92,18 +91,15 @@ export class DocumentDTO {
    */
   registrator?: string;
 
-
   constructor();
   constructor(data: any, fromOtherType?: boolean);
 
   constructor(data?: any, fromOtherType?: boolean) {
     if (fromOtherType) {
       this.fromOtherType(data);
-    }
-    else {
+    } else {
       this.fromDocument(data);
     }
-
   }
 
   fromOtherType(data: any) {
@@ -129,8 +125,7 @@ export class DocumentDTO {
       this.activeReceipt = Number(data.DocumentActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
-
-    } catch (e) { }
+    } catch (e) {}
   }
 
   fromDocument(document: any) {
@@ -156,15 +151,12 @@ export class DocumentDTO {
 
       if (document.ActiveReceipt) {
         this.activeReceipt = Number(document.ActiveReceipt);
-      }
-      else {
+      } else {
         this.activeReceipt = null;
       }
-      
+
       this.lastVerificationID = Number(document.LastVerificationID);
       this.lastVerificationDate = document.LastVerificationDate;
-
-    } catch (e) { }
+    } catch (e) {}
   }
-
 }

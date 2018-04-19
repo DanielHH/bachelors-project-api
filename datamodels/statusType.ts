@@ -2,7 +2,6 @@
  * StatusType data model
  */
 export class StatusType {
-
   /**
    * Database ID of the status type
    */
@@ -17,17 +16,11 @@ export class StatusType {
   constructor(statusType?: any);
 
   constructor(statusType?: any) {
-
     try {
       if (statusType) {
         this.id = statusType.ID;
         this.name = statusType.Name;
       }
-
-    }
-    catch (e) {
-
-    }
+    } catch (e) {}
   }
-
 }

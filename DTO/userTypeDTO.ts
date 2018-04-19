@@ -2,7 +2,6 @@
  * UserType data transfer object
  */
 export class UserTypeDTO {
-
   /**
    * Database ID of the user type
    */
@@ -19,8 +18,7 @@ export class UserTypeDTO {
   constructor(data?: any, fromOtherType?: boolean) {
     if (fromOtherType) {
       this.fromFromOtherType(data);
-    }
-    else {
+    } else {
       this.fromUserType(data);
     }
   }
@@ -29,14 +27,13 @@ export class UserTypeDTO {
     try {
       this.id = Number(data.UserTypeID);
       this.name = data.UserTypeName;
-
-    } catch (e) { }
+    } catch (e) {}
   }
 
   fromUserType(userType: any) {
     try {
       this.id = Number(userType.ID);
       this.name = userType.Name;
-    } catch (e) { }
+    } catch (e) {}
   }
 }

@@ -1,13 +1,9 @@
-import * as mariasql from 'mariasql';
-import { TestModel } from '../datamodels/testModel';
-import * as _ from 'lodash';
 
 /**
  * SQL function utilities
  */
 export class SqlUtilities {
-
-  constructor() { }
+  constructor() {}
 
   /**
    * Insert data into database
@@ -23,7 +19,7 @@ export class SqlUtilities {
       queryString += key + ' = ?,';
       dataArray.push(data[key]);
     }
- 
+
     queryString = queryString.slice(0, -1);
 
     //Wait for the async query to be done before 'returning' the data
@@ -55,15 +51,19 @@ export class SqlUtilities {
 
   sqlSelectUsername(username: string) {
     return new Promise((resolve, reject) => {
-      global.db.query('SELECT User.*, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserType) WHERE User.Username=?', [username], false, (err, rows) => {
-        if (!err) resolve(rows[0]);
-        reject(err);
-      });
+      global.db.query(
+        'SELECT User.*, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserType) WHERE User.Username=?',
+        [username],
+        false,
+        (err, rows) => {
+          if (!err) resolve(rows[0]);
+          reject(err);
+        }
+      );
     });
   }
 
   sqlSelectQuery(query: string, queryData?: any[]) {
-
     return new Promise((resolve, reject) => {
       global.db.query(query, queryData, false, (err, rows) => {
         if (!err) resolve(rows);

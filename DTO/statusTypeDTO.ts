@@ -2,7 +2,6 @@
  * StatusType data transfer object
  */
 export class StatusTypeDTO {
-
   /**
    * Database ID of the status type
    */
@@ -17,10 +16,7 @@ export class StatusTypeDTO {
   constructor(id?: number, name?: string);
 
   constructor(id?: number, name?: string) {
-
     this.id = Number(id);
     this.name = name;
-
   }
-
 }

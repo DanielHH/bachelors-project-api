@@ -1,19 +1,15 @@
-import { SqlUtilities } from './sql-utilities';
-import { Card } from '../datamodels/card';
-import { CardDTO } from '../DTO/cardDTO';
-import { Document } from '../datamodels/document';
+import * as ejs from 'ejs';
+import * as fs from 'fs';
+import * as pdf from 'html-pdf';
 import * as _ from 'lodash';
-import { userInfo } from 'os';
 import * as moment from 'moment';
+import { CardDTO } from '../DTO/cardDTO';
+import { DeliveryDTO } from '../DTO/deliveryDTO';
 import { DocumentDTO } from '../DTO/documentDTO';
+import { ReceiptDTO } from '../DTO/receiptDTO';
 import { VerificationDTO } from '../DTO/verificationDTO';
 import { Receipt } from '../datamodels/receipt';
-import { resolve } from 'path';
-import { start } from 'repl';
-import { ReceiptDTO } from '../DTO/receiptDTO';
-import * as fs from 'fs';
-import * as ejs from 'ejs';
-import * as pdf from 'html-pdf';
+import { SqlUtilities } from './sql-utilities';
 
 export class PdfUtilities {
   templatePath = './pdfTemplates/';
@@ -46,6 +42,8 @@ export class PdfUtilities {
         return this.createDocumentList(data[1], data[2]);
       case 'cards':
         return this.createCardList(data[1], data[2]);
+      case 'deliveries':
+        return this.createDeliveryList(data[1], data[2]);
     }
   }
 
@@ -142,6 +140,22 @@ export class PdfUtilities {
     });
 
     return this.filePromise(compiled, '/documents');
+  }
+
+    /**
+   * Generates a dynamically sized pdf
+   * @param deliveries a list of deliveries
+   * @returns a promise of a dynamically sized pdf
+   */
+  createDeliveryList(deliveries: DeliveryDTO[], filters: any[]) {
+    const compiled = ejs.render(fs.readFileSync(this.templatePath + '/delivery/delivery_list_template.html', 'utf8'), {
+      currentDate: moment(new Date()).format('YYYY-MM-DD'),
+      items: deliveries,
+      filters: filters,
+      formatDate: this.formatDate
+    });
+
+    return this.filePromise(compiled, '/deliveries');
   }
 
   /**

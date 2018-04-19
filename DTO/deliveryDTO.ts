@@ -1,11 +1,10 @@
-import { DocumentTypeDTO } from "./documentTypeDTO";
-import { StatusTypeDTO } from "./statusTypeDTO";
+import { DocumentTypeDTO } from './documentTypeDTO';
+import { StatusTypeDTO } from './statusTypeDTO';
 
 /**
  * Document delivery data transfer object
-*/
+ */
 export class DeliveryDTO {
-
   /**
    * Database ID of the document
    */
@@ -37,8 +36,8 @@ export class DeliveryDTO {
   sentDate: Date;
 
   /**
-    * Creation date of document in database
-    */
+   * Creation date of document in database
+   */
   creationDate: Date;
 
   /**
@@ -70,7 +69,6 @@ export class DeliveryDTO {
 
       this.documentType = new DocumentTypeDTO(document, true);
 
-
       this.documentNumber = document.DocumentNumber;
       this.name = document.Name;
       this.documentDate = document.DocumentDate;
@@ -81,8 +79,6 @@ export class DeliveryDTO {
       this.comment = document.Comment;
 
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
-    } catch (e) { }
-
+    } catch (e) {}
   }
-
 }

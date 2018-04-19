@@ -1,4 +1,3 @@
-import { SqlUtilities } from '../utilities/sql-utilities';
 
 /**
  * CardType data model
@@ -33,12 +32,10 @@ export class CardType {
   constructor(cardType?: any);
 
   constructor(cardType?: any) {
-
     this.ID = cardType.id;
     this.Name = cardType.name;
     this.CreationDate = cardType.creationDate;
     this.ModifiedDate = cardType.modifiedDate;
     this.Status = cardType.status.id;
-
   }
 }
