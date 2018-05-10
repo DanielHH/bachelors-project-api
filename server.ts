@@ -445,17 +445,17 @@ class Server {
       this.sqlUtil.sqlInsert('Receipt', new Receipt(req.body.receipt)).then(id => {
         let table;
         let item;
-        if (req.body.card) {
+        if (req.body.receipt.card) {
           table = 'Card';
-          item = new Card(req.body.card);
-          req.body.card.activeReceipt = Number(id);
+          req.body.receipt.card.activeReceipt = Number(id);          
+          item = new Card(req.body.receipt.card);
         } else {
           table = 'Document';
-          item = new Document(req.body.document);
-          req.body.document.activeReceipt = Number(id);
+          req.body.receipt.document.activeReceipt = Number(id);          
+          item = new Document(req.body.receipt.document);
         }
+        
         req.body.receipt.id = Number(id);
-        item.activeReceipt = Number(id);
 
         this.sqlUtil.sqlUpdate(table, item).then(success => {
           this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
