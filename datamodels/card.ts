@@ -62,6 +62,11 @@ export class Card {
    */
   LastVerification?: number;
 
+  /**
+   * Last verification
+   */
+  LastSelfCheck?: number;
+
   constructor();
   constructor(card: any);
 
@@ -98,6 +103,12 @@ export class Card {
         this.LastVerification = card.lastVerificationID;
       } else {
         this.LastVerification = null;
+      }
+
+      if (card.lastSelfCheckID) {
+        this.LastSelfCheck = card.lastSelfCheckID;
+      } else {
+        this.LastSelfCheck = null;
       }
     } catch (e) {}
   }

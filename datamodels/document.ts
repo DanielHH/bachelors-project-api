@@ -77,6 +77,11 @@ export class Document {
    */
   LastVerification?: number;
 
+  /**
+   * Last self check
+   */
+  LastSelfCheck?: number;
+
   constructor();
   constructor(document: any);
 
@@ -115,6 +120,12 @@ export class Document {
       this.LastVerification = document.lastVerificationID;
     } else {
       this.LastVerification = null;
+    }
+
+    if (document.lastSelfCheckID) {
+      this.LastSelfCheck = document.lastSelfCheckID;
+    } else {
+      this.LastSelfCheck = null;
     }
   }
 }
