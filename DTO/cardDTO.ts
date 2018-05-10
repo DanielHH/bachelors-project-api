@@ -72,6 +72,17 @@ export class CardDTO {
   lastVerificationDate?: Date;
 
   /**
+   * ID of last self check
+   */
+  lastSelfCheckID?: number;
+
+  /**
+   * Date of last self check
+   */
+  lastSelfCheckDate?: Date;
+
+
+  /**
    * Registrator
    */
   registrator?: string;
@@ -105,6 +116,8 @@ export class CardDTO {
       this.activeReceipt = Number(data.CardActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
+      this.lastSelfCheckID = Number(data.LastSelfCheckID);
+      this.lastSelfCheckDate = data.LastSelfCheckDate;
     } catch (e) {}
   }
 
@@ -130,6 +143,8 @@ export class CardDTO {
       }
       this.lastVerificationID = Number(card.LastVerificationID);
       this.lastVerificationDate = card.LastVerificationDate;
+      this.lastSelfCheckID = Number(card.LastSelfCheckID);
+      this.lastSelfCheckDate = card.LastSelfCheckDate;
     } catch (e) {}
   }
 }

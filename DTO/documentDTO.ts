@@ -87,6 +87,16 @@ export class DocumentDTO {
   lastVerificationDate?: Date;
 
   /**
+   * ID of last verification
+   */
+  lastSelfCheckID?: number;
+
+  /**
+   * Date of last self check
+   */
+  lastSelfCheckDate?: Date;
+
+  /**
    * Registrator
    */
   registrator?: string;
@@ -125,6 +135,8 @@ export class DocumentDTO {
       this.activeReceipt = Number(data.DocumentActiveReceipt);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
+      this.lastSelfCheckID = Number(data.LastSelfCheckID);
+      this.lastSelfCheckDate = data.LastSelfCheckDate;
     } catch (e) {}
   }
 
@@ -157,6 +169,8 @@ export class DocumentDTO {
 
       this.lastVerificationID = Number(document.LastVerificationID);
       this.lastVerificationDate = document.LastVerificationDate;
+      this.lastSelfCheckID = Number(document.LastSelfCheckID);
+      this.lastSelfCheckDate = document.LastSelfCheckDate;
     } catch (e) {}
   }
 }

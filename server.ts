@@ -90,13 +90,17 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
+        'SelfCheck.ID AS LastSelfCheckID,' +
+        'SelfCheck.VerificationDate AS LastSelfCheckDate,' +
         'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'UserStatusType.ID AS UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
         'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) ' +
-        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Card.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
-        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification)';
+        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON ' +
+        '(User.ID=Card.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
+        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification) ' +
+        'LEFT JOIN (Verification AS SelfCheck) ON (SelfCheck.ID=Card.LastSelfCheck)';;
 
       let queryData = [];
 
@@ -137,13 +141,16 @@ class Server {
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName,' +
         'Verification.ID AS LastVerificationID,' +
         'Verification.VerificationDate AS LastVerificationDate,' +
+        'SelfCheck.ID AS LastSelfCheckID,' +
+        'SelfCheck.VerificationDate AS LastSelfCheckDate,' +
         'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'UserStatusType.ID AS UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
         'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
-        'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification)';
+        'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification) ' +
+        'LEFT JOIN (Verification AS SelfCheck) ON (SelfCheck.ID=Document.LastSelfCheck)';;
 
       let queryData = [];
 
