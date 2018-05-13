@@ -4,17 +4,22 @@ html {
 }
 
 body {
-  background-color: white;
   font-family: sans-serif !important;
-  width: 794px;
-  height: 1028px;
+  background-color: white;
 }
 
 /* Container CSS */
 
+.page-wrapper {
+  width: 794px;
+  height: 1028px;
+  position: relative;
+}
+
 .container {
   margin: 0px 40px 0px 78px;
   white-space: nowrap;
+  position: relative;
 }
 
 .row {
@@ -23,6 +28,14 @@ body {
 
 .header {
   height: 94px;
+}
+
+.footer {
+  position: absolute;
+  height: 47px;
+  margin-left: 78px;
+  left: 0;
+  bottom: 0;
 }
 
 .col {
