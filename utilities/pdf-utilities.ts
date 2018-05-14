@@ -22,7 +22,7 @@ export class PdfUtilities {
     this.sqlUtil = new SqlUtilities();
 
     this.formatDate = function(date) {
-      return moment(date).format('YYYY-MM-DD');
+      return date ? moment(date).format('YYYY-MM-DD') : 'Aldrig';
     };
   }
 
