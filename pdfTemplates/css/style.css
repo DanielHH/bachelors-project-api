@@ -210,10 +210,14 @@ p {
 
 .border-top-dashed {
   border-top: 1px dashed black;
+  overflow: hidden !important;
+  white-space: nowrap !important;
 }
 
 .border-bottom-dashed {
   border-bottom: 1px dashed black;
+  overflow: hidden !important;
+  white-space: nowrap !important;
 }
 
 span {
