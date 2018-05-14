@@ -83,29 +83,15 @@
         <div class="row mt-48">
           <div class="col">
             <div class="s-32">
-              <p class="border-top pt-2">Utlämningsdatum</p>
+              <p class="text-bold mt-2">Utlämning</p>
+              <p class="mt-2">Utlämningsdatum: <%= currentDate %></p>
+              <p class="border-top-dashed pt-2 mt-32"><%= documentUser %></p>
             </div>
           </div>
           <div class="col text-right">
             <div class="s-32 ml-32">
-              <p class="border-top pt-2">Utlämningsdatum</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row mt-48">
-          <div class="col">
-            <div class="s-32">
-              <p class="border-top pt-2">
-                <%= documentUser %>
-              </p>
-            </div>
-          </div>
-          <div class="col text-right">
-            <div class="s-32 ml-32">
-              <p class="border-top pt-2">
-                <%= adminUser %>
-              </p>
+              <p class="mt-2">Utlämningsdatum: <%= currentDate %></p>
+              <p class="border-top-dashed pt-2 mt-32"><%= adminUser %></p>
             </div>
           </div>
         </div>
@@ -140,32 +126,22 @@
 
           <% } %>
 
-            <div class="row mt-48">
-              <div class="col">
-                <div class="s-32">
-                  <p class="border-top pt-2">Återlämningsdatum</p>
-                </div>
-              </div>
-              <div class="col text-right">
-                <div class="s-32 ml-32">
-                  <p class="border-top pt-2">Återlämningsdatum</p>
-                </div>
-              </div>
-            </div>
+          <%if (i == 0) { %>
+            <div class="mt-64"></div>
+          <% }  %>
 
             <div class="row mt-48">
               <div class="col">
                 <div class="s-32">
-                  <p class="border-top pt-2">
-                    <%= documentUser %>
-                  </p>
+                  <p class="text-bold mt-2">Återlämning</p>
+                  <p class="mt-2">Återlämningsdatum: </p>
+                  <p class="border-top-dashed pt-2 mt-32"><%= documentUser %></p>
                 </div>
               </div>
               <div class="col text-right">
                 <div class="s-32 ml-32">
-                  <p class="border-top pt-2">
-                    <%= adminUser %>
-                  </p>
+                  <p class="mt-2">Återlämningsdatum: </p>
+                  <p class="border-top-dashed pt-2 mt-32"><%= adminUser %></p>
                 </div>
               </div>
             </div>

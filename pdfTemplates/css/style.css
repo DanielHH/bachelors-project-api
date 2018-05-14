@@ -141,6 +141,14 @@ p {
   margin-top: 70px !important;
 }
 
+.mt-128 {
+  margin-top: 128px !important;
+}
+
+.mt-256 {
+  margin-top: 256px !important;
+}
+
 .ml-1 {
   margin-left: 1px !important;
 }
@@ -198,6 +206,10 @@ p {
 
 .border-top {
   border-top: 1px solid black;
+}
+
+.border-top-dashed {
+  border-top: 1px dashed black;
 }
 
 span {
