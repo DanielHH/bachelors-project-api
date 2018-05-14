@@ -11,7 +11,7 @@
 
 
 <body>
-  <% let pages = Math.ceil(items.length / 11); for(var i=0; i < pages; i++) { %>
+  <% let pages = Math.ceil(items.length / 12); for(var i=0; i < pages; i++) { %>
     <div class="page-wrapper">
       <div class="container">
 
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="font-12 m-header">
+        <div class="row font-12 m-header">
           <span>Listan är skapad utifrån följande filter:
             <% for(var j=0; j < filters.length; j++) { %>
               <%= filters[j] %>
@@ -49,8 +49,8 @@
 
         <div class="table font-12 mt-16">
 
-          <% for(var l=0; (l < 11) && ((i*11)+l < items.length); l++) { %>
-            <% let item = items[(i*11+l)]%>
+          <% for(var l=0; (l < 12) && ((i*12)+l < items.length); l++) { %>
+            <% let item = items[(i*12+l)]%>
               <div class="inventory-row">
                 <div class="row mt-2">
                   <div class="col">
@@ -116,7 +116,7 @@
     </div>
     <%if (i < pages-1) { %>
       <div class="page-break"></div>
-      <% } } %>
+    <% } } %>
 </body>
 
 </html>

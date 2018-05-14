@@ -11,99 +11,112 @@
 
 
 <body>
-  <% let pages = Math.ceil(items.length / 13); for(var i=0; i < pages; i++) { %>
-    <div class="container">
+  <% let pages = Math.ceil(items.length / 12); for(var i=0; i < pages; i++) { %>
+    <div class="page-wrapper">
+      <div class="container">
 
-      <!-- Page header -->
-      <div class="header">
-        <div class="row font-12">
-          <div class="col">
-            <span class="align-center">
-              <%=  currentDate %>
-            </span>
-          </div>
-          <div class="col">
-            <span class="align-center align-right">Sida
-              <%= i+1 %> av <%= pages %>
-            </span>
+        <!-- Page header -->
+        <div class="header">
+          <div class="row font-12 align-center">
+            <div class="col">
+              <span class="">
+                <%=  currentDate %>
+              </span>
+            </div>
+            <div class="col align-right">
+              <span class="">Sida
+                <%= i+1 %> av
+                  <%= pages %>
+              </span>
+            </div>
           </div>
         </div>
-        <div class="row font-12 mt-16">
+
+        <div class="row font-12 m-header">
           <span>Listan är skapad utifrån följande filter:
             <% for(var j=0; j < filters.length; j++) { %>
-              <%= filters[j] %><% if(j < filters.length - 1) {%>,
-            <% } } %>
+              <%= filters[j] %>
+                <% if(j < filters.length - 1) {%>,
+                  <% } } %>
+          </span>
+        </div>
+
+        <div class="row">
+          <div class="align-middle">
+            <span class="font-32 border-bottom">Leveranser</span>
+          </div>
+        </div>
+
+        <div class="table font-12 mt-16">
+
+          <% for(var l=0; (l < 12) && ((i*12)+l < items.length); l++) { %>
+            <% let item = items[(i*12+l)]%>
+              <div class="inventory-row">
+                <div class="row mt-2">
+                  <div class="col">
+                    <span class="text-bold pl-2">Status: </span>
+                    <span>
+                      <%= item.status.name %>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <span class="text-bold">Typ: </span>
+                    <span>
+                      <%= item.documentType.name %>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col">
+                    <span class="text-bold pl-2">ID: </span>
+                    <span>
+                      <%= item.documentNumber %>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <span class="text-bold">Benämning: </span>
+                    <span>
+                      <%= item.name %>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col">
+                    <span class="text-bold pl-2">Mottagare: </span>
+                    <span>
+                      <%= item.receiver %>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <span class="text-bold">Skickat: </span>
+                    <span>
+                      <%= formatDate(item.sentDate) %>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mh-28 mt-2">
+                  <div class="pl-2">
+                    <span class="text-bold">Kommentar:</span>
+                    <span>
+                      <%= item.comment %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="row font-12">
+          <span class="align-center">
+            SecTrack
           </span>
         </div>
       </div>
-
-      <div class="row">
-        <div class="align-middle">
-          <span class="font-32 border-bottom">Leveranser</span>
-        </div>
-      </div>
-
-      <div class="table font-12 mt-16">
-
-        <% for(var l=0; (l < 13) && ((i*13)+l < items.length); l++) { %>
-          <% let item = items[(i*13+l)]%>
-          <div class="inventory-row">
-            <div class="row mt-2">
-              <div class="col">
-                <span class="text-bold pl-2">Status: </span>
-                <span>                  
-                  <%= item.status.name %>
-                </span>
-              </div>
-              <div class="col">
-                <span class="text-bold">Typ: </span>
-                <span>
-                  <%= item.documentType.name %>
-                </span>
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col">
-                <span class="text-bold pl-2">ID: </span>
-                <span>
-                  <%= item.documentNumber %>
-                </span>
-              </div>
-              <div class="col">
-                <span class="text-bold">Benämning: </span>
-                <span>
-                  <%= item.name %>
-                </span>
-              </div>
-            </div>
-            <div class="row mt-2">
-              <div class="col">
-                <span class="text-bold pl-2">Mottagare: </span>
-                <span>
-                  <%= item.receiver %>
-                </span>
-              </div>
-              <div class="col">
-                <span class="text-bold">Skickat: </span>
-                <span>
-                  <%= formatDate(item.sentDate) %>
-                </span>
-              </div>
-            </div>
-            <div class="row mh-28 mt-2">
-              <div class="pl-2">
-                <span class="text-bold">Kommentar:</span>
-                <span>
-                  <%= item.comment %>
-                </span>
-              </div>
-            </div>
-          </div>
-          <% } %>
-      </div>
     </div>
-    <div class="page-break"></div>
-    <% } %>
+    <%if (i < pages-1) { %>
+      <div class="page-break"></div>
+    <% } } %>
 </body>
 
 </html>
