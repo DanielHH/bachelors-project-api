@@ -212,10 +212,19 @@ p {
   border-top: 1px dashed black;
 }
 
+.border-bottom-dashed {
+  border-bottom: 1px dashed black;
+}
+
 span {
   position: relative;
   white-space: normal;
   overflow-wrap: break-word;
+}
+
+p span {
+  width: 100%;
+  display: inline-block;
 }
 
 /* Table CSS */
@@ -261,4 +270,9 @@ span {
 
 .page-break {
   page-break-after: always;
+}
+
+.hidden {
+  overflow: hidden !important;
+  white-space: nowrap !important;
 }
