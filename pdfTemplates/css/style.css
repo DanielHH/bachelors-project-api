@@ -24,9 +24,11 @@ body {
 
 .row {
   position: relative;
+  width: 100%;
 }
 
 .header {
+  position: relative;
   height: 94px;
 }
 
@@ -149,6 +151,10 @@ p {
 
 .ml-32 {
   margin-left: 32px !important;
+}
+
+.m-header {
+  margin-top: -27px !important;
 }
 
 .mh-50 {

@@ -17,28 +17,28 @@
 
         <!-- Page header -->
         <div class="header">
-          <div class="row font-12">
+          <div class="row font-12 align-center">
             <div class="col">
-              <span class="align-center">
+              <span class="">
                 <%= currentDate %>
               </span>
             </div>
-            <div class="col">
-              <span class="align-center align-right">Sida
+            <div class="col align-right">
+              <span class="">Sida
                 <%= i+1 %> av
                   <%= pages %>
               </span>
             </div>
-            <div class="mt-16">
-              <span>Listan är skapad utifrån följande filter:
-                <% for(var j=0; j < filters.length; j++) { %>
-                  <%= filters[j] %>
-                    <% if(j < filters.length - 1) {%>,
-                      <% } } %>
-              </span>
-            </div>
           </div>
+        </div>
 
+        <div class="font-12 m-header">
+          <span>Listan är skapad utifrån följande filter:
+            <% for(var j=0; j < filters.length; j++) { %>
+              <%= filters[j] %>
+                <% if(j < filters.length - 1) {%>,
+                  <% } } %>
+          </span>
         </div>
 
         <div class="row">
