@@ -96,6 +96,28 @@
                   </span>
                 </div>
               </div>
+              <div class="row mt-2">
+                <div class="col">
+                  <span class="text-bold pl-2">Senast inventerat: </span>
+                  <span>
+                    <% if (item.itemType.id == 1) { %>
+                      <%= formatDate(item.card.lastVerificationDate) %>
+                        <% } else { %>
+                          <%= formatDate(item.document.lastVerificationDate) %>
+                            <% } %>
+                  </span>
+                </div>
+                <div class="col">
+                  <span class="text-bold">Senaste egenkontroll: </span>
+                  <span>
+                    <% if (item.itemType.id == 1) { %>
+                      <%= formatDate(item.card.lastSelfCheckDate) %>
+                        <% } else { %>
+                          <%= formatDate(item.card.lastSelfCheckDate) %>
+                            <% } %>
+                  </span>
+                </div>
+              </div>
               <div class="row mh-28 mt-2">
                 <div class="pl-2">
                   <span class="text-bold">Kommentar:</span>
@@ -122,7 +144,7 @@
     </div>
     <%if (i < pages-1) { %>
       <div class="page-break"></div>
-    <% } } %>
+      <% } } %>
 </body>
 
 </html>

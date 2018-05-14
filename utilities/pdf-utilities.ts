@@ -101,11 +101,12 @@ export class PdfUtilities {
    * @param inventory a list of items to be verified
    * @returns a promise of a dynamically sized pdf
    */
-  createInventory(inventory: VerificationDTO[], filters: any[]) {
+  createInventory(inventory: any, filters: any[]) {
     const compiled = ejs.render(fs.readFileSync(this.templatePath + '/inventory/inventory_template.html', 'utf8'), {
       currentDate: moment(new Date()).format('YYYY-MM-DD'),
       items: inventory,
-      filters: filters
+      filters: filters,
+      formatDate: this.formatDate
     });
 
     return this.filePromise(compiled, '/inventory');
