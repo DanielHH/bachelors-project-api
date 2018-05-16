@@ -8,9 +8,9 @@ export class Card {
   ID: number;
 
   /**
-   * Card type
+   * Card type ID
    */
-  CardType: number;
+  CardTypeID: number;
 
   /**
    * Card serial number (can contain alphabetical characters)
@@ -48,24 +48,24 @@ export class Card {
   ModifiedDate: Date;
 
   /**
-   * Card checked in/out status
+   * ID of card status type
    */
-  Status: Number;
+  StatusTypeID: Number;
 
   /**
-   * Active receipt (if any)
+   * ID of active receipt (if any)
    */
-  ActiveReceipt?: number;
+  ActiveReceiptID?: number;
 
   /**
-   * Last verification
+   * ID of last verification (if any)
    */
-  LastVerification?: number;
+  LastVerificationID?: number;
 
   /**
-   * Last verification
+   * ID of last verification (if any)
    */
-  LastSelfCheck?: number;
+  LastSelfCheckID?: number;
 
   constructor();
   constructor(card: any);
@@ -77,7 +77,7 @@ export class Card {
       } else {
         this.ID = null;
       }
-      this.CardType = card.cardType.id;
+      this.CardTypeID = card.cardType.id;
       this.CardNumber = card.cardNumber;
 
       if (card.user.id) {
@@ -91,24 +91,24 @@ export class Card {
       this.ExpirationDate = card.expirationDate;
       this.CreationDate = card.creationDate;
       this.ModifiedDate = card.modifiedDate;
-      this.Status = card.status.id;
+      this.StatusTypeID = card.status.id;
 
       if (card.activeReceipt) {
-        this.ActiveReceipt = card.activeReceipt;
+        this.ActiveReceiptID = card.activeReceipt;
       } else {
-        this.ActiveReceipt = null;
+        this.ActiveReceiptID = null;
       }
 
       if (card.lastVerificationID) {
-        this.LastVerification = card.lastVerificationID;
+        this.LastVerificationID = card.lastVerificationID;
       } else {
-        this.LastVerification = null;
+        this.LastVerificationID = null;
       }
 
       if (card.lastSelfCheckID) {
-        this.LastSelfCheck = card.lastSelfCheckID;
+        this.LastSelfCheckID = card.lastSelfCheckID;
       } else {
-        this.LastSelfCheck = null;
+        this.LastSelfCheckID = null;
       }
     } catch (e) {}
   }

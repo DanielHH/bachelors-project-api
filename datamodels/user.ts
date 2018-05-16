@@ -10,7 +10,7 @@ export class User {
   /**
    * User type ID
    */
-  UserType: number;
+  UserTypeID: number;
 
   /**
    * Username
@@ -38,9 +38,9 @@ export class User {
   ModifiedDate: Date;
 
   /**
-   * User active/inactive status
+   * ID of User status type
    */
-  Status: number;
+  StatusTypeID: number;
 
   /**
    * User password for when adding a new user
@@ -57,13 +57,13 @@ export class User {
       } else {
         this.ID = null;
       }
-      this.UserType = user.userType.id;
+      this.UserTypeID = user.userType.id;
       this.Username = user.username;
       this.Name = user.name;
       this.Email = user.email;
       this.CreationDate = user.creationDate;
       this.ModifiedDate = user.modifiedDate;
-      this.Status = user.status.id;
+      this.StatusTypeID = user.status.id;
       if (user.password) {
         this.Password = user.password;
       }

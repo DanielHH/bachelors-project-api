@@ -8,9 +8,9 @@ export class Delivery {
   ID: number;
 
   /**
-   * Document type
+   * ID of document type
    */
-  DocumentType: number;
+  DocumentTypeID: number;
 
   /**
    * Document serial number (can contain alphabetical characters)
@@ -55,7 +55,7 @@ export class Delivery {
   /**
    * document checked in/out status
    */
-  Status: number;
+  StatusTypeID: number;
 
   constructor();
   constructor(document: any);
@@ -67,7 +67,7 @@ export class Delivery {
       } else {
         this.ID = null;
       }
-      this.DocumentType = document.documentType.id;
+      this.DocumentTypeID = document.documentType.id;
       this.DocumentNumber = document.documentNumber;
       this.Name = document.name;
       this.DocumentDate = document.documentDate;
@@ -76,7 +76,7 @@ export class Delivery {
       this.ModifiedDate = document.modifiedDate;
       this.Receiver = document.receiver;
       this.Comment = document.comment;
-      this.Status = document.status.id;
+      this.StatusTypeID = document.status.id;
     } catch (e) {}
   }
 }
