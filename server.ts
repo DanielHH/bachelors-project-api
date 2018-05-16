@@ -10,7 +10,6 @@ import * as atob from 'atob';
 import * as btoa from 'btoa';
 
 import { dbconfig } from './database-config';
-import { TestModel } from './datamodels/testModel';
 import { Card } from './datamodels/card';
 import { SqlUtilities } from './utilities/sql-utilities';
 import { CardType } from './datamodels/cardType';
@@ -92,15 +91,15 @@ class Server {
         'Verification.VerificationDate AS LastVerificationDate,' +
         'SelfCheck.ID AS LastSelfCheckID,' +
         'SelfCheck.VerificationDate AS LastSelfCheckDate,' +
-        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
+        'User.UserTypeID, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'UserStatusType.ID AS UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
-        'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardType AND StatusType.ID=Card.Status) ' +
+        'FROM Card LEFT JOIN (CardType, StatusType) ON (CardType.ID=Card.CardTypeID AND StatusType.ID=Card.StatusTypeID) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON ' +
-        '(User.ID=Card.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
-        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerification) ' +
-        'LEFT JOIN (Verification AS SelfCheck) ON (SelfCheck.ID=Card.LastSelfCheck)';;
+        '(User.ID=Card.UserID AND UserType.ID=User.UserTypeID AND UserStatusType.ID=User.StatusTypeID) ' +
+        'LEFT JOIN (Verification) ON (Verification.ID=Card.LastVerificationID) ' +
+        'LEFT JOIN (Verification AS SelfCheck) ON (SelfCheck.ID=Card.LastSelfCheckID)';;
 
       let queryData = [];
 
@@ -122,7 +121,7 @@ class Server {
       const query =
         'SELECT CardType.*,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
-        'FROM CardType LEFT JOIN (StatusType) ON (StatusType.ID=CardType.Status)';
+        'FROM CardType LEFT JOIN (StatusType) ON (StatusType.ID=CardType.StatusTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((cardTypeList: any[]) => {
         res.send(
@@ -143,14 +142,14 @@ class Server {
         'Verification.VerificationDate AS LastVerificationDate,' +
         'SelfCheck.ID AS LastSelfCheckID,' +
         'SelfCheck.VerificationDate AS LastSelfCheckDate,' +
-        'User.UserType, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
+        'User.UserTypeID, User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate,' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'UserStatusType.ID AS UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
-        'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentType AND StatusType.ID=Document.Status) ' +
-        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Document.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
-        'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerification) ' +
-        'LEFT JOIN (Verification AS SelfCheck) ON (SelfCheck.ID=Document.LastSelfCheck)';;
+        'FROM Document LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Document.DocumentTypeID AND StatusType.ID=Document.StatusTypeID) ' +
+        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Document.UserID AND UserType.ID=User.UserTypeID AND UserStatusType.ID=User.StatusTypeID) ' +
+        'LEFT JOIN (Verification) ON (Verification.ID=Document.LastVerificationID) ' +
+        'LEFT JOIN (Verification AS SelfCheck) ON (SelfCheck.ID=Document.LastSelfCheckID)';;
 
       let queryData = [];
 
@@ -173,7 +172,7 @@ class Server {
         'SELECT Delivery.*,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
-        'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentType AND StatusType.ID=Delivery.Status)';
+        'FROM Delivery LEFT JOIN (DocumentType, StatusType) ON (DocumentType.ID=Delivery.DocumentTypeID AND StatusType.ID=Delivery.StatusTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((deliveryList: any[]) => {
         res.send(
@@ -188,7 +187,7 @@ class Server {
       const query =
         'SELECT DocumentType.*,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName ' +
-        'FROM DocumentType LEFT JOIN (StatusType) ON (StatusType.ID=DocumentType.Status)';
+        'FROM DocumentType LEFT JOIN (StatusType) ON (StatusType.ID=DocumentType.StatusTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((documentTypeList: any[]) => {
         res.send(
@@ -202,30 +201,30 @@ class Server {
     this.app.get('/getReceipts', (req, res) => {
       let query =
         'SELECT Receipt.*,' +
-        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.CardTypeID, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
         'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
-        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'Card.StatusTypeID AS CardStatusTypeID, Card.ActiveReceiptID AS CardActiveReceiptID,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
-        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.DocumentTypeID, Document.DocumentNumber, Document.Name AS DocumentName,' +
         'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
         'Document.Comment AS DocumentComment, Document.DocumentDate,' +
         'Document.RegistrationDate AS DocumentRegistrationDate,' +
         'Document.CreationDate AS DocumentCreationDate,' +
         'Document.ModifiedDate AS DocumentModifiedDate,' +
-        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'Document.StatusTypeID AS DocumentStatusTypeID, Document.ActiveReceiptID AS DocumentActiveReceiptID,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
+        'User.UserTypeID, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
-        'FROM Receipt LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Receipt.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
-        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Receipt.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'FROM Receipt LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Receipt.CardID AND CardType.ID=Card.CardTypeID AND CardStatusType.ID=Card.StatusTypeID) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Receipt.DocumentID AND DocumentType.ID=Document.DocumentTypeID AND DocumentStatusType.ID=Document.StatusTypeID) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = Receipt.ItemTypeID) ' +
-        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Receipt.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status)';
+        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Receipt.UserID AND UserType.ID=User.UserTypeID AND UserStatusType.ID=User.StatusTypeID)';
 
       let queryData = [];
 
@@ -247,31 +246,31 @@ class Server {
     this.app.get('/getLogEvents', (req, res) => {
       const query =
         'SELECT LogEvent.*,' +
-        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.CardTypeID, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
         'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
-        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'Card.StatusTypeID AS CardStatusTypeID, Card.ActiveReceiptID AS CardActiveReceiptID,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
-        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.DocumentTypeID, Document.DocumentNumber, Document.Name AS DocumentName,' +
         'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
         'Document.Comment AS DocumentComment, Document.DocumentDate,' +
         'Document.RegistrationDate AS DocumentRegistrationDate,' +
         'Document.CreationDate AS DocumentCreationDate,' +
         'Document.ModifiedDate AS DocumentModifiedDate,' +
-        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'Document.StatusTypeID AS DocumentStatusTypeID, Document.ActiveReceiptID AS DocumentActiveReceiptID,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
+        'User.UserTypeID, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName, ' +
         'LogType.ID AS LogTypeID, LogType.Name AS LogTypeName, LogType.LogText AS LogTypeText ' +
-        'FROM LogEvent LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=LogEvent.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
-        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'FROM LogEvent LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=LogEvent.CardID AND CardType.ID=Card.CardTypeID AND CardStatusType.ID=Card.StatusTypeID) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=LogEvent.DocumentID AND DocumentType.ID=Document.DocumentTypeID AND DocumentStatusType.ID=Document.StatusTypeID) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = LogEvent.ItemTypeID) ' +
-        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=LogEvent.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status) ' +
+        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=LogEvent.UserID AND UserType.ID=User.UserTypeID AND UserStatusType.ID=User.StatusTypeID) ' +
         'LEFT JOIN (LogType) ON (LogType.ID = LogEvent.LogTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((logEventList: any[]) => {
@@ -316,30 +315,30 @@ class Server {
     this.app.get('/getVerifications', (req, res) => {
       let query =
         'SELECT Verification.*,' +
-        'Card.CardType, Card.CardNumber, Card.Location AS CardLocation,' +
+        'Card.CardTypeID, Card.CardNumber, Card.Location AS CardLocation,' +
         'Card.Comment AS CardComment, Card.ExpirationDate AS CardExpirationDate,' +
         'Card.CreationDate AS CardCreationDate, Card.ModifiedDate AS CardModifiedDate,' +
-        'Card.Status AS CardStatus, Card.ActiveReceipt AS CardActiveReceipt,' +
+        'Card.StatusTypeID AS CardStatusTypeID, Card.ActiveReceiptID AS CardActiveReceiptID,' +
         'CardType.ID AS CardTypeID, CardType.Name AS CardTypeName,' +
         'CardStatusType.ID AS CardStatusTypeID, CardStatusType.Name AS CardStatusTypeName,' +
-        'Document.DocumentType, Document.DocumentNumber, Document.Name AS DocumentName,' +
+        'Document.DocumentTypeID, Document.DocumentNumber, Document.Name AS DocumentName,' +
         'Document.Sender AS DocumentSender, Document.Location AS DocumentLocation,' +
         'Document.Comment AS DocumentComment, Document.DocumentDate,' +
         'Document.RegistrationDate AS DocumentRegistrationDate,' +
         'Document.CreationDate AS DocumentCreationDate,' +
         'Document.ModifiedDate AS DocumentModifiedDate,' +
-        'Document.Status AS DocumentStatus, Document.ActiveReceipt AS DocumentActiveReceipt,' +
+        'Document.StatusTypeID AS DocumentStatusTypeID, Document.ActiveReceiptID AS DocumentActiveReceiptID,' +
         'DocumentType.ID AS DocumentTypeID, DocumentType.Name AS DocumentTypeName,' +
         'DocumentStatusType.ID AS DocumentStatusTypeID, DocumentStatusType.Name AS DocumentStatusTypeName,' +
         'ItemType.ID AS ItemTypeID, ItemType.Name AS ItemTypeName,' +
-        'User.UserType, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
+        'User.UserTypeID, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName, ' +
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
-        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=Card.CardType AND CardStatusType.ID=Card.Status) ' +
-        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentType AND DocumentStatusType.ID=Document.Status) ' +
+        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=ID AND CardStatusType.ID=Card.StatusTypeID) ' +
+        'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentTypeID AND DocumentStatusType.ID=Document.StatusTypeID) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
-        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Verification.UserID AND UserType.ID=User.UserType AND UserStatusType.ID=User.Status)';
+        'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Verification.UserID AND UserType.ID=User.UserTypeID AND UserStatusType.ID=User.StatusTypeID)';
 
       let queryData = [];
 
@@ -372,7 +371,7 @@ class Server {
         'SELECT User.*,' +
         'StatusType.ID AS StatusTypeID, StatusType.Name AS StatusTypeName, ' +
         'UserType.ID AS UserTypeID, UserType.Name AS UserTypeName ' +
-        'FROM User LEFT JOIN (UserType, StatusType) ON (UserType.ID=User.UserType AND StatusType.ID=User.Status)';
+        'FROM User LEFT JOIN (UserType, StatusType) ON (UserType.ID=User.UserTypeID AND StatusType.ID=User.StatusTypeID)';
 
       this.sqlUtil.sqlSelectQuery(query).then((userList: any[]) => {
         res.send(

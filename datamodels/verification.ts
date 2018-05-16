@@ -8,9 +8,9 @@ export class Verification {
   ID: number;
 
   /**
-   * Verification type
+   * ID of verification type
    */
-  VerificationType: number;
+  VerificationTypeID: number;
 
   /**
    * ID of verification item type
@@ -48,7 +48,7 @@ export class Verification {
         this.ID = null;
       }
 
-      this.VerificationType = verification.verificationType.id;
+      this.VerificationTypeID = verification.verificationType.id;
       this.ItemTypeID = verification.itemType.id;
 
       if (verification.card) {

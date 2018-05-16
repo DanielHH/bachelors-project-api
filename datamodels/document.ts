@@ -8,9 +8,9 @@ export class Document {
   ID: number;
 
   /**
-   * Document type
+   * ID of document type
    */
-  DocumentType: number;
+  DocumentTypeID: number;
 
   /**
    * Document serial number (can contain alphabetical characters)
@@ -63,24 +63,24 @@ export class Document {
   Comment?: string;
 
   /**
-   * document checked in/out status
+   * ID of document status type
    */
-  Status: number;
+  StatusTypeID: number;
 
   /**
-   * Active receipt (if any)
+   * ID of active receipt (if any)
    */
-  ActiveReceipt?: number;
+  ActiveReceiptID?: number;
 
   /**
-   * Last verification
+   * ID of last verification (if any)
    */
-  LastVerification?: number;
+  LastVerificationID?: number;
 
   /**
-   * Last self check
+   * ID of last self check (if any)
    */
-  LastSelfCheck?: number;
+  LastSelfCheckID?: number;
 
   constructor();
   constructor(document: any);
@@ -91,7 +91,7 @@ export class Document {
     } else {
       this.ID = null;
     }
-    this.DocumentType = document.documentType.id;
+    this.DocumentTypeID = document.documentType.id;
     this.DocumentNumber = document.documentNumber;
     this.Name = document.name;
     this.Sender = document.sender;
@@ -108,24 +108,24 @@ export class Document {
 
     this.Location = document.location;
     this.Comment = document.comment;
-    this.Status = document.status.id;
+    this.StatusTypeID = document.status.id;
 
     if (document.activeReceipt) {
-      this.ActiveReceipt = document.activeReceipt;
+      this.ActiveReceiptID = document.activeReceipt;
     } else {
-      this.ActiveReceipt = null;
+      this.ActiveReceiptID = null;
     }
 
     if (document.lastVerificationID) {
-      this.LastVerification = document.lastVerificationID;
+      this.LastVerificationID = document.lastVerificationID;
     } else {
-      this.LastVerification = null;
+      this.LastVerificationID = null;
     }
 
     if (document.lastSelfCheckID) {
-      this.LastSelfCheck = document.lastSelfCheckID;
+      this.LastSelfCheckID = document.lastSelfCheckID;
     } else {
-      this.LastSelfCheck = null;
+      this.LastSelfCheckID = null;
     }
   }
 }

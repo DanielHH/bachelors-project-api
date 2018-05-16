@@ -23,9 +23,9 @@ export class DocumentType {
   ModifiedDate: Date;
 
   /**
-   * DocumentType active/inactive status
+   * ID of DocumentType status type
    */
-  Status: Number;
+  StatusTypeID: Number;
 
   constructor();
   constructor(documentType: any);
@@ -35,6 +35,6 @@ export class DocumentType {
     this.Name = documentType.name;
     this.CreationDate = documentType.creationDate;
     this.ModifiedDate = documentType.modifiedDate;
-    this.Status = documentType.status.id;
+    this.StatusTypeID = documentType.status.id;
   }
 }

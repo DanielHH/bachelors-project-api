@@ -72,9 +72,9 @@ export class DocumentDTO {
   status: StatusTypeDTO;
 
   /**
-   * Active receipt (if any)
+   * ID of active receipt (if any)
    */
-  activeReceipt?: number;
+  activeReceiptID?: number;
 
   /**
    * ID of last verification
@@ -132,7 +132,7 @@ export class DocumentDTO {
       this.location = data.DocumentLocation;
       this.comment = data.DocumentComment;
       this.status = new StatusTypeDTO(data.DocumentStatusTypeID, data.DocumentStatusTypeName);
-      this.activeReceipt = Number(data.DocumentActiveReceipt);
+      this.activeReceiptID = Number(data.DocumentActiveReceiptID);
       this.lastVerificationID = Number(data.LastVerificationID);
       this.lastVerificationDate = data.LastVerificationDate;
       this.lastSelfCheckID = Number(data.LastSelfCheckID);
@@ -161,10 +161,10 @@ export class DocumentDTO {
       this.comment = document.Comment;
       this.status = new StatusTypeDTO(document.StatusTypeID, document.StatusTypeName);
 
-      if (document.ActiveReceipt) {
-        this.activeReceipt = Number(document.ActiveReceipt);
+      if (document.ActiveReceiptID) {
+        this.activeReceiptID = Number(document.ActiveReceiptID);
       } else {
-        this.activeReceipt = null;
+        this.activeReceiptID = null;
       }
 
       this.lastVerificationID = Number(document.LastVerificationID);

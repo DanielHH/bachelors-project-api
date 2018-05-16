@@ -24,9 +24,9 @@ export class CardType {
   ModifiedDate: Date;
 
   /**
-   * CardType active/inactive status
+   * ID of cardType status type
    */
-  Status: Number;
+  StatusTypeID: Number;
 
   constructor();
   constructor(cardType?: any);
@@ -36,6 +36,6 @@ export class CardType {
     this.Name = cardType.name;
     this.CreationDate = cardType.creationDate;
     this.ModifiedDate = cardType.modifiedDate;
-    this.Status = cardType.status.id;
+    this.StatusTypeID = cardType.status.id;
   }
 }
