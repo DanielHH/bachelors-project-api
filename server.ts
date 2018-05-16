@@ -335,7 +335,7 @@ class Server {
         'User.Username AS UserUsername, User.Name AS UserName, User.Email AS UserEmail,' +
         'User.CreationDate AS UserCreationDate, User.ModifiedDate AS UserModifiedDate, ' +
         'UserStatusType.ID as UserStatusTypeID, UserStatusType.Name AS UserStatusTypeName ' +
-        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=ID AND CardStatusType.ID=Card.StatusTypeID) ' +
+        'FROM Verification LEFT JOIN (Card, CardType, StatusType AS CardStatusType) ON (Card.ID=Verification.CardID AND CardType.ID=CardTypeID AND CardStatusType.ID=Card.StatusTypeID) ' +
         'LEFT JOIN (Document, DocumentType, StatusType AS DocumentStatusType) ON (Document.ID=Verification.DocumentID AND DocumentType.ID=Document.DocumentTypeID AND DocumentStatusType.ID=Document.StatusTypeID) ' +
         'LEFT JOIN (ItemType) ON (ItemType.ID = Verification.ItemTypeID) ' +
         'LEFT JOIN (User, UserType, StatusType AS UserStatusType) ON (User.ID=Verification.UserID AND UserType.ID=User.UserTypeID AND UserStatusType.ID=User.StatusTypeID)';
