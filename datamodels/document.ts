@@ -110,8 +110,8 @@ export class Document {
     this.Comment = document.comment;
     this.StatusTypeID = document.status.id;
 
-    if (document.activeReceipt) {
-      this.ActiveReceiptID = document.activeReceipt;
+    if (document.activeReceiptID) {
+      this.ActiveReceiptID = document.activeReceiptID;
     } else {
       this.ActiveReceiptID = null;
     }

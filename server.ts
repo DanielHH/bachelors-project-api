@@ -453,11 +453,11 @@ class Server {
         let item;
         if (req.body.receipt.card) {
           table = 'Card';
-          req.body.receipt.card.activeReceipt = Number(id);          
+          req.body.receipt.card.activeReceiptID = Number(id);          
           item = new Card(req.body.receipt.card);
         } else {
           table = 'Document';
-          req.body.receipt.document.activeReceipt = Number(id);          
+          req.body.receipt.document.activeReceiptID = Number(id);          
           item = new Document(req.body.receipt.document);
         }
         

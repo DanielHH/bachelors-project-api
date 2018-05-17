@@ -93,8 +93,8 @@ export class Card {
       this.ModifiedDate = card.modifiedDate;
       this.StatusTypeID = card.status.id;
 
-      if (card.activeReceipt) {
-        this.ActiveReceiptID = card.activeReceipt;
+      if (card.activeReceiptID) {
+        this.ActiveReceiptID = card.activeReceiptID;
       } else {
         this.ActiveReceiptID = null;
       }
