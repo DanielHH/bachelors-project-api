@@ -466,7 +466,7 @@ class Server {
         this.sqlUtil.sqlUpdate(table, item).then(success => {
           this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
             req.body.logEvent.id = Number(id);
-            req.body.logEvent.LogText = _.replace(
+            req.body.logEvent.logText = _.replace(
               req.body.logEvent.logType.logText,
               '$data',
               req.body.logEvent.logText
@@ -514,7 +514,7 @@ class Server {
           if (req.body.logEvent) {
             this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(id => {
               req.body.logEvent.id = Number(id);
-              req.body.logEvent.LogText = _.replace(
+              req.body.logEvent.logText = _.replace(
                 req.body.logEvent.logType.logText,
                 '$data',
                 req.body.logEvent.logText
@@ -541,7 +541,7 @@ class Server {
           if (req.body.logEvent) {
             this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(id => {
               req.body.logEvent.id = Number(id);
-              req.body.logEvent.LogText = _.replace(
+              req.body.logEvent.logText = _.replace(
                 req.body.logEvent.logType.logText,
                 '$data',
                 req.body.logEvent.logText
@@ -577,7 +577,7 @@ class Server {
         this.sqlUtil.sqlUpdate(table, item).then(success => {
           this.sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
             req.body.logEvent.id = Number(id);
-            req.body.logEvent.LogText = _.replace(
+            req.body.logEvent.logText = _.replace(
               req.body.logEvent.logType.logText,
               '$data',
               req.body.logEvent.logText
