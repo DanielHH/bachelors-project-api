@@ -126,20 +126,4 @@ export function configPutRequests(appObject: any) {
       });
     }
   });
-
-  app.post('/login', (req, res) => {
-    sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
-      if (user) {
-        bcrypt.compare(atob(req.body.password), user.Password, (err, result) => {
-          if (result) {
-            res.send({ message: 'success', data: new UserDTO(user) });
-          } else {
-            res.send({ message: 'failure' });
-          }
-        });
-      } else {
-        res.send({ message: 'failure' });
-      }
-    });
-  });
 }
