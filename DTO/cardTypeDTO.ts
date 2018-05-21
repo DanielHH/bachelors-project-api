@@ -1,4 +1,3 @@
-import { StatusType } from '../datamodels/statusType';
 import { StatusTypeDTO } from './statusTypeDTO';
 
 /**
@@ -28,7 +27,7 @@ export class CardTypeDTO {
   /**
    * CardType active/inactive status
    */
-  status: StatusType;
+  status: StatusTypeDTO;
 
   constructor();
   constructor(data?: any, fromOtherType?: boolean);

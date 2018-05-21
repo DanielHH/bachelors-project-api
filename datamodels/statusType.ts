@@ -5,12 +5,12 @@ export class StatusType {
   /**
    * Database ID of the status type
    */
-  id: number;
+  ID: number;
 
   /**
    * Name of the status type
    */
-  name: string;
+  Name: string;
 
   constructor();
   constructor(statusType?: any);
@@ -18,8 +18,8 @@ export class StatusType {
   constructor(statusType?: any) {
     try {
       if (statusType) {
-        this.id = statusType.ID;
-        this.name = statusType.Name;
+        this.ID = statusType.id;
+        this.Name = statusType.name;
       }
     } catch (e) {}
   }
