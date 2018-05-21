@@ -5,20 +5,20 @@ export class ItemType {
   /**
    * Database ID of the item type
    */
-  id: number;
+  ID: number;
 
   /**
    * Name of the item type
    */
-  name: string;
+  Name: string;
 
   constructor();
   constructor(itemType: any);
 
   constructor(itemType?: any) {
     try {
-      if (itemType.ID) this.id = itemType.ID;
-      this.name = itemType.Name;
-    } catch (e) {}
+      if (itemType.ID) this.ID = itemType.id;
+      this.Name = itemType.name;
+    } catch (e) { }
   }
 }

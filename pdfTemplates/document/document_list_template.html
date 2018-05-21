@@ -35,8 +35,7 @@
         <div class="row font-12 m-header">
           <span>Listan är skapad utifrån följande filter:
             <% for(var j=0; j < filters.length; j++) { %>
-              <%= filters[j] %>
-                <% if(j < filters.length - 1) {%>,
+              <%= filters[j] %><% if(j < filters.length - 1) {%>,
                   <% } } %>
           </span>
         </div>
