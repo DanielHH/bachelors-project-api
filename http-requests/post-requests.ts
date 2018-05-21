@@ -1,6 +1,9 @@
 import * as _ from 'lodash';
 import * as bcrypt from 'bcrypt';
 
+import * as atob from 'atob';
+import * as btoa from 'btoa';
+
 import { Card } from '../datamodels/card';
 import { LogEvent } from '../datamodels/logEvent';
 import { User } from '../datamodels/user';
@@ -10,12 +13,13 @@ import { Document } from '../datamodels/document';
 import { CardType } from '../datamodels/cardType';
 import { Receipt } from '../datamodels/receipt';
 import { DocumentType } from '../datamodels/documentType';
+import { UserDTO } from '../DTO/userDTO';
 
 export function configPostRequests(appObject: any) {
   let app = appObject.app;
   let sqlUtil = appObject.sqlUtil;
   let pdfUtil = appObject.pdfUtil;
-  
+
   app.post('/genPDF', (req, res) => {
     pdfUtil.generatePDF(req.body).then(path => {
       res.send({
@@ -126,6 +130,23 @@ export function configPostRequests(appObject: any) {
         req.body.id = Number(id);
         res.send({ message: 'success', data: req.body });
       });
+    });
+  });
+
+
+  app.post('/login', (req, res) => {
+    sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
+      if (user) {
+        bcrypt.compare(atob(req.body.password), user.Password, (err, result) => {
+          if (result) {
+            res.send({ message: 'success', data: new UserDTO(user) });
+          } else {
+            res.send({ message: 'failure' });
+          }
+        });
+      } else {
+        res.send({ message: 'failure' });
+      }
     });
   });
 }

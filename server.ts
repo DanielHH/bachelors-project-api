@@ -65,11 +65,13 @@ class Server {
       this.app.use('/pdfs', express.static(__dirname + '\\pdfs'));
     }
 
-    configGetRequests({app: this.app, sqlUtil: this.sqlUtil});
+    let appObject = {app: this.app, sqlUtil: this.sqlUtil, pdfUtil: this.pdfUtil};
 
-    configPostRequests({app: this.app, sqlUtil: this.sqlUtil, pdfUtil: this.pdfUtil});
+    configGetRequests(appObject);
 
-    configPutRequests({app: this.app, sqlUtil: this.sqlUtil});
+    configPostRequests(appObject);
+
+    configPutRequests(appObject);
 
   }
 
