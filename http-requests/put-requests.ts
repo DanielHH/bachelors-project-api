@@ -38,7 +38,7 @@ export function configPutRequests(appObject: any) {
 
   app.put('/updateCardType', (req, res) => {
     sqlUtil.sqlUpdate('CardType', new CardType(req.body)).then(success => {
-      if (success) res.send({ message: 'success' });
+      if (success) res.send({ message: 'success', data: req.body });
       else res.send({ message: 'failure' });
     });
   });
@@ -65,7 +65,7 @@ export function configPutRequests(appObject: any) {
 
   app.put('/updateDocumentType', (req, res) => {
     sqlUtil.sqlUpdate('DocumentType', new DocumentType(req.body)).then(success => {
-      if (success) res.send({ message: 'success' });
+      if (success) res.send({ message: 'success', data: req.body });
       else res.send({ message: 'failure' });
     });
   });
