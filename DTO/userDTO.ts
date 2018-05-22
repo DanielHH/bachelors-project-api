@@ -77,8 +77,8 @@ export class UserDTO {
       this.name = user.Name;
       this.userType = new UserTypeDTO(user, true);
       this.email = user.Email;
-      this.creationDate = new Date(user.CreationDate);
-      this.modifiedDate = new Date(user.ModifiedDate);
+      this.creationDate = user.CreationDate;
+      this.modifiedDate = user.ModifiedDate;
       this.status = new StatusTypeDTO(user.StatusTypeID, user.StatusTypeName);
     } catch (e) {}
   }
