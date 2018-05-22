@@ -91,11 +91,7 @@ export function configPostRequests(appObject: any) {
       sqlUtil.sqlUpdate(table, item).then(success => {
         sqlUtil.sqlInsert('LogEvent', new LogEvent(req.body.logEvent)).then(() => {
           req.body.logEvent.id = Number(id);
-          req.body.logEvent.logText = _.replace(
-            req.body.logEvent.logType.logText,
-            '$data',
-            req.body.logEvent.logText
-          );
+          req.body.logEvent.logText = _.replace(req.body.logEvent.logType.logText, '$data', req.body.logEvent.logText);
           res.send({ message: 'success', data: req.body });
         });
       });
@@ -128,11 +124,11 @@ export function configPostRequests(appObject: any) {
       req.body.password = hash;
       sqlUtil.sqlInsert('User', new User(req.body)).then(id => {
         req.body.id = Number(id);
+        req.body.password = '';
         res.send({ message: 'success', data: req.body });
       });
     });
   });
-
 
   app.post('/login', (req, res) => {
     sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
