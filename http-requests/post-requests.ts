@@ -132,7 +132,7 @@ export function configPostRequests(appObject: any) {
 
   app.post('/login', (req, res) => {
     sqlUtil.sqlSelectUsername(req.body.username).then((user: any) => {
-      if (user) {
+      if (user && user.StatusTypeID != 6) {
         bcrypt.compare(atob(req.body.password), user.Password, (err, result) => {
           if (result) {
             res.send({ message: 'success', data: new UserDTO(user) });
