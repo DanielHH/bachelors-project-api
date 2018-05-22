@@ -115,13 +115,14 @@ export function configPutRequests(appObject: any) {
       bcrypt.hash(atob(req.body.password), 12, (err, hash) => {
         req.body.password = hash;
         sqlUtil.sqlUpdate('User', new User(req.body)).then(success => {
-          if (success) res.send({ message: 'success' });
+          req.body.password = '';
+          if (success) res.send({ message: 'success', data: req.body });
           else res.send({ message: 'failure' });
         });
       });
     } else {
       sqlUtil.sqlUpdate('User', new User(req.body)).then(success => {
-        if (success) res.send({ message: 'success' });
+        if (success) res.send({ message: 'success', data: req.body });
         else res.send({ message: 'failure' });
       });
     }
