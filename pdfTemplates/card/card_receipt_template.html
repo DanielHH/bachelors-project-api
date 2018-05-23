@@ -1,0 +1,163 @@
+<!-- <!DOCTYPE html pdfTemplates/card> -->
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="pdfTemplates/css/style.css" />
+  <title></title>
+</head>
+
+
+
+<body>
+  <% for(var i=0; i<2; i++) { %>
+    <div class="page-wrapper">
+      <div class="container">
+
+        <!-- Page header -->
+        <div class="row font-12 header">
+          <div class="col">
+            <span class="align-center">
+              <%= currentDate %>
+            </span>
+          </div>
+          <div class="col">
+            <span class="align-center align-right">
+              <%if (i) { %>
+                Användarkopia
+                <% } else {%>
+                  Registratorkopia
+                  <% } %>
+
+            </span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="align-middle">
+            <span class="font-32 border-bottom">Kortkvittens</span>
+          </div>
+        </div>
+
+        <div class="row mt-32">
+          <div class="col">
+            <span class="text-bold">Korttyp:</span>
+            <p class="mt-4">
+              <%= cardType %>
+            </p>
+          </div>
+
+          <div class="col">
+            <span class="text-bold">Kort-ID:</span>
+            <p class="mt-4">
+              <%= cardNumber %>
+            </p>
+          </div>
+        </div>
+
+
+        <div class="row mt-16">
+          <div class="col">
+            <span class="text-bold">Förvaringsplats:</span>
+            <p class="mt-4">
+              <%= cardLocation %>
+            </p>
+          </div>
+
+          <div class="col">
+            <span class="text-bold">Utgångsdatum:</span>
+            <p class="mt-4">
+              <%= cardExpirationDate %>
+            </p>
+          </div>
+        </div>
+
+        <div class="row mt-16">
+          <span class="text-bold">Kommentar:</span>
+          <p class="mt-4 mh-50">
+            <%= cardComment %>
+          </p>
+        </div>
+
+        <div class="row mt-48">
+          <div class="col">
+            <div class="s-32">
+              <p class="text-bold mt-2">Utlämning</p>
+              <p class="mt-2">Utlämningsdatum: <%= currentDate %></p>
+              <p class="border-top-dashed pt-2 mt-32"><%= cardUser %></p>
+            </div>
+          </div>
+          <div class="col text-right">
+            <div class="s-32 ml-32">
+              <p class="mt-2">Utlämningsdatum: <%= currentDate %></p>
+              <p class="border-top-dashed pt-2 mt-32"><%= adminUser %></p>
+            </div>
+          </div>
+        </div>
+
+        <%if (i) { %>
+
+
+
+          <div class="row mt-48">
+            <div class="align-middle">
+              <span class="font-32 border-bottom">Egenkontroll</span>
+            </div>
+          </div>
+
+          <div class="table mt-32">
+            <div class="table-row">
+              <div class="col">
+                <p class="ml-5 text-bold align-bottom">Datum</span>
+              </div>
+              <div class="col">
+                <p class="text-bold align-bottom ml-1">Signatur</span>
+              </div>
+            </div>
+            <% for(var k=0; k<8; k++) { %>
+
+              <div class="table-row">
+                <div class="col"></div>
+              </div>
+
+              <% } %>
+          </div>
+
+          <% } %>
+
+          <%if (i == 0) { %>
+            <div class="mt-64"></div>
+          <% }  %>
+
+            <div class="row mt-48">
+              <div class="col">
+                <div class="s-32">
+                  <p class="text-bold mt-2">Återlämning</p>
+                  <p class="mt-2 hidden">Återlämningsdatum: <span class="border-bottom-dashed"></span></p>
+                  <p class="border-top-dashed pt-2 mt-32"><%= cardUser %></p>
+                </div>
+              </div>
+              <div class="col text-right">
+                <div class="s-32 ml-32">
+                  <p class="mt-2 hidden">Återlämningsdatum: <span class="border-bottom-dashed"></span></p>
+                  <p class="border-top-dashed pt-2 mt-32">Registrator</p>
+                </div>
+              </div>
+            </div>
+
+      </div>
+      <div class="footer">
+        <div class="row font-12">
+          <span class="align-center">
+            SecTrack
+          </span>
+        </div>
+      </div>
+    </div>
+    <%if (i == 0) { %>
+      <div class="page-break"></div>
+    <% } } %>
+</body>
+
+</html>

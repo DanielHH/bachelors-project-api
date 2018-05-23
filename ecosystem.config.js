@@ -27,7 +27,7 @@ module.exports = {
       user: 'gitlab',
       host: 'localhost',
       ref: 'origin/dev',
-      repo: 'git@gitlab.ida.liu.se:nikni459/PUMServer.git',
+      repo: 'git@gitlab.ida.liu.se:pum-ninjas/PUMApi.git',
       path: '/home/gitlab/app',
       'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production'
     }

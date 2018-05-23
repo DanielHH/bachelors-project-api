@@ -1,0 +1,139 @@
+<!-- <!DOCTYPE html pdfTemplates/card> -->
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="pdfTemplates/css/style.css" />
+  <title></title>
+</head>
+
+
+
+<body>
+  <% let pages = Math.ceil(items.length / 12); for(var i=0; i < pages; i++) { %>
+    <div class="page-wrapper">
+      <div class="container">
+
+        <!-- Page header -->
+        <div class="header">
+          <div class="row font-12 align-center">
+            <div class="col">
+              <span class="">
+                <%= currentDate %>
+              </span>
+            </div>
+            <div class="col align-right">
+              <span class="">Sida
+                <%= i+1 %> av
+                  <%= pages %>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row font-12 m-header">
+          <span>Listan är skapad utifrån följande filter:
+            <% for(var j=0; j < filters.length; j++) { %>
+              <%= filters[j] %><% if(j < filters.length - 1) {%>,
+                  <% } } %>
+          </span>
+        </div>
+
+        <div class="row">
+          <div class="align-middle">
+            <span class="font-32 border-bottom">Kvittenser</span>
+          </div>
+        </div>
+
+        <div class="table font-12 mt-16">
+
+          <% for(var l=0; (l < 12) && ((i*12)+l < items.length); l++) { %>
+            <% let item = items[(i*12+l)]%>
+              <div class="inventory-row">
+                <div class="row mt-2">
+                  <div class="col">
+                    <span class="text-bold pl-2">Status: </span>
+                    <span>
+                      <% if (item.itemType.id == 1) { %>
+                        <%= item.card.status.name %>
+                          <% } else { %>
+                            <%= item.document.status.name %>
+                              <% } %>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <span class="text-bold">Typ: </span>
+                    <span>
+                      <% if (item.itemType.id == 1) { %>
+                        <%= item.card.cardType.name %>
+                          <% } else { %>
+                            <%= item.document.documentType.name %>
+                              <% } %>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col">
+                    <span class="text-bold pl-2">ID: </span>
+                    <span>
+                      <% if (item.itemType.id == 1) { %>
+                        <%= item.card.cardNumber %>
+                          <% } else { %>
+                            <%= item.document.documentNumber %>
+                              <% } %>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <span class="text-bold">Användare: </span>
+                    <span>
+                      <%= item.user.name %>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col">
+                    <span class="text-bold pl-2">Startdatum: </span>
+                    <span>
+                      <%= formatDate(item.startDate) %>
+                    </span>
+                  </div>
+                  <div class="col">
+                    <span class="text-bold">Slutdatum: </span>
+                    <span>
+                      <% if (item.endDate) { %>
+                        <%= formatDate(item.endDate) %>
+                          <% } %>
+                    </span>
+                  </div>
+                </div>
+                <div class="row mh-28 mt-2">
+                  <div class="pl-2">
+                    <span class="text-bold">Kommentar:</span>
+                    <span>
+                      <% if (item.itemType.id == 1) { %>
+                        <%= item.card.comment %>
+                          <% } else { %>
+                            <%= item.document.comment %>
+                              <% } %>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <% } %>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="row font-12">
+          <span class="align-center">
+            SecTrack
+          </span>
+        </div>
+      </div>
+    </div>
+    <%if (i < pages-1) { %>
+      <div class="page-break"></div>
+    <% } } %>
+</body>
+
+</html>
