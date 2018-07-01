@@ -1,3 +1,4 @@
+const globalAny: any = global;
 
 /**
  * SQL function utilities
@@ -24,7 +25,7 @@ export class SqlUtilities {
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
-      global.db.query(queryString, dataArray, (err, rows) => {
+      globalAny.db.query(queryString, dataArray, (err, rows) => {
         if (!err) resolve(rows.info.insertId);
         reject(err);
       });
@@ -33,7 +34,7 @@ export class SqlUtilities {
 
   sqlSelectAll(tableName: string) {
     return new Promise((resolve, reject) => {
-      global.db.query('SELECT * FROM ' + tableName, false, (err, rows) => {
+      globalAny.db.query('SELECT * FROM ' + tableName, false, (err, rows) => {
         if (!err) resolve(rows);
         reject(err);
       });
@@ -42,7 +43,7 @@ export class SqlUtilities {
 
   sqlSelectID(tableName: string, id: number) {
     return new Promise((resolve, reject) => {
-      global.db.query('SELECT * FROM ' + tableName + ' WHERE ID = ?', [id], false, (err, rows) => {
+      globalAny.db.query('SELECT * FROM ' + tableName + ' WHERE ID = ?', [id], false, (err, rows) => {
         if (!err) resolve(rows[0]);
         reject(err);
       });
@@ -51,7 +52,7 @@ export class SqlUtilities {
 
   sqlSelectUsername(username: string) {
     return new Promise((resolve, reject) => {
-      global.db.query(
+      globalAny.db.query(
         'SELECT User.*, UserType.ID AS UserTypeID, UserType.Name AS UserTypeName FROM User LEFT JOIN (UserType) ON (UserType.ID=User.UserTypeID) WHERE User.Username=?',
         [username],
         false,
@@ -65,7 +66,7 @@ export class SqlUtilities {
 
   sqlSelectQuery(query: string, queryData?: any[]) {
     return new Promise((resolve, reject) => {
-      global.db.query(query, queryData, false, (err, rows) => {
+      globalAny.db.query(query, queryData, false, (err, rows) => {
         if (!err) resolve(rows);
         reject(err);
       });
@@ -93,7 +94,7 @@ export class SqlUtilities {
 
     //Wait for the async query to be done before 'returning' the data
     return new Promise((resolve, reject) => {
-      global.db.query(queryString, dataArray, (err, rows) => {
+      globalAny.db.query(queryString, dataArray, (err, rows) => {
         if (!err) resolve(rows.info.affectedRows);
         reject(err);
       });

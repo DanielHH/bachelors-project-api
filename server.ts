@@ -41,6 +41,8 @@ import { DocumentTypeDTO } from './DTO/documentTypeDTO';
 import { UserType } from './datamodels/userType';
 import { UserTypeDTO } from './DTO/userTypeDTO';
 
+const globalAny: any = global;
+
 class Server {
   public app: express.Application;
 
@@ -48,7 +50,7 @@ class Server {
   pdfUtil: PdfUtilities;
 
   constructor() {
-    global.db = new mariasql();
+    globalAny.db = new mariasql();
 
     //create expressjs application
     this.app = express();
@@ -82,7 +84,7 @@ class Server {
     this.app.use(methodOverride());
     this.app.use(cors());
 
-    global.db.connect({
+    globalAny.db.connect({
       host: dbconfig.host,
       user: dbconfig.username,
       password: dbconfig.password,
